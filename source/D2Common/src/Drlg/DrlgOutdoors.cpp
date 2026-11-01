@@ -1012,7 +1012,7 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2DrlgRo
 			// Update flags for next Y (move everything in direction of negative y, then sample the new values
 			if (nY >= 2)
 			{
-				memcpy(aFlags, &aFlags[1], sizeof(aFlags) - sizeof(aFlags[0]));
+				memmove(aFlags, &aFlags[1], sizeof(aFlags) - sizeof(aFlags[0]));
 
 				aFlags[MapOffsetToBoxIndex(-1, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX - 1, nY - 2);
 				aFlags[MapOffsetToBoxIndex( 0, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + 0, nY - 2);
