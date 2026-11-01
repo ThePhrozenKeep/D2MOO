@@ -531,6 +531,8 @@ int32_t __fastcall AITACTICS_RunAwayFromTarget(D2GameStrc* pGame, D2UnitStrc* pU
 //1.14d: 0x005DE200
 int32_t __fastcall AITACTICS_WalkCloseToUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMaxDistance)
 {
+	nMaxDistance = static_cast<uint8_t>(nMaxDistance);
+
 	int32_t nOffsetX = 0;
 	int32_t nOffsetY = 0;
 
@@ -565,11 +567,26 @@ int32_t __fastcall AITACTICS_WalkCloseToUnit(D2GameStrc* pGame, D2UnitStrc* pUni
 //1.14d: 0x005DF400
 int32_t __fastcall AITACTICS_WanderToTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nMaxDistance)
 {
+	// Native quirk: same body as AITACTICS_WalkCloseToUnit, pTarget is unused.
+	return AITACTICS_WalkCloseToUnit(pGame, pUnit, nMaxDistance);
+}
+
+//D2Game.0x6FCD0B60
+//1.14d: 0x005DF530
+int32_t __fastcall D2GAME_AICORE_WalkToOwner_6FCD0B60(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pOwner, int32_t nMaxDistance)
+{
+	nMaxDistance = static_cast<uint8_t>(nMaxDistance);
+
+	if (!pOwner)
+	{
+		return AITACTICS_WalkCloseToUnit(pGame, pUnit, 2);
+	}
+
 	int32_t nOffsetX = 0;
 	int32_t nOffsetY = 0;
 
-	const int32_t nTargetX = CLIENTS_GetUnitX(pTarget);
-	const int32_t nTargetY = CLIENTS_GetUnitY(pTarget);
+	const int32_t nTargetX = CLIENTS_GetUnitX(pOwner);
+	const int32_t nTargetY = CLIENTS_GetUnitY(pOwner);
 
 	if (ITEMS_RollRandomNumber(&pUnit->pSeed) & 1)
 	{
@@ -593,18 +610,6 @@ int32_t __fastcall AITACTICS_WanderToTarget(D2GameStrc* pGame, D2UnitStrc* pUnit
 	}
 
 	return AITACTICS_MoveToTarget(pGame, pUnit, nullptr, MONMODE_WALK, nTargetX + nOffsetX, nTargetY + nOffsetY, 1u, 0);
-}
-
-//D2Game.0x6FCD0B60
-//1.14d: 0x005DF530
-int32_t __fastcall D2GAME_AICORE_WalkToOwner_6FCD0B60(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pOwner, int32_t nMaxDistance)
-{
-	if (!pOwner)
-	{
-		return AITACTICS_WalkCloseToUnit(pGame, pUnit, 2);
-	}
-
-	return AITACTICS_WanderToTarget(pGame, pUnit, pOwner, nMaxDistance);
 }
 
 //D2Game.0x6FCD0D00
