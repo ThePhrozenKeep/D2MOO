@@ -1544,7 +1544,7 @@ void __fastcall EDITBOX_GetCaretPosition(D2WinEditBoxStrc* pEditBox, int32_t* pX
 
 	if (*pX != -1)
 	{
-		*pX = *pX - pEditBox->controlHeader.nImageX - 1;
+		*pX -= pEditBox->controlHeader.nImageX + 1;
 		*pY += pEditBox->controlHeader.nHeight - pEditBox->controlHeader.nImageY - 1;
 
 		// The upper bound is applied last, so it wins in a box narrower than its insets.
