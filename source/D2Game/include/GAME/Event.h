@@ -39,7 +39,7 @@ enum D2C_EventTypes : uint8_t
 
 struct D2TimerArg2Strc
 {
-	int nUnitGUID;
+	D2UnitGUID nUnitGUID;
 	D2TimerArg2Strc* pNext;
 };
 
@@ -57,7 +57,7 @@ struct D2EventTimerStrc
 	uint16_t nFlags;
 	int32_t nExpireFrame;
 	D2UnitStrc* pUnit;
-	int32_t nUnitGUID;
+	D2UnitGUID nUnitGUID;
 	int32_t nUnitType;
 	int32_t dwEventCustomId;
 	int32_t dwEventCustomParam;
