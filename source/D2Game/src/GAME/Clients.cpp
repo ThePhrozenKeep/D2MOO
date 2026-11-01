@@ -684,6 +684,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     {
         const uint64_t nPlayerExperience = STATLIST_GetUnitBaseStat(pPlayer, STAT_EXPERIENCE, 0);
         const int32_t nPlayerLevel = STATLIST_GetUnitBaseStat(pPlayer, STAT_LEVEL, 0);
+        const int32_t nPlayerClassId = pPlayer->dwClassId; // pPlayer is freed by SUNIT_RemoveUnit below
         PARTY_LeaveParty(pGame, pPlayer);
         PLAYERPETS_FreePetsFromPlayerData(pGame, pPlayer);
         SUNITPROXY_OnClientRemovedFromGame(pGame, pPlayer);
@@ -707,7 +708,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
                 gpD2EventCallbackTable_6FD45830->pfLeaveGame(
 						&pClientToRemove->pClientInfo,
 						pGame->nGameId,
-						pPlayer->dwClassId, nPlayerLevel, nPlayerExperience,
+						nPlayerClassId, nPlayerLevel, nPlayerExperience,
 						pClientToRemove->tSaveFlags.nPackedValue, pClientToRemove->szName,
 						reinterpret_cast<const char*>(&pClientToRemove->tCharacterInfo), pClientToRemove->bUnlockCharacter,
 						0,
