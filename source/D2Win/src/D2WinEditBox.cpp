@@ -1212,320 +1212,213 @@ int32_t __fastcall EDITBOX_DrawSingleLine(D2WinControlStrc* pControl)
 	return 1;
 }
 
-//D2Win.0x6F8A86C0) --------------------------------------------------------
+//D2Win.0x6F8A86C0
 //1.14d: 0x004FF620
 int32_t __fastcall EDITBOX_DrawMultiLine(D2WinControlStrc* pControl)
 {
-	//D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pControl;
+	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pControl;
 
-//	int v5; // eax@18
-//	int v6; // esi@18
-//	unsigned int v9; // eax@21
-//	char *v12; // ebp@25
-//	char *v13; // ebx@25
-//	int v14; // eax@25
-//	int v15; // edx@25
-//	char v16; // al@29
-//	int v17; // edi@32
-//	int v18; // eax@32
-//	int v19; // eax@37
-//	int v20; // ecx@38
-//	int v21; // edx@39
-//	int v22; // eax@43
-//	int v23; // ecx@43
-//	int v24; // edi@43
-//	size_t v26; // edi@55
-//	int v27; // edx@59
-//	int v28; // eax@61
-//	int v29; // ebp@64
-//	int v30; // edi@68
-//	int v31; // eax@68
-//	int v32; // edi@77
-//	int v33; // eax@77
-//	int nX; // [sp+18h] [bp-6C4h]@18
-//	int v38; // [sp+1Ch] [bp-6C0h]@41
-//	int v39; // [sp+1Ch] [bp-6C0h]@49
-//	int v42; // [sp+28h] [bp-6B4h]@29
-//	int Count; // [sp+2Ch] [bp-6B0h]@29
-//	int pWidth; // [sp+30h] [bp-6ACh]@45
-//	int v45; // [sp+34h] [bp-6A8h]@21
-//	int v46; // [sp+38h] [bp-6A4h]@23
-//	int v47; // [sp+3Ch] [bp-6A0h]@25
-//	int nY; // [sp+40h] [bp-69Ch]@18
-//	int v49; // [sp+44h] [bp-698h]@25
-//	int v52; // [sp+50h] [bp-68Ch]@43
-//	int v53; // [sp+54h] [bp-688h]@53
-//	int pHeight; // [sp+58h] [bp-684h]@45
-//	int v55; // [sp+5Ch] [bp-680h]@20
-//	int v56; // [sp+60h] [bp-67Ch]@25
-//	char Dest[256]; // [sp+84h] [bp-658h]@29
-//	char a2[256]; // [sp+184h] [bp-558h]@25
-//
-//	D2_ASSERT(pEditBox);
-//	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
-//
-//	if (pEditBox->controlHeader.dwFlags & gdwBitMasks[2] && pEditBox->controlHeader.dwFlags & gdwBitMasks[0])
-//	{
-//		if (!D2Win_IsMouseButtonPressed())
-//		{
-//			pEditBox->field_280 = 0;
-//		}
-//
-//		if (pEditBox->field_280)
-//		{
-//			SMSGHANDLER_PARAMS msg = {};
-//
-//			msg.hWindow = (HWND)pEditBox;
-//			msg.uMessage = WM_LBUTTONDOWN;
-//
-//			EDITBOX_PlaceMultiLineCaret(&msg, gMousePosition_6F8FE234.x - pEditBox->field_40 - pEditBox->controlHeader.nImageX, gMousePosition_6F8FE234.y + pEditBox->controlHeader.nHeight - pEditBox->field_44 - pEditBox->controlHeader.nImageY);
-//		}
-//
-//		Unicode v61[300] = {};
-//
-//		D2Win_10127_SetFont(pEditBox->nFont);
-//
-//		nX = pEditBox->field_40 + pEditBox->controlHeader.nImageX;
-//		v6 = pEditBox->field_44 + pEditBox->controlHeader.nImageY - pEditBox->controlHeader.nHeight + D2Win_10125();
-//		nY = v6;
-//
-//		Unicode::strcpy(v61, pEditBox->wszText);
-//
-//		Unicode wszText[2] = {};
-//
-//		Unicode::win2Unicode(wszText, "_", 2);
-//
-//		v55 = D2Win_10122(wszText, 2);
-//		if (CONTROL_GetFocusedEditBox() != pEditBox || !(GetTickCount() / 250 & 1))
-//		{
-//			v45 = 0;
-//		}
-//		else
-//		{
-//			v45 = 1;
-//		}
-//
-//		v46 = 0;
-//
-//		Unicode v60[256] = {};
-//
-//		D2LANG_unicode2Win(a2, pEditBox->wszText);
-//
-//		v12 = a2;
-//		v13 = a2;
-//		v14 = D2Win_10125();
-//		v15 = pEditBox->field_40;
-//		v47 = v14;
-//		v56 = pEditBox->controlHeader.nWidth - 2 * v15;
-//		v49 = pEditBox->controlHeader.nHeight - 2 * pEditBox->field_44;
-//
-//		if (a2[0] || v45 && (D2Win_10117_DrawText(wszText, nX, nY, pEditBox->nTextColor, 0), v46 = 1, a2[0]))
-//		{
-//			while (1)
-//			{
-//				if (v6 - nY >= v49)
-//				{
-//					return 1;
-//				}
-//
-//				Count = v13 - v12;
-//				memset(Dest, 0, sizeof(Dest));
-//				v16 = *v13;
-//				v42 = 0;
-//				if (v16)
-//				{
-//					while (v16 != '\r' && v16 != '\n')
-//					{
-//						v17 = Count;
-//						Dest[Count] = v16;
-//						Unicode::win2Unicode(v60, Dest, 256);
-//						v18 = D2Win_10122(v60, v17);
-//						if (v55 + v18 > v56)
-//						{
-//							v42 = 1;
-//							break;
-//						}
-//
-//						v16 = (v13++)[1];
-//						Count = v17 + 1;
-//						if (!v16)
-//						{
-//							break;
-//						}
-//					}
-//				}
-//
-//				v19 = pEditBox->field_54;
-//				if (v19 != -1)
-//				{
-//					v20 = pEditBox->nTextLength;
-//					if (v19 != v20)
-//					{
-//						break;
-//					}
-//				}
-//LABEL_57:
-//				strncpy(Dest, v12, Count);
-//				Dest[v13 - v12] = 0;
-//				Unicode::win2Unicode(v60, Dest, 256);
-//				D2Win_10117_DrawText(v60, nX, v6, pEditBox->nTextColor, 0);
-//				if (v45)
-//				{
-//					if (!v46)
-//					{
-//						v27 = (int)&a2[pEditBox->field_25C - (_DWORD)v12];
-//						if (v27 >= 0)
-//						{
-//							if (v27 <= Count)
-//							{
-//								v28 = nX;
-//								if (v27)
-//								{
-//									v28 = nX + D2Win_10122(v60, v27);
-//								}
-//
-//								D2Win_10117_DrawText(wszText, v28, v6, pEditBox->nTextColor, 0);
-//								v46 = 1;
-//							}
-//						}
-//					}
-//				}
-//
-//				v29 = v47;
-//				if (v42)
-//				{
-//					v6 += v47;
-//				}
-//
-//				if (*v13 == '\r')
-//				{
-//					if (v13[1] == '\n')
-//					{
-//						v30 = v13 - a2;
-//						v31 = v6 - nY;
-//						do
-//						{
-//							if (v13[1] != '\n')
-//							{
-//								break;
-//							}
-//
-//							v13 += 2;
-//							v30 += 2;
-//							v6 += v29;
-//							v31 += v29;
-//							v42 = v31;
-//							if (v45 && !v46 && pEditBox->field_25C == v30 && v31 < v49)
-//							{
-//								D2Win_10117_DrawText(wszText, nX, v6, pEditBox->nTextColor, 0);
-//								v31 = v42;
-//							}
-//						}
-//						while (*v13 == '\r');
-//					}
-//					else
-//					{
-//						v32 = v13 - a2;
-//						v33 = v6 - nY;
-//						do
-//						{
-//							++v13;
-//							++v32;
-//							v6 += v29;
-//							v33 += v29;
-//							v42 = v33;
-//							if (v45 && !v46 && pEditBox->field_25C == v32 && v33 < v49)
-//							{
-//								D2Win_10117_DrawText(wszText, nX, v6, pEditBox->nTextColor, 0);
-//								v33 = v42;
-//							}
-//						}
-//						while (*v13 == '\r');
-//					}
-//				}
-//
-//				v12 = v13;
-//				if (!*v13)
-//				{
-//					return 1;
-//				}
-//			}
-//
-//			v21 = pEditBox->field_54;
-//			if (v19 >= v20)
-//			{
-//				v21 = pEditBox->nTextLength;
-//			}
-//
-//			v38 = pEditBox->field_54;
-//			if (v19 <= v20)
-//			{
-//				v38 = pEditBox->nTextLength;
-//			}
-//
-//			v22 = v12 - a2;
-//			v23 = v13 - a2;
-//			v52 = nX;
-//			v24 = v38;
-//			if (v21 >= (signed int)(v12 - a2))
-//			{
-//				if (v21 < v23)
-//				{
-//LABEL_49:
-//					v39 = v21;
-//					if (v21 <= v22)
-//					{
-//						v39 = v12 - a2;
-//					}
-//
-//					if (v24 >= v23)
-//					{
-//						v24 = v13 - a2;
-//					}
-//
-//					v53 = v39 - v22;
-//					if (v39 != v22)
-//					{
-//						strncpy(Dest, v12, v39 - v22);
-//						Dest[v53] = 0;
-//						Unicode::win2Unicode(v60, Dest, 256);
-//						D2Win_10131_GetTextDimensions(v60, &pWidth, &pHeight);
-//						v52 = nX + pWidth;
-//					}
-//
-//					v26 = v24 - v39;
-//					strncpy(Dest, &v12[v53], v26);
-//					Dest[v26] = 0;
-//					Unicode::win2Unicode(v60, Dest, 256);
-//					D2Win_10131_GetTextDimensions(v60, &pWidth, &pHeight);
-//					D2GFX_10055_DrawSolidRectEx(v52, v6 - v47, v52 + pWidth, v6, D2Win_10034_MixRGB(0x40u, 0x40u, 0x40u), DRAWMODE_NORMAL);
-//					goto LABEL_57;
-//				}
-//			}
-//			else
-//			{
-//				if (v38 >= v23)
-//				{
-//					strncpy(Dest, v12, Count);
-//					Dest[v13 - v12] = 0;
-//
-//					Unicode::win2Unicode(v60, Dest, 256);
-//
-//					D2Win_10131_GetTextDimensions(v60, &pWidth, &pHeight);
-//					D2GFX_10055_DrawSolidRectEx(nX, v6 - v47, nX + pWidth, v6, D2Win_10034_MixRGB(0x40u, 0x40u, 0x40u), DRAWMODE_NORMAL);
-//					goto LABEL_57;
-//				}
-//			}
-//
-//			if (v38 < v22 || v38 >= v23)
-//			{
-//				goto LABEL_57;
-//			}
-//
-//			goto LABEL_49;
-//		}
-//	}
-//
+	D2_ASSERT(pEditBox);
+	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
+
+	if (!(pEditBox->controlHeader.dwFlags & gdwBitMasks[2]) || !(pEditBox->controlHeader.dwFlags & gdwBitMasks[0]))
+	{
+		return 1;
+	}
+
+	// Drag selection: the mouse-down handler runs every frame while the button is held
+	if (!D2Win_IsMouseButtonPressed())
+	{
+		pEditBox->bMouseSelecting = 0;
+	}
+
+	if (pEditBox->bMouseSelecting)
+	{
+		SMSGHANDLER_PARAMS msg = {};
+		msg.hWindow = (HWND)pEditBox;
+		msg.nMessage = WM_LBUTTONDOWN;
+		sub_6F8A97D0(&msg);
+	}
+
+	D2Win_10127_SetFont(pEditBox->eFont);
+
+	const int32_t nX = pEditBox->nTextInsetX + pEditBox->controlHeader.nImageX;
+	const int32_t nStartY = pEditBox->nTextInsetY + pEditBox->controlHeader.nImageY - pEditBox->controlHeader.nHeight + D2Win_10125();
+	int32_t nY = nStartY;
+
+	const uint8_t nSelectionColor = D2Win_10034_MixRGB(0x40u, 0x40u, 0x40u);
+
+	Unicode wszCaret[2] = {};
+	Unicode::win2Unicode(wszCaret, "_", 2);
+	const int32_t nCaretWidth = D2Win_10122(wszCaret, 2);
+
+	const BOOL bDrawCaret = CONTROL_GetFocusedEditBox() == pEditBox && GetTickCount() / 250 & 1;
+	BOOL bCaretDrawn = FALSE;
+
+	Unicode wszLine[256] = {};
+	char szText[256] = {};
+	Unicode::unicode2Win(szText, pEditBox->wszText, 256);
+
+	const char* pLineStart = szText;
+	const char* pCurrent = szText;
+	const int32_t nLineHeight = D2Win_10125();
+	const int32_t nAvailableWidth = pEditBox->controlHeader.nWidth - 2 * pEditBox->nTextInsetX;
+	const int32_t nAvailableHeight = pEditBox->controlHeader.nHeight - 2 * pEditBox->nTextInsetY;
+
+	if (!szText[0])
+	{
+		if (bDrawCaret)
+		{
+			D2Win_10117_DrawText(wszCaret, nX, nY, pEditBox->nTextColor, 0);
+		}
+		return 1;
+	}
+
+	do
+	{
+		if (nY - nStartY >= nAvailableHeight)
+		{
+			return 1;
+		}
+
+		int32_t nCount = pCurrent - pLineStart;
+		char szLine[256] = {};
+		BOOL bWrapped = FALSE;
+		char nChar = *pCurrent;
+		if (nChar)
+		{
+			while (nChar != '\r' && nChar != '\n')
+			{
+				szLine[nCount] = nChar;
+				Unicode::win2Unicode(wszLine, szLine, 256);
+				if (nCaretWidth + D2Win_10122(wszLine, nCount) > nAvailableWidth)
+				{
+					bWrapped = TRUE;
+					break;
+				}
+
+				nChar = *++pCurrent;
+				++nCount;
+				if (!nChar)
+				{
+					break;
+				}
+			}
+		}
+
+		if (pEditBox->nSelectionStart != -1 && pEditBox->nSelectionStart != pEditBox->nSelectionEnd)
+		{
+			const int32_t nSelectionMin = std::min(pEditBox->nSelectionStart, pEditBox->nSelectionEnd);
+			const int32_t nSelectionMax = std::max(pEditBox->nSelectionStart, pEditBox->nSelectionEnd);
+			const int32_t nLineStart = pLineStart - szText;
+			const int32_t nLineEnd = pCurrent - szText;
+
+			int32_t nWidth = 0;
+			int32_t nHeight = 0;
+
+			if (nSelectionMin < nLineStart && nSelectionMax >= nLineEnd)
+			{
+				// The whole line is selected
+				strncpy(szLine, pLineStart, nCount);
+				szLine[pCurrent - pLineStart] = 0;
+				Unicode::win2Unicode(wszLine, szLine, 256);
+				D2Win_10131_GetTextDimensions(wszLine, &nWidth, &nHeight);
+				D2GFX_DrawBox(nX, nY - nLineHeight, nX + nWidth, nY, nSelectionColor, DRAWMODE_NORMAL);
+			}
+			else if ((nSelectionMin >= nLineStart && nSelectionMin < nLineEnd) || (nSelectionMax >= nLineStart && nSelectionMax < nLineEnd))
+			{
+				const int32_t nStart = std::max(nSelectionMin, nLineStart);
+				const int32_t nEnd = std::min(nSelectionMax, nLineEnd);
+				const int32_t nPrefixLength = nStart - nLineStart;
+
+				int32_t nBoxX = nX;
+				if (nStart != nLineStart)
+				{
+					strncpy(szLine, pLineStart, nPrefixLength);
+					szLine[nPrefixLength] = 0;
+					Unicode::win2Unicode(wszLine, szLine, 256);
+					D2Win_10131_GetTextDimensions(wszLine, &nWidth, &nHeight);
+					nBoxX = nX + nWidth;
+				}
+
+				const int32_t nSelectedLength = nEnd - nStart;
+				strncpy(szLine, &pLineStart[nPrefixLength], nSelectedLength);
+				szLine[nSelectedLength] = 0;
+				Unicode::win2Unicode(wszLine, szLine, 256);
+				D2Win_10131_GetTextDimensions(wszLine, &nWidth, &nHeight);
+				D2GFX_DrawBox(nBoxX, nY - nLineHeight, nBoxX + nWidth, nY, nSelectionColor, DRAWMODE_NORMAL);
+			}
+		}
+
+		strncpy(szLine, pLineStart, nCount);
+		szLine[pCurrent - pLineStart] = 0;
+		Unicode::win2Unicode(wszLine, szLine, 256);
+		D2Win_10117_DrawText(wszLine, nX, nY, pEditBox->nTextColor, 0);
+
+		if (bDrawCaret && !bCaretDrawn)
+		{
+			const int32_t nCaretColumn = pEditBox->nCaretPosition - (pLineStart - szText);
+			if (nCaretColumn >= 0 && nCaretColumn <= nCount)
+			{
+				int32_t nCaretX = nX;
+				if (nCaretColumn)
+				{
+					nCaretX = nX + D2Win_10122(wszLine, nCaretColumn);
+				}
+
+				D2Win_10117_DrawText(wszCaret, nCaretX, nY, pEditBox->nTextColor, 0);
+				bCaretDrawn = TRUE;
+			}
+		}
+
+		if (bWrapped)
+		{
+			nY += nLineHeight;
+		}
+
+		// The caret on an empty line is drawn without setting bCaretDrawn (both binaries)
+		if (*pCurrent == '\r')
+		{
+			int32_t nPosition = pCurrent - szText;
+			if (pCurrent[1] == '\n')
+			{
+				do
+				{
+					if (pCurrent[1] != '\n')
+					{
+						break;
+					}
+
+					pCurrent += 2;
+					nPosition += 2;
+					nY += nLineHeight;
+					if (bDrawCaret && !bCaretDrawn && pEditBox->nCaretPosition == nPosition && nY - nStartY < nAvailableHeight)
+					{
+						D2Win_10117_DrawText(wszCaret, nX, nY, pEditBox->nTextColor, 0);
+					}
+				}
+				while (*pCurrent == '\r');
+			}
+			else
+			{
+				do
+				{
+					++pCurrent;
+					++nPosition;
+					nY += nLineHeight;
+					if (bDrawCaret && !bCaretDrawn && pEditBox->nCaretPosition == nPosition && nY - nStartY < nAvailableHeight)
+					{
+						D2Win_10117_DrawText(wszCaret, nX, nY, pEditBox->nTextColor, 0);
+					}
+				}
+				while (*pCurrent == '\r');
+			}
+		}
+
+		pLineStart = pCurrent;
+	}
+	while (*pCurrent);
+
 	return 1;
 }
 
@@ -1651,11 +1544,12 @@ void __fastcall EDITBOX_GetCaretPosition(D2WinEditBoxStrc* pEditBox, int32_t* pX
 
 	if (*pX != -1)
 	{
-		*pX -= pEditBox->controlHeader.nImageX - 1;
+		*pX = *pX - pEditBox->controlHeader.nImageX - 1;
 		*pY += pEditBox->controlHeader.nHeight - pEditBox->controlHeader.nImageY - 1;
 
-		*pX = D2Clamp(*pX, pEditBox->nTextInsetX, pEditBox->controlHeader.nWidth - pEditBox->nTextInsetX - 1);
-		*pY = D2Clamp(*pX, pEditBox->nTextInsetY, pEditBox->controlHeader.nHeight - pEditBox->nTextInsetY - 1);
+		// The upper bound is applied last, so it wins in a box narrower than its insets.
+		*pX = std::min(std::max(*pX, pEditBox->nTextInsetX), pEditBox->controlHeader.nWidth - pEditBox->nTextInsetX - 1);
+		*pY = std::min(std::max(*pY, pEditBox->nTextInsetY), pEditBox->controlHeader.nHeight - pEditBox->nTextInsetY - 1);
 	}
 }
 
@@ -1803,8 +1697,9 @@ int32_t __fastcall EDITBOX_PlaceMultiLineCaret(SMSGHANDLER_PARAMS* pMsg, int32_t
 
 	if (pEditBox->bMouseSelecting)
 	{
-		nX = D2Clamp(nX, pEditBox->nTextInsetX, pEditBox->controlHeader.nWidth - pEditBox->nTextInsetX - 1);
-		nY = D2Clamp(nY, pEditBox->nTextInsetY, pEditBox->controlHeader.nHeight - pEditBox->nTextInsetY - 1);
+		// The upper bound is applied last, so it wins in a box narrower than its insets.
+		nX = std::min(std::max(nX, pEditBox->nTextInsetX), pEditBox->controlHeader.nWidth - pEditBox->nTextInsetX - 1);
+		nY = std::min(std::max(nY, pEditBox->nTextInsetY), pEditBox->controlHeader.nHeight - pEditBox->nTextInsetY - 1);
 	}
 
 	if (nX >= -pEditBox->nTextInsetX && nX < pEditBox->controlHeader.nWidth - pEditBox->nTextInsetX && nY >= -pEditBox->nTextInsetY && nY < pEditBox->controlHeader.nHeight - pEditBox->nTextInsetY)
