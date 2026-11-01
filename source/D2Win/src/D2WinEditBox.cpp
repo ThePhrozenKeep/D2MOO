@@ -1125,28 +1125,16 @@ int32_t __fastcall EDITBOX_DrawSingleLine(D2WinControlStrc* pControl)
 		Unicode wszVisible[300] = {};
 		Unicode::strncpy(wszVisible, &pEditBox->wszText[pEditBox->nFirstVisibleChar], pEditBox->nLastVisibleChar - pEditBox->nFirstVisibleChar + 1);
 
-		//const int32_t v50 = Unicode::strlen(wszVisible);
+		const int32_t nVisibleLength = Unicode::strlen(wszVisible);
 		if (pEditBox->dwEditBoxFlags & EDITBOX_PASSWORD)
 		{
 			Unicode wszStar[2] = {};
 			Unicode::win2Unicode(wszStar, "*", 2);
 
-			//TODO: Set text
-			//if (v50 > 0)
-			//{
-			//	LOWORD(pEditBox2) = wszStar[0];
-			//	pEditBox3 = pEditBox2 << 16;
-			//	LOWORD(pEditBox3) = wszStar[0];
-			//	pEditBox4 = v50 & 1;
-			//	pEditBox5 = v50 >> 1;
-			//	memset32(wszVisible, pEditBox3, v50 >> 1);
-			//	pEditBox6 = &wszVisible[2 * pEditBox5];
-			//	for (i = pEditBox4; i; --i)
-			//	{
-			//		*pEditBox6 = pEditBox3;
-			//		++pEditBox6;
-			//	}
-			//}
+			for (int32_t i = 0; i < nVisibleLength; ++i)
+			{
+				wszVisible[i] = wszStar[0];
+			}
 		}
 
 		if (pEditBox->nSelectionStart == -1 || pEditBox->nSelectionStart == pEditBox->nSelectionEnd)
@@ -1166,7 +1154,7 @@ int32_t __fastcall EDITBOX_DrawSingleLine(D2WinControlStrc* pControl)
 			}
 
 			int32_t nBeforeLength = 0;
-			if (nBeforeLength > nSelectionMin - pEditBox->nFirstVisibleChar)
+			if (nSelectionMin - pEditBox->nFirstVisibleChar > 0)
 			{
 				nBeforeLength = nSelectionMin - pEditBox->nFirstVisibleChar;
 			}
@@ -1958,20 +1946,9 @@ void __fastcall sub_6F8A98A0(D2WinEditBoxStrc* pEditBox)
 	{
 		Unicode wszStar[2] = {};
 		Unicode::win2Unicode(wszStar, "*", 2);
-		if (nTextLength > 0)
+		for (int32_t i = 0; i < nTextLength; ++i)
 		{
-			//TODO: Set text
-
-			//LOWORD(v7) = wszStar;
-			//v8 = v7 << 16;
-			//LOWORD(v8) = wszStar;
-			//memset32(wszText, v8, (unsigned int)nTextLength >> 1);
-			//v9 = &wszText[2 * ((unsigned int)nTextLength >> 1)];
-			//for (int i = nTextLength & 1; i; --i)
-			//{
-			//	*v9 = v8;
-			//	++v9;
-			//}
+			wszText[i] = wszStar[0];
 		}
 	}
 	else
