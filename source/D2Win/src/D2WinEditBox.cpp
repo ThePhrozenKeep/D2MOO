@@ -339,6 +339,17 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 	constexpr char CHAR_CUT = 24;
 	constexpr char CHAR_SELECT_ALL = 1;
 
+	// The Ctrl+C / Ctrl+X copy buffer and the typed-character insert buffer
+	// 1.10f: 0x190 and 0x200 bytes (frame [ebp-B90h] and [ebp-A00h])
+	// 1.14d: one 0x100-byte slot shared by both (frame [ebp-110h]); the Enter path's unicode2Win writes 2 bytes past it
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	constexpr int32_t COPY_BUFFER_SIZE = 0x100;
+	constexpr int32_t INSERT_BUFFER_SIZE = 0x100;
+#else
+	constexpr int32_t COPY_BUFFER_SIZE = 0x190;
+	constexpr int32_t INSERT_BUFFER_SIZE = 0x200;
+#endif
+
 	if (!D2Win_10128(a2))
 	{
 		const uint32_t dwEditBoxFlags = pEditBox->dwEditBoxFlags;
@@ -380,7 +391,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 			const int32_t nSelectionMin = std::min(pEditBox->nSelectionStart, pEditBox->nSelectionEnd);
 			const int32_t nSelectionMax = std::max(pEditBox->nSelectionStart, pEditBox->nSelectionEnd);
 
-			char szCopy[256] = {};
+			char szCopy[COPY_BUFFER_SIZE] = {};
 			Unicode::unicode2Win(szCopy, &wszNewText[nSelectionMin], std::max(nSelectionMax - nSelectionMin + 1, 2));
 			EDITBOX_SetClipboardText(szCopy);
 		}
@@ -456,7 +467,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 
 			pCaret = &wszNewText[nSelectionMin];
 
-			char szCopy[256] = {};
+			char szCopy[COPY_BUFFER_SIZE] = {};
 			Unicode::unicode2Win(szCopy, pCaret, std::max(nSelectionMax - nSelectionMin + 1, 2));
 			EDITBOX_SetClipboardText(szCopy);
 
@@ -475,7 +486,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 		if (nTextLength < 255)
 		{
 			// The tail of the text from the caret goes through an ANSI buffer behind the typed character(s)
-			char szInsert[256] = {};
+			char szInsert[INSERT_BUFFER_SIZE] = {};
 			if (nChar == '\r')
 			{
 				Unicode::unicode2Win(&szInsert[2], pCaret, 256);
