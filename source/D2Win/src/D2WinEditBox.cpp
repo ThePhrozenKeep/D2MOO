@@ -31,9 +31,7 @@ int dword_6F8FD8B4;
 // The last text read from the clipboard (Ctrl+V)
 //1.10f: D2Win.0x6F8FD6B0
 //1.14d: 0x00841B80
-// D2MOO: one byte more than the 0x200 the binary strncpy's into, so a full read stays terminated (in 1.10f
-// dword_6F8FD8B0 follows the buffer)
-static char gszClipboardText_6F8FD6B0[0x200 + 1];
+static char gszClipboardText_6F8FD6B0[0x200];
 // The memory handed to SetClipboardData by the last Ctrl+C / Ctrl+X
 //1.10f: D2Win.0x6F8FD8B8
 //1.14d: 0x00841D80
@@ -382,7 +380,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 			const int32_t nSelectionMin = std::min(pEditBox->nSelectionStart, pEditBox->nSelectionEnd);
 			const int32_t nSelectionMax = std::max(pEditBox->nSelectionStart, pEditBox->nSelectionEnd);
 
-			char szCopy[400] = {};
+			char szCopy[256] = {};
 			Unicode::unicode2Win(szCopy, &wszNewText[nSelectionMin], std::max(nSelectionMax - nSelectionMin + 1, 2));
 			EDITBOX_SetClipboardText(szCopy);
 		}
@@ -458,7 +456,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 
 			pCaret = &wszNewText[nSelectionMin];
 
-			char szCopy[400] = {};
+			char szCopy[256] = {};
 			Unicode::unicode2Win(szCopy, pCaret, std::max(nSelectionMax - nSelectionMin + 1, 2));
 			EDITBOX_SetClipboardText(szCopy);
 
@@ -477,7 +475,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 		if (nTextLength < 255)
 		{
 			// The tail of the text from the caret goes through an ANSI buffer behind the typed character(s)
-			char szInsert[512] = {};
+			char szInsert[256] = {};
 			if (nChar == '\r')
 			{
 				Unicode::unicode2Win(&szInsert[2], pCaret, 256);
@@ -747,9 +745,8 @@ int32_t __fastcall EDITBOX_HandleKeyDown(D2WinEditBoxStrc* pEditBox, char nVirtu
 		break;
 
 	case VK_LEFT:
-		// D2MOO: the binaries step a pointer to wszText[-1] (and read it) at caret 0, then clamp to 0
 		--nCaret;
-		if (nCaret >= 0 && wszText[nCaret] == '\n')
+		if (wszText[nCaret] == '\n')
 		{
 			--nCaret;
 		}
