@@ -4003,6 +4003,7 @@ D2UnitStrc* __fastcall OBJMODE_DropItemWithCodeAndQuality(D2GameStrc* pGame, D2U
 //1.14d: 0x00585B90
 D2UnitStrc* __fastcall OBJMODE_DropFromChestTCWithQuality(D2ObjOperateFnStrc* pOp, int32_t nItemQuality)
 {
+    //D2Game.0x6FD28E38
     constexpr int32_t nLevelIds[] =
     {
         2, 37,

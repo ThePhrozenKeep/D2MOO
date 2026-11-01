@@ -260,7 +260,7 @@ int32_t __fastcall SKILLS_SrvSt14_Hydra(D2GameStrc* pGame, D2UnitStrc* pUnit, in
 }
 
 //D2Game.0x6FD15E50
-//1.14d: 0x004E2ED0
+//1.14d: 0x005C9290
 void __fastcall SKILLS_MissileInit_ChargedBolt(D2UnitStrc* pMissile, int32_t nSeedOffset)
 {
     if (!pMissile)
