@@ -169,7 +169,7 @@ void __fastcall sub_6F8AFCC0(Font nFontSize)
 //1.10f:D2Win.0x6F8AFDC0 (#10043)
 //1.13c:D2Win.0x? (#10178)
 //1.14d: 0x004FC960
-int32_t __fastcall D2Win_10043_TEXTBOX_Destroy(D2WinTextBoxStrc* pTextBox)
+BOOL __fastcall D2Win_10043_TEXTBOX_Destroy(D2WinTextBoxStrc* pTextBox)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -187,7 +187,7 @@ int32_t __fastcall D2Win_10043_TEXTBOX_Destroy(D2WinTextBoxStrc* pTextBox)
 
 //D2Win.0x6F8AFE30 (#10047)
 //1.14d: 0x004FB6A0
-int32_t __fastcall D2Win_10047(D2WinTextBoxStrc* pTextBox)
+BOOL __fastcall D2Win_10047(D2WinTextBoxStrc* pTextBox)
 {
 	if (!pTextBox)
 	{
@@ -222,7 +222,7 @@ int32_t __fastcall D2Win_10047(D2WinTextBoxStrc* pTextBox)
 
 //D2Win.0x6F8AFED0 (#10062)
 //1.14d: 0x004FB740
-int32_t __fastcall D2Win_10062(D2WinTextBoxStrc* pTextBox, int32_t nWrappedLineGap, int32_t nLineGap)
+BOOL __fastcall D2Win_10062(D2WinTextBoxStrc* pTextBox, int32_t nWrappedLineGap, int32_t nLineGap)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -246,7 +246,7 @@ void __fastcall D2Win_10045(D2WinTextBoxStrc* pTextBox, const char* szText)
 
 //D2Win.0x6F8AFFB0 (#10046)
 //1.14d: 0x004FCFF0
-int32_t __fastcall D2Win_10046(D2WinTextBoxStrc* pTextBox, const char* szText, int32_t nColor)
+BOOL __fastcall D2Win_10046(D2WinTextBoxStrc* pTextBox, const char* szText, int32_t nColor)
 {
 	Unicode wszText[1024] = {};
 
@@ -368,7 +368,7 @@ int32_t __fastcall D2Win_10051_Helper(D2WinTextBoxStrc* pTextBox, const Unicode*
 //D2Win.0x6F8B0040) --------------------------------------------------------
 // Tooltip ?
 //1.14d: 0x004FC9B0
-int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* wszText, int32_t nColor, char bIsWrapped, int32_t nIndent)
+BOOL __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* wszText, int32_t nColor, char bIsWrapped, int32_t nIndent)
 {
 	Unicode* v14; // ebp@27
 	int v15; // edi@27
@@ -503,7 +503,7 @@ LABEL_37:
 
 //D2Win.0x6F8B05E0 (#10198)
 //1.14d: 0x004FCC40
-int32_t __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int32_t nCount, int32_t nColor, char bIsWrapped)
+BOOL __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int32_t nCount, int32_t nColor, char bIsWrapped)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -547,7 +547,7 @@ int32_t __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const Unicode* pText,
 
 //D2Win.0x6F8B0750 (#10057)
 //1.14d: 0x004FCD40
-int32_t __fastcall D2Win_10057(D2WinTextBoxStrc* pTextBox, const char* szText, int32_t nLine, int32_t nColumn)
+BOOL __fastcall D2Win_10057(D2WinTextBoxStrc* pTextBox, const char* szText, int32_t nLine, int32_t nColumn)
 {
 	Unicode wszText[1024] = {};
 
@@ -557,7 +557,7 @@ int32_t __fastcall D2Win_10057(D2WinTextBoxStrc* pTextBox, const char* szText, i
 
 //D2Win.0x6F8B07C0 (#10058)
 //1.14d: 0x004FB790
-int32_t __fastcall D2Win_10058_0(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int32_t nLine, int32_t nColumn)
+BOOL __fastcall D2Win_10058_0(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int32_t nLine, int32_t nColumn)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -665,7 +665,7 @@ void __fastcall D2Win_10050_TEXTBOX_SetLine(D2WinTextBoxStrc* pTextBox, int32_t 
 
 //D2Win.0x6F8B0B30 (#10053)
 //1.14d: 0x004FBA30
-int32_t __fastcall D2Win_10053(D2WinTextBoxStrc* pTextBox, int32_t nLine)
+BOOL __fastcall D2Win_10053(D2WinTextBoxStrc* pTextBox, int32_t nLine)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -829,7 +829,7 @@ int32_t __fastcall D2Win_10061(D2WinTextBoxStrc* pTextBox)
 
 //D2Win.0x6F8B0FC0 (#10187)
 //1.14d: 0x004FBD70
-void __fastcall D2Win_10187(D2WinTextBoxStrc* pTextBox, int32_t bSet)
+void __fastcall D2Win_10187(D2WinTextBoxStrc* pTextBox, BOOL bSet)
 {
 	CONTROL_SetVisible(&pTextBox->controlHeader, bSet);
 
@@ -844,7 +844,7 @@ void __fastcall D2Win_10187(D2WinTextBoxStrc* pTextBox, int32_t bSet)
 
 //D2Win.0x6F8B1030 (#10188)
 //1.14d: 0x004FBDE0
-int __fastcall D2Win_10188(D2WinTextBoxStrc* pTextBox, int32_t nLineNum, int32_t nColor)
+BOOL __fastcall D2Win_10188(D2WinTextBoxStrc* pTextBox, int32_t nLineNum, int32_t nColor)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -902,7 +902,7 @@ int32_t __fastcall TEXTBOX_TruncateTextToWidth(Unicode* wszText, int32_t nWidth)
 
 //D2Win.0x6F8B1130
 //1.14d: 0x004FBF30
-int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
+BOOL __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 {
 	D2WinTextBoxStrc* pTextBox = (D2WinTextBoxStrc*)pControl;
 
@@ -1116,7 +1116,7 @@ int32_t __stdcall TEXTBOX_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 
 //D2Win.0x6F8B16B0
 //1.14d: 0x004FC3F0
-int32_t __stdcall TEXTBOX_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
+BOOL __stdcall TEXTBOX_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 {
 	D2WinTextBoxStrc* pTextBox = (D2WinTextBoxStrc*)pMsg->hWindow;
 
@@ -1229,7 +1229,7 @@ int32_t __fastcall D2Win_10190(D2WinTextBoxStrc* pTextBox)
 
 //D2Win.0x6F8B1940 (#10191)
 //1.14d: 0x004FC5E0
-int32_t __fastcall D2Win_10191(D2WinTextBoxStrc* pTextBox, int32_t nMaxSteps)
+BOOL __fastcall D2Win_10191(D2WinTextBoxStrc* pTextBox, int32_t nMaxSteps)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -1249,7 +1249,7 @@ int32_t __fastcall D2Win_10192(D2WinTextBoxStrc* pTextBox)
 
 //D2Win.0x6F8B19E0 (#10193)
 //1.14d: 0x004FC660
-int32_t __fastcall D2Win_10193(D2WinTextBoxStrc* pTextBox, int32_t nCurrentStep)
+BOOL __fastcall D2Win_10193(D2WinTextBoxStrc* pTextBox, int32_t nCurrentStep)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -1259,7 +1259,7 @@ int32_t __fastcall D2Win_10193(D2WinTextBoxStrc* pTextBox, int32_t nCurrentStep)
 
 //D2Win.0x6F8B1A30 (#10194)
 //1.14d: 0x004FC6A0
-int32_t __fastcall D2Win_10194(D2WinTextBoxStrc* pTextBox, D2WinTextBoxStrc* pLinkedTextBox)
+BOOL __fastcall D2Win_10194(D2WinTextBoxStrc* pTextBox, D2WinTextBoxStrc* pLinkedTextBox)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -1269,7 +1269,7 @@ int32_t __fastcall D2Win_10194(D2WinTextBoxStrc* pTextBox, D2WinTextBoxStrc* pLi
 
 //D2Win.0x6F8B1A80 (#10195)
 //1.14d: 0x004FC6E0
-int32_t __fastcall D2Win_10195(D2WinTextBoxStrc* pTextBox, void(__stdcall* pfScrollCallback)(SMSGHANDLER_PARAMS*))
+BOOL __fastcall D2Win_10195(D2WinTextBoxStrc* pTextBox, void(__stdcall* pfScrollCallback)(SMSGHANDLER_PARAMS*))
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
