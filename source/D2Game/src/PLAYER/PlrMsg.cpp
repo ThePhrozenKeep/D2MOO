@@ -1811,7 +1811,7 @@ void __fastcall sub_6FC84C70(D2GameStrc* pGame, const char* szMessage, uint8_t n
     pPacket.nMessageType = 1;
     pPacket.nUnitType = UNIT_OBJECT;
     pPacket.nMessageColor = nColor;
-    memcpy(pPacket.szMessage, szMessage, sizeof(pPacket.szMessage));
+    strncpy(pPacket.szMessage, szMessage, sizeof(pPacket.szMessage)); // szMessage is often a short literal; the client reads to the null
 
     GAME_ForEachIngameClient(pGame, j_D2GAME_PACKETS_SendPacket0x26_ServerMessage_6FC3DDF0, &pPacket);
 }
@@ -1828,7 +1828,7 @@ void __fastcall sub_6FC84CD0(D2GameStrc* pGame, const char* szMessage, uint8_t n
     pPacket.dwUnitGUID = 0;
     pPacket.nUnitType = UNIT_PLAYER;
     pPacket.nLang = 0;
-    memcpy(pPacket.szMessage, szMessage, sizeof(pPacket.szMessage));
+    strncpy(pPacket.szMessage, szMessage, sizeof(pPacket.szMessage)); // szMessage is often a short literal; the client reads to the null
 
     GAME_ForEachIngameClient(pGame, j_D2GAME_PACKETS_SendPacket0x26_ServerMessage_6FC3DDF0, &pPacket);
 }
