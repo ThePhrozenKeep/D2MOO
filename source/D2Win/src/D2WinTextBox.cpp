@@ -881,6 +881,25 @@ int __fastcall D2Win_10188(D2WinTextBoxStrc* pTextBox, int32_t nLineNum, int32_t
 	return 1;
 }
 
+//Inlined in D2Win.0x6F8B1130
+//1.14d: 0x004FBEE0
+int32_t __fastcall TEXTBOX_TruncateTextToWidth(Unicode* wszText, int32_t nWidth)
+{
+	int32_t nLength = 0;
+	const int32_t nTextLength = Unicode::strlen(wszText);
+	while (nLength < nTextLength)
+	{
+		if (D2Win_10122(wszText, nLength + 1) >= nWidth)
+		{
+			break;
+		}
+		++nLength;
+	}
+
+	wszText[nLength] = 0;
+	return nLength;
+}
+
 //D2Win.0x6F8B1130
 //1.14d: 0x004FBF30
 int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
@@ -950,7 +969,7 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 	}
 
 	int32_t nCounter = 0;
-	for (D2WinTextBoxLineStrc* pCurrentLine = pTextBox->pCurrentLine; pCurrentLine; pCurrentLine = pCurrentLine->pNext)
+	for (D2WinTextBoxLineStrc* pCurrentLine = pTextBox->pCurrentLine; pCurrentLine; )
 	{
 		for (int32_t i = 0; i < pTextBox->nNumColumns; ++i)
 		{
@@ -1011,17 +1030,7 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 
 			Unicode wszText[1024] = {};
 			Unicode::strcpy(wszText, pCurrentLine->pColumns[i]);
-
-			int32_t j = 0;
-			while (j < Unicode::strlen(wszText))
-			{
-				if (D2Win_10122(wszText, j + 1) >= nColumnWidth)
-				{
-					break;
-				}
-				++j;
-			}
-			wszText[j] = L'\0';
+			TEXTBOX_TruncateTextToWidth(wszText, nColumnWidth);
 
 			if (pTextBox->nCurrentLine == nCounter + pTextBox->nLine && pTextBox->dwTextBoxFlags & TEXTBOXFLAG_SELECTABLE)
 			{
@@ -1054,7 +1063,9 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 
 		++nCounter;
 
-		if (nRemainingHeight < nLineStep)
+		// Stops when the next line, with the gap below it, no longer fits
+		pCurrentLine = pCurrentLine->pNext;
+		if (!pCurrentLine || nRemainingHeight < nLineHeight + (pCurrentLine->bWrappedSegment ? pTextBox->nWrappedLineGap : pTextBox->nLineGap))
 		{
 			break;
 		}
@@ -1148,7 +1159,7 @@ int32_t __stdcall TEXTBOX_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 		else if (nTopLine < nNumLines - nVisibleLines)
 		{
 			nTopLine = std::min(nBottomLine, nNumLines - nVisibleLines);
-			nSelectedLine = std::min(nBottomLine, nNumLines - 1);
+			nSelectedLine = std::min(nTopLine + nVisibleLines - 1, nNumLines - 1);
 		}
 		break;
 	}

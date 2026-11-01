@@ -139,6 +139,9 @@ void __fastcall D2Win_10187(D2WinTextBoxStrc* pTextBox, int bSet);
 //D2Win.0x6F8B1030
 //1.14d: 0x004FBDE0
 int __fastcall D2Win_10188(D2WinTextBoxStrc* pTextBox, int nLineNum, int nColor);
+//Inlined in D2Win.0x6F8B1130
+//1.14d: 0x004FBEE0
+int32_t __fastcall TEXTBOX_TruncateTextToWidth(Unicode* wszText, int32_t nWidth);
 //D2Win.0x6F8B1130
 //1.14d: 0x004FBF30
 int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl);
