@@ -52,11 +52,6 @@ namespace
 		return static_cast<uint16_t>(random_unsigned_integer(0, 0xFFFF));
 	}
 
-	int random_signed_integer(int nMin, int nMax)
-	{
-		return nMin + static_cast<int>(random_unsigned_integer(0, nMax - nMin));
-	}
-
 	// D2CMP.#10085 returns the 5x5 subtile collision flags stored at offset 0x28 of the tile
 	void randomize_tile_flags(D2TileLibraryEntryStrc& moo_pTile, D2TileLibraryEntryStrc& original_pTile)
 	{
