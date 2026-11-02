@@ -6,8 +6,10 @@
 
 
 //D2Common.0x6FDD8480
+//1.14d: 0x749780
 static const int gnFieldXOffsets[] = { 0, 1, 1, 1, 0, -1, -1, -1, 0 };
-//D2Common.0xFDD84A4
+//D2Common.0x6FDD84A4
+//1.14d: 0x7497A4
 static const int gnFieldYOffsets[] = { -1, -1, 0, 1, 1, 1, 0, -1, 0 };
 
 

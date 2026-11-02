@@ -388,6 +388,7 @@ BOOL __fastcall sub_6FD84820(D2DrlgLevelStrc* pLevel, int nX, int nY, int a4, in
 //1.14d: 0x0067E160
 void __fastcall DRLGOUTSIEGE_PlaceSpecialPresets(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: 0x6FDD0AF8
 	//1.14d: 0x006F2100
 	static const D2DrlgOutSiegeInitStrc3 stru_6FDD0AF8[] =
 	{

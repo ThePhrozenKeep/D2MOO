@@ -381,8 +381,8 @@ int32_t __fastcall PARTY_ShareGoldDrop(D2GameStrc* pGame, D2UnitStrc* pUnit, int
                         {
                             int32_t nGoldToPick = 0;
                             int32_t nGoldToDrop = 0;
-                            PARTY_CalculatePickAndDrop(pUnit, nDividedGold, &nGoldToPick, &nGoldToDrop);
-                            D2GAME_SetStatOrResetGold_6FC7CA70(pPartyMember, STAT_GOLD, nGoldToPick + STATLIST_UnitGetStatValue(pPartyMember, STAT_GOLD, 0));
+                            PARTY_CalculatePickAndDrop(pPartyMember, nDividedGold, &nGoldToPick, &nGoldToDrop);
+                            PLRTRADE_AddGold(pPartyMember, STAT_GOLD, nGoldToPick);
 
                             nGoldValue += nGoldToDrop - nDividedGold;
                         }
@@ -402,7 +402,7 @@ int32_t __fastcall PARTY_ShareGoldDrop(D2GameStrc* pGame, D2UnitStrc* pUnit, int
     int32_t nGoldToPick = 0;
     int32_t nGoldToDrop = 0;
     PARTY_CalculatePickAndDrop(pUnit, nGoldValue, &nGoldToPick, &nGoldToDrop);
-    D2GAME_SetStatOrResetGold_6FC7CA70(pUnit, STAT_GOLD, nGoldToPick + STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0));
+    PLRTRADE_AddGold(pUnit, STAT_GOLD, nGoldToPick);
 
     return nGoldToDrop;
 }

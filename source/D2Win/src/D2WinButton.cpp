@@ -66,7 +66,7 @@ D2WinButtonStrc* __fastcall BUTTON_Create(int32_t nX, int32_t nY, int32_t nWidth
 
 //D2Win.0x6F8A62C0 (#10108)
 //1.14d: 0x00500930
-int32_t __fastcall BUTTON_Destroy(D2WinButtonStrc* pButton)
+BOOL __fastcall BUTTON_Destroy(D2WinButtonStrc* pButton)
 {
 	D2_ASSERT(pButton->controlHeader.nType == D2WIN_BUTTON);
 
@@ -75,7 +75,7 @@ int32_t __fastcall BUTTON_Destroy(D2WinButtonStrc* pButton)
 
 //D2Win.0x6F8A62F0 (#10109)
 //1.14d: 0x00500960
-int32_t __fastcall BUTTON_IsPressed(D2WinButtonStrc* pButton)
+BOOL __fastcall BUTTON_IsPressed(D2WinButtonStrc* pButton)
 {
 	D2_ASSERT(pButton->controlHeader.nType == D2WIN_BUTTON);
 
@@ -84,7 +84,7 @@ int32_t __fastcall BUTTON_IsPressed(D2WinButtonStrc* pButton)
 
 //D2Win.0x6F8A6330 (#10110)
 //1.14d: 0x005009A0
-void __fastcall BUTTON_SetIsPressed(D2WinButtonStrc* pButton, int32_t bIsPressed)
+void __fastcall BUTTON_SetIsPressed(D2WinButtonStrc* pButton, BOOL bIsPressed)
 {
 	D2_ASSERT(pButton->controlHeader.nType == D2WIN_BUTTON);
 
@@ -168,7 +168,7 @@ void __fastcall BUTTON_SetBaseFrame(D2WinButtonStrc* pButton, int32_t nBaseFrame
 
 //D2Win.0x6F8A64D0
 //1.14d: 0x00500B50
-int32_t __fastcall BUTTON_OnMouseWheelScrolled(D2WinButtonStrc* pButton, int32_t nMouseWheelIncrement)
+BOOL __fastcall BUTTON_OnMouseWheelScrolled(D2WinButtonStrc* pButton, int32_t nMouseWheelIncrement)
 {
 	D2_ASSERT(pButton->controlHeader.nType == D2WIN_BUTTON);
 
@@ -205,7 +205,7 @@ void __fastcall BUTTON_SetStringId(D2WinButtonStrc* pButton, uint16_t nStringId)
 }
 
 //D2Win.0x6F8A65A0
-int32_t __fastcall BUTTON_Draw(D2WinControlStrc* pControl)
+BOOL __fastcall BUTTON_Draw(D2WinControlStrc* pControl)
 {
 	D2WinButtonStrc* pButton = (D2WinButtonStrc*)pControl;
 
@@ -361,7 +361,7 @@ int32_t __fastcall BUTTON_Draw(D2WinControlStrc* pControl)
 
 //D2Win.0x6F8A6A10
 //1.14d: 0x00501090
-int32_t __stdcall BUTTON_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
+BOOL __stdcall BUTTON_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 {
 	D2WinButtonStrc* pButton = (D2WinButtonStrc*)pMsg->hWindow;
 

@@ -190,23 +190,23 @@ void __fastcall EVENT_IterateEvents(D2GameStrc* pGame)
 
     pTimerQueue->nArrayIndex = pGame->dwGameFrame % 64;
 
-    const int nMissileEventIdx = EVENT_MapUnitTypeToIndex(UNIT_MISSILE);
+    const int32_t nMissileEventIdx = EVENT_MapUnitTypeToIndex(UNIT_MISSILE);
     EVENT_ExecuteMissileEvents(pGame, pTimerQueue, pTimerQueue->pInfinite[nMissileEventIdx], 0);
     EVENT_ExecuteMissileEvents(pGame, pTimerQueue, pTimerQueue->pHead[nMissileEventIdx][pTimerQueue->nArrayIndex], 1);
 
-    const int nPlayerEventIdx = EVENT_MapUnitTypeToIndex(UNIT_PLAYER);
+    const int32_t nPlayerEventIdx = EVENT_MapUnitTypeToIndex(UNIT_PLAYER);
     EVENT_ExecutePlayerEvents(pGame, pTimerQueue, pTimerQueue->pInfinite[nPlayerEventIdx], 0);
     EVENT_ExecutePlayerEvents(pGame, pTimerQueue, pTimerQueue->pHead[nPlayerEventIdx][pTimerQueue->nArrayIndex], 1);
 
-    const int nMonsterEventIdx = EVENT_MapUnitTypeToIndex(UNIT_MONSTER);
+    const int32_t nMonsterEventIdx = EVENT_MapUnitTypeToIndex(UNIT_MONSTER);
     EVENT_ExecuteMonsterEvents(pGame, pTimerQueue, pTimerQueue->pInfinite[nMonsterEventIdx], 0);
     EVENT_ExecuteMonsterEvents(pGame, pTimerQueue, pTimerQueue->pHead[nMonsterEventIdx][pTimerQueue->nArrayIndex], 1);
 
-    const int nObjectEventIdx = EVENT_MapUnitTypeToIndex(UNIT_OBJECT);
+    const int32_t nObjectEventIdx = EVENT_MapUnitTypeToIndex(UNIT_OBJECT);
     EVENT_ExecuteObjectEvents(pGame, pTimerQueue, pTimerQueue->pInfinite[nObjectEventIdx], 0);
     EVENT_ExecuteObjectEvents(pGame, pTimerQueue, pTimerQueue->pHead[nObjectEventIdx][pTimerQueue->nArrayIndex], 1);
 
-    const int nItemEventIdx = EVENT_MapUnitTypeToIndex(UNIT_ITEM);
+    const int32_t nItemEventIdx = EVENT_MapUnitTypeToIndex(UNIT_ITEM);
     EVENT_ExecuteItemEvents(pGame, pTimerQueue, pTimerQueue->pInfinite[nItemEventIdx], 0);
     EVENT_ExecuteItemEvents(pGame, pTimerQueue, pTimerQueue->pHead[nItemEventIdx][pTimerQueue->nArrayIndex], 1);
 }
@@ -214,7 +214,7 @@ void __fastcall EVENT_IterateEvents(D2GameStrc* pGame)
 // Only differs from EventTimerCallback by return type
 using ExecuteEventCallback = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2C_EventTypes, int32_t, int32_t);
 // Helper function
-static void __fastcall EVENT_ExecuteEventsImpl(ExecuteEventCallback pDefaultCallback, D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t bTimedEvents)
+static void __fastcall EVENT_ExecuteEventsImpl(ExecuteEventCallback pDefaultCallback, D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, BOOL bTimedEvents)
 {
     pTimerQueue->pNextTimerToExecute = nullptr;
 
@@ -272,21 +272,21 @@ static void __fastcall EVENT_ExecuteEventsImpl(ExecuteEventCallback pDefaultCall
 
 //D2Game.0x6FC34CC0
 //1.14d: 0x00540F60
-void __fastcall EVENT_ExecutePlayerEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t bTimedEvents)
+void __fastcall EVENT_ExecutePlayerEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, BOOL bTimedEvents)
 {
     EVENT_ExecuteEventsImpl(D2GAME_EVENTS_Callback_6FC81BD0, pGame, pTimerQueue, pEventTimer, bTimedEvents);
 }
 
 //D2Game.0x6FC34DB0
 //1.14d: 0x00541060
-void __fastcall EVENT_ExecuteMonsterEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t bTimedEvents)
+void __fastcall EVENT_ExecuteMonsterEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, BOOL bTimedEvents)
 {
     EVENT_ExecuteEventsImpl(MONSTERMODE_EventHandler, pGame, pTimerQueue, pEventTimer, bTimedEvents);
 }
 
 //D2Game.0x6FC34EA0
 //1.14d: 0x00541160
-void __fastcall EVENT_ExecuteObjectEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t bTimedEvents)
+void __fastcall EVENT_ExecuteObjectEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, BOOL bTimedEvents)
 {
     EVENT_ExecuteEventsImpl(
         [](D2GameStrc* pGame, D2UnitStrc* pObject, D2C_EventTypes nEventType, int32_t, int32_t) {
@@ -297,7 +297,7 @@ void __fastcall EVENT_ExecuteObjectEvents(D2GameStrc* pGame, D2EventTimerQueueSt
 
 //D2Game.0x6FC34F90
 //1.14d: 0x00541240
-void __fastcall EVENT_ExecuteMissileEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t bTimedEvents)
+void __fastcall EVENT_ExecuteMissileEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, BOOL bTimedEvents)
 {
     EVENT_ExecuteEventsImpl(
         [](D2GameStrc* pGame, D2UnitStrc* pMissile, D2C_EventTypes nEventType, int32_t, int32_t) {
@@ -308,7 +308,7 @@ void __fastcall EVENT_ExecuteMissileEvents(D2GameStrc* pGame, D2EventTimerQueueS
 
 //D2Game.0x6FC35080
 //1.14d: 0x00541320
-void __fastcall EVENT_ExecuteItemEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t bTimedEvents)
+void __fastcall EVENT_ExecuteItemEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, BOOL bTimedEvents)
 {
     EVENT_ExecuteEventsImpl(
         [](D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t, int32_t) {

@@ -243,6 +243,8 @@ BOOL __fastcall DRLGOUTWILD_TestSpawnRiver(D2DrlgLevelStrc* pLevel, int nX)
 //1.10f: Inlined
 void DRLGOUTWILD_SpawnRiverPreset(D2DrlgLevelStrc* pLevel, int nX, int nY, bool bLowerRiver)
 {
+	//1.10f: 0x6FDD0CA0
+	//1.14d: 0x006F26A0
 	static const struct {
 		int nUpperFile;
 		int nLowerFile;

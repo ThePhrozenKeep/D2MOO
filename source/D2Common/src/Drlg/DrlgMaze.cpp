@@ -2838,6 +2838,8 @@ void __fastcall DRLGMAZE_PlaceAct5BaalStuff(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x00673120
 void __fastcall DRLGMAZE_PlaceAct1Barracks(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: 0x6FDCF41C
+	//1.14d: 0x006F0468
 	static D2DrlgRoomStrc* (__fastcall* pfGetBarracksEntryRoom[])(D2DrlgLevelStrc*) =
 	{
 		DRLGMAZE_GetFreeLocationForRoomWest,

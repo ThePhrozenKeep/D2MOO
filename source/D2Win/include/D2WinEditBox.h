@@ -70,6 +70,18 @@ void __fastcall EDITBOX_ClearSelection(D2WinEditBoxStrc* pEditBox);
 //D2Win.0x6F8A6F10
 //1.14d: 0x004FDD00
 int __fastcall D2Win_10082(D2WinEditBoxStrc* pEditBox);
+//Inlined at various places
+//1.14d: 0x004FDC70
+BOOL __fastcall EDITBOX_HasSelection(D2WinEditBoxStrc* pEditBox);
+//Inlined in D2Win.0x6F8A6F70 (#10074)
+//1.14d: 0x004FDB40
+const char* __fastcall EDITBOX_GetClipboardText();
+//Inlined in D2Win.0x6F8A6F70 (#10074)
+//1.14d: 0x004FDBB0
+BOOL __fastcall EDITBOX_SetClipboardText(const char* szText);
+//Inlined in D2Win.0x6F8A6F70 (#10074)
+//1.14d: 0x004FDE30
+int32_t __fastcall EDITBOX_GetTextHeight(D2WinEditBoxStrc* pEditBox, const Unicode* wszText);
 //D2Win.0x6F8A6F70
 //1.14d: 0x004FEAE0
 int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2);
@@ -117,10 +129,10 @@ int32_t __fastcall EDITBOX_PlaceMultiLineCaret(SMSGHANDLER_PARAMS* pMsg, int32_t
 int __stdcall sub_6F8A97D0(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8A9850
 //1.14d: 0x004FE770
-bool __stdcall D2Win_10078_IsNumber(int32_t nUnused1, int32_t nUnused2, char* szChar);
+BOOL __stdcall D2Win_10078_IsNumber(int32_t nUnused1, int32_t nUnused2, char* szChar);
 //D2Win.0x6F8A9870
 //1.14d: 0x004FE790
-bool __stdcall D2Win_10079_IsLetter(int nUnused1, int nUnused2, char* szChar);
+BOOL __stdcall D2Win_10079_IsLetter(int nUnused1, int nUnused2, char* szChar);
 //D2Win.0x6F8A98A0
 //1.14d: 0x004FE7C0
 void __fastcall sub_6F8A98A0(D2WinEditBoxStrc* pEditBox);

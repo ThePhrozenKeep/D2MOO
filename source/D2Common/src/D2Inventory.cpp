@@ -2897,9 +2897,10 @@ void __fastcall INVENTORY_InitializeComponentArray()
 			{
 				int nIndex = nCurrentTableEntries;
 
-				while (ITEMS_CheckType(gComponentItemTypeMap[nIndex].nItemType, ITEMTYPE_WEAPON) && ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_WEAPON)
+				// Bounded: past the table the game read the next globals, and any index there is reset below anyway.
+				while (nIndex < ARRAY_SIZE(gTxtComponentItemTypeMap) && (ITEMS_CheckType(gComponentItemTypeMap[nIndex].nItemType, ITEMTYPE_WEAPON) && ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_WEAPON)
 					   || ITEMS_CheckType(gComponentItemTypeMap[nIndex].nItemType, ITEMTYPE_ANY_ARMOR) && ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_ANY_ARMOR)
-					   || gTxtComponentItemTypeMap[nIndex].dwCode)
+					   || gTxtComponentItemTypeMap[nIndex].dwCode))
 				{
 					++nIndex;
 				}

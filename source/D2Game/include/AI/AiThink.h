@@ -633,6 +633,7 @@ void __fastcall AITHINK_AncientBarb1SkillHandler(D2GameStrc* pGame, D2UnitStrc* 
 //1.14d: 0x005EEB10
 int32_t __fastcall AITHINK_AreUnitsInSameLevel(D2UnitStrc* pUnit, D2UnitStrc* pTarget);
 //Inlined in D2Game.0x6FCEFBC0
+//1.14d: 0x005EEDA0
 void __fastcall AITHINK_AncientBarb2SkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam);
 //D2Game.0x6FCEFA10
 //1.14d: 0x005EF010

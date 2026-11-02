@@ -3627,6 +3627,7 @@ int __stdcall ITEMS_GetOwnerId(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9E1A0 (#10736)
+//1.14d: 0x62FDF0
 BOOL __stdcall ITEMS_IsBodyItem(D2UnitStrc* pItem)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
@@ -3716,6 +3717,8 @@ int __stdcall ITEMS_GetClassOfClassSpecificItem(D2UnitStrc* pItem)
 //1.14d: 0x00629FE0
 uint16_t __stdcall ITEMS_GetWeaponClassId(D2UnitStrc* pItem)
 {
+	//1.10f: 0x6FDE3C08
+	//1.14d: 0x7446A0
 	static const D2CompositStrc stru_6FDE3C08[8] =
 	{
 		{ ' wob', WEAPONCLASS_BOW },
@@ -7586,6 +7589,7 @@ int __stdcall ITEMS_GetNoOfSetItemsFromItem(D2UnitStrc* pItem)
 
 
 //D2Common.0x6FDD15C8
+//1.14d: 0x006EE424
 int gnItemSetStates[] =
 {
 	STATE_ITEMSET1, STATE_ITEMSET2, STATE_ITEMSET3, STATE_ITEMSET4, STATE_ITEMSET5, STATE_ITEMSET6

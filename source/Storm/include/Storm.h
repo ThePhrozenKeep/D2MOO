@@ -514,15 +514,16 @@ D2FUNC_DLL_NP(STORM, SMemReAlloc, void*, __stdcall, (void *location, int amount,
 #endif
 
 
+// Built on the stack by SMsgDispatchMessage (1.10f Storm.#412, 1.14d Game.exe 0x420B00) and passed to every handler.
 struct SMSGHANDLER_PARAMS {
-    HWND    hWindow;
-    UINT    nMessage;
-    WPARAM  wParam;
-    LPARAM  lParam;
-    UINT    nNotifyCode;
-    LPVOID  pExtra;
-    BOOL    bUseResult;
-    LRESULT lResult;
+    HWND    hWindow;        //0x00
+    UINT    nMessage;       //0x04
+    WPARAM  wParam;         //0x08
+    LPARAM  lParam;         //0x0C
+    UINT    nNotifyCode;    //0x10 HIWORD(wParam) for WM_COMMAND, 0 otherwise
+    LPVOID  pExtra;         //0x14 not set by SMsgDispatchMessage
+    BOOL    bUseResult;     //0x18 cleared before dispatch, copied to *bUseResult
+    LRESULT lResult;        //0x1C cleared before dispatch, copied to *pResult
 };
 typedef BOOL(CALLBACK* SMSGIDLEPROC)(DWORD);
 typedef void (CALLBACK* SMSGHANDLER)(SMSGHANDLER_PARAMS*);

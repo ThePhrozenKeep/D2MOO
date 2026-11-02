@@ -71,7 +71,7 @@ int32_t dword_6FD4581C;
 int32_t gnTargetFrameRate_6FD2CA60 = DEFAULT_FRAMES_PER_SECOND;
 //1.10f: D2Game.0x6FD457F8
 //1.14d: 0x00883D60
-int32_t gnTargetMsPerFrame_6FD457F8;
+int32_t gnTargetMsPerFrame_6FD457F8 = GAME_InitializeFrameRate();
 //1.10f: D2Game.0x6FD2CA14
 //1.14d: 0x00731010
 int32_t gnFrameRate_6FD2CA14;
@@ -2173,9 +2173,9 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
 
 //D2Game.0x6FC38E00
 //1.14d: 0x006CAF10
-void __fastcall GAME_InitializeFrameRate()
+int32_t __fastcall GAME_InitializeFrameRate()
 {
-    gnTargetMsPerFrame_6FD457F8 = 1000 / gnTargetFrameRate_6FD2CA60;
+    return gnTargetMsPerFrame_6FD457F8 = 1000 / gnTargetFrameRate_6FD2CA60;
 }
 
 //1.10f:D2Game.0x6FC38E20 (#10004)
@@ -2193,18 +2193,28 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t bLimitCatchUp)
         dword_6FD45844 = nSysTimeMs;
     }
 
-    if (nSysTimeMs - dword_6FD45844 < gnTargetMsPerFrame_6FD457F8)
+#ifdef NO_BUG_FIX
+    const int32_t nElapsedMs = static_cast<int32_t>(nSysTimeMs - dword_6FD45844);
+#else
+    // timeGetTime is masked to 31 bits; retain the frame cadence when it wraps.
+    const int32_t nElapsedMs = (nSysTimeMs - dword_6FD45844) & 0x7FFFFFFF;
+#endif
+    if (nElapsedMs < gnTargetMsPerFrame_6FD457F8)
     {
         return 0;
     }
 
-    int32_t nRemainingDelayMs = nSysTimeMs - dword_6FD45844 - gnTargetMsPerFrame_6FD457F8;
+    int32_t nRemainingDelayMs = nElapsedMs - gnTargetMsPerFrame_6FD457F8;
     if (bLimitCatchUp && nRemainingDelayMs >= gnTargetMsPerFrame_6FD457F8)
     {
         nRemainingDelayMs = gnTargetMsPerFrame_6FD457F8;
     }
 
+#ifdef NO_BUG_FIX
     dword_6FD45844 = nSysTimeMs - nRemainingDelayMs;
+#else
+    dword_6FD45844 = (nSysTimeMs - nRemainingDelayMs) & 0x7FFFFFFF;
+#endif
     
     int32_t bQueryPerformance = 0;
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)

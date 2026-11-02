@@ -38,7 +38,7 @@ int32_t dword_6F8BE008;
 
 PALETTEENTRY gScreenPalette_6F8FE290[256][64];
 
-uint32_t dword_6F90E290;
+int32_t dword_6F90E290;
 uint32_t dword_6F90E294;
 PALETTEENTRY gDarkBlendPalette_6F90E298[256][64];
 D2ShadowLightGammaPaletteStrc gShadowsLightGammaPalette_6F91E298;

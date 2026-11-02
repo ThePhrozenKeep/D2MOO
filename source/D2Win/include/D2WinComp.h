@@ -133,4 +133,4 @@ inline void sub_6F8A2070(void*)
 void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int bUnlinkAndFree);
 //1.10f: D2Win.0x6F8A4CE0 (#10160)
 //1.14d: 0x00505640
-const char* __stdcall D2Win_10160_GetPlayerTitle(int nClass, int nTitle, BOOL bSoftCore);
+const char* __stdcall D2Win_10160_GetPlayerTitle(int nClass, int nTitle, BOOL bExpansion);

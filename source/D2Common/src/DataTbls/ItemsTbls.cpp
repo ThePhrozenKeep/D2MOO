@@ -1040,6 +1040,7 @@ void __fastcall DATATBLS_UnloadSets_SetItemsTxt()
 }
 
 // Inlined
+//1.14d: 0x483440
 D2SetItemsTxt* __stdcall DATATBLS_GetSetItemsTxtRecord(int nSetItemId)
 {
 	if (nSetItemId >= 0 && nSetItemId < sgptDataTables->nSetItemsTxtRecordCount)
@@ -1049,6 +1050,7 @@ D2SetItemsTxt* __stdcall DATATBLS_GetSetItemsTxtRecord(int nSetItemId)
 	return nullptr;
 }
 
+//1.14d: 0x483410
 D2SetsTxt* __stdcall DATATBLS_GetSetsTxtRecord(int nSetId)
 {
 	if (nSetId >= 0 && nSetId < sgptDataTables->nSetsTxtRecordCount)

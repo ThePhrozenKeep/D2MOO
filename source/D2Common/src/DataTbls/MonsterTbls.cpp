@@ -2733,7 +2733,11 @@ void __fastcall DATATBLS_LoadMonEquipTxt(HD2ARCHIVE hArchive)
 //1.14d: 0x0065A400
 void __fastcall DATATBLS_LoadSomeMonsterTxts(HD2ARCHIVE hArchive)
 {
+	//1.10f: 0x6FDDC0C8
+	//1.14d: 0x745A10
 	static const char* szTreasureClassVariants[] = { "A", "B", "C" };
+	//1.10f: 0x6FDDC0BC
+	//1.14d: 0x745A1C
 	static const char* szDifficulties[] = { "", " (N)", " (H)" };
 
 	D2TCExShortStrc** ppTCEx = NULL;

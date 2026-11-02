@@ -635,8 +635,9 @@ int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlaye
     return 0;
 }
 
-//1.10f: D2Game.0x6FC8DC20
+//D2Game.0x6FC8DC20
 //1.13c: D2Game.0x6FD0BAF0
+//1.14d: 0x00569D80
 #if PLRSAVE2_CHECK_LADDER_TIMESTAMP
 int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags, D2ClientStrc* pClient)
 #else

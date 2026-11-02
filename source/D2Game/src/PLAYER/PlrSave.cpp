@@ -1670,7 +1670,7 @@ int32_t __fastcall PLRSAVE_ReadCorpseSection(D2GameStrc* pGame, D2UnitStrc* pPla
         INVENTORY_SetOwnerId(pPlayerBody->pInventory, pPlayer ? pPlayer->dwUnitId : -1);
 
         int32_t nReadSize = 0;
-        const int32_t nErrorCode = PLRSAVE_ReadItemSection(pGame, pPlayer, pData + 12, dwVersion, nRemainingSize - 12, 1, &nReadSize);
+        const int32_t nErrorCode = PLRSAVE_ReadItemSection(pGame, pPlayerBody, pData + 12, dwVersion, nRemainingSize - 12, 1, &nReadSize);
         if (nErrorCode)
         {
             return nErrorCode;

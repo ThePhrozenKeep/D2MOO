@@ -296,7 +296,7 @@ int32_t __fastcall PLRMSG_SendPlayerStatUpdates(D2UnitStrc* pUnit, D2UnitStrc* p
     }
     
     D2StatListStrc* pHealthPotStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_HEALTHPOT);
-    int32_t nPotionLifePercent = 0;
+    uint8_t nPotionLifePercent = 0;
     if (pHealthPotStatList && nShiftedMaxHp)
     {
         D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
@@ -311,7 +311,7 @@ int32_t __fastcall PLRMSG_SendPlayerStatUpdates(D2UnitStrc* pUnit, D2UnitStrc* p
 
     const int32_t nMaxMana = STATLIST_GetMaxManaFromUnit(pUnit);
     D2StatListStrc* pManaPotStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_MANAPOT);
-    int32_t nPotionManaPercent = 0;
+    uint8_t nPotionManaPercent = 0;
     if (pManaPotStatList && nMaxMana)
     {
         D2CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
@@ -1811,7 +1811,7 @@ void __fastcall sub_6FC84C70(D2GameStrc* pGame, const char* szMessage, uint8_t n
     pPacket.nMessageType = 1;
     pPacket.nUnitType = UNIT_OBJECT;
     pPacket.nMessageColor = nColor;
-    memcpy(pPacket.szMessage, szMessage, sizeof(pPacket.szMessage));
+    strncpy(pPacket.szMessage, szMessage, sizeof(pPacket.szMessage)); // szMessage is often a short literal; the client reads to the null
 
     GAME_ForEachIngameClient(pGame, j_D2GAME_PACKETS_SendPacket0x26_ServerMessage_6FC3DDF0, &pPacket);
 }
@@ -1828,7 +1828,7 @@ void __fastcall sub_6FC84CD0(D2GameStrc* pGame, const char* szMessage, uint8_t n
     pPacket.dwUnitGUID = 0;
     pPacket.nUnitType = UNIT_PLAYER;
     pPacket.nLang = 0;
-    memcpy(pPacket.szMessage, szMessage, sizeof(pPacket.szMessage));
+    strncpy(pPacket.szMessage, szMessage, sizeof(pPacket.szMessage)); // szMessage is often a short literal; the client reads to the null
 
     GAME_ForEachIngameClient(pGame, j_D2GAME_PACKETS_SendPacket0x26_ServerMessage_6FC3DDF0, &pPacket);
 }

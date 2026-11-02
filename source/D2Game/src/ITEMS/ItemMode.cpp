@@ -4454,16 +4454,16 @@ void __fastcall ITEMMODE_RemoveInventoryItemFromAllPlayers(D2GameStrc* pGame, D2
 //1.14d: 0x0055EDC0
 void __fastcall ITEMMODE_CompactBeltColumn(D2GameStrc* pGame, D2UnitStrc* pUnit, int8_t nRemovedSlot)
 {
-    const int32_t nPosition = D2Clamp(nRemovedSlot & 3, 0, 3);
-    int32_t nWriteRow = nPosition;
-    for (int32_t nReadRow = nPosition; nReadRow < 4; ++nReadRow)
+    const int32_t nColumn = D2Clamp(nRemovedSlot & 3, 0, 3);
+    int32_t nWriteRow = 0;
+    for (int32_t nReadRow = 0; nReadRow < 4; ++nReadRow)
     {
-        D2UnitStrc* pBeltItem = INVENTORY_GetItemFromBeltSlot(pUnit->pInventory, 4 * nReadRow);
+        D2UnitStrc* pBeltItem = INVENTORY_GetItemFromBeltSlot(pUnit->pInventory, nColumn + 4 * nReadRow);
         if (pBeltItem)
         {
             if (nWriteRow != nReadRow)
             {
-                INVENTORY_PlaceItemInBeltSlot(pUnit->pInventory, pBeltItem, 4 * nWriteRow);
+                INVENTORY_PlaceItemInBeltSlot(pUnit->pInventory, pBeltItem, nColumn + 4 * nWriteRow);
                 ITEMS_SetItemFlag(pBeltItem, IFLAG_UNK1, 1);
                 ITEMS_SetItemFlag(pBeltItem, IFLAG_NEWITEM, 1);
 

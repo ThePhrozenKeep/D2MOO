@@ -415,7 +415,7 @@ int32_t __fastcall MISSMODE_SrvHit57_BaalFxControl(D2GameStrc* pGame, D2UnitStrc
 //D2Game.0x6FC5F8B0
 //1.14d: 0x005B0AA0
 int32_t __fastcall MISSMODE_SrvDo37_CreateTimedSubmissiles(D2GameStrc* pGame, D2UnitStrc* pMissile);
-//D2Game.0x6FC5F8C0
+//D2Game.0x6FC5FAC0
 //1.14d: 0x005B0BC0
 int32_t __fastcall MISSMODE_SrvDo01_BasicMissile(D2GameStrc* pGame, D2UnitStrc* pMissile);
 //D2Game.0x6FC5FAD0

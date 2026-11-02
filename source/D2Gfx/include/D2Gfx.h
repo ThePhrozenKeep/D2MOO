@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <cstdint>
 
 #include <Windows.h>
@@ -129,13 +130,13 @@ struct D2GfxSettingsStrc
 
 struct D2GfxHelperStrc
 {
-	void(__fastcall* pfFillYBufferTable)(uint8_t* ppvBits, int32_t nWidth, int32_t nHeight, int32_t a4);
-	void(__fastcall* pfDrawVisTile)(uint8_t* a1, int32_t a2, int32_t a3);
-	void(__fastcall* pfUnknown)(uint8_t* a1, int32_t a2, int32_t a3, uint8_t a4);
+	void(__fastcall* pfFillYBufferTable)(uint8_t* pBuffer, int32_t nPitch, int32_t nHeight, int32_t nUnknown);
+	void(__fastcall* pfDrawVisTile)(uint8_t* pSrc, int32_t nX, int32_t nY);
+	void(__fastcall* pfDrawFlatLitVisTile)(uint8_t* pSrc, int32_t nX, int32_t nY, uint8_t nIntensity);
 	void(__fastcall* pfFloorTileDraw)(D2TileLibraryEntryStrc* pTileLibraryEntry, int32_t nX, int32_t nY, D2GfxLightExStrc* pLightEx);
-	void(__fastcall* pfTileDrawLit)(uint8_t* a1, int32_t a2, int32_t a3, int32_t* a4);
-	void(__fastcall* pfDrawBlendedVisTile)(int32_t a1, int32_t a2, int32_t a3, uint8_t a4);
-	void(__fastcall* pfDrawRoofTile)(int32_t a1, int32_t a2, int32_t a3, int32_t* a4, uint8_t a5);
+	void(__fastcall* pfTileDrawLit)(uint8_t* pSrc, int32_t nX, int32_t nY, int32_t* pIntensities);
+	void(__fastcall* pfDrawBlendedVisTile)(uint8_t* pSrc, int32_t nX, int32_t nY, uint8_t nAlpha);
+	void(__fastcall* pfDrawRoofTile)(uint8_t* pSrc, int32_t nX, int32_t nY, int32_t* pIntensities, uint8_t nAlpha);
 };
 
 struct D2GraphicsInterfaceStrc
@@ -207,7 +208,7 @@ D2GFX_DLL_DECL int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC p
 //D2Gfx.0x6FA73980
 D2GFX_DLL_DECL void __cdecl j_D2GFX_10040_ShowAllWindows();
 //D2Gfx.0x6FA73990 (#10002)
-D2GFX_DLL_DECL int32_t __stdcall D2GFX_ReturnFalse();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_ReturnFalse(int32_t nUnused1, int32_t nUnused2, int32_t nUnused3);
 //D2Gfx.0x6FA739A0 (#10001)
 D2GFX_DLL_DECL int32_t __stdcall D2GFX_Release();
 //D2Gfx.0x6FA73AC0 (#10003)
@@ -271,7 +272,7 @@ D2GFX_DLL_DECL void __stdcall D2GFX_DrawBox(int32_t nXStart, int32_t nYStart, in
 //D2Gfx.0x6FA73DA0 (#10056)
 D2GFX_DLL_DECL void __stdcall D2GFX_DrawBoxAlpha(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t dwColor, uint8_t nAlpha);
 //D2Gfx.0x6FA73DE0 (#10057)
-D2GFX_DLL_DECL void __stdcall D2GFX_DrawLine(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint8_t nColor, uint8_t nAlpha);
+D2GFX_DLL_DECL void __stdcall D2GFX_DrawLine(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t nColor, uint8_t nAlpha);
 //D2Gfx.0x6FA73E10 (#10058)
 D2GFX_DLL_DECL void __stdcall D2GFX_ClearScreen(int32_t bPartial);
 //D2Gfx.0x6FA73E30 (#10079)

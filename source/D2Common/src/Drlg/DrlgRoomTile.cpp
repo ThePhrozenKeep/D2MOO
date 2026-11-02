@@ -453,7 +453,7 @@ void __fastcall DRLGROOMTILE_InitTileShadow(D2DrlgRoomStrc* pDrlgRoom, int nX, i
 
 //1.10f:D2Common.0x6FD89000
 //1.11: D2Common.0x6FD8E0B0
-//1.14d: 0x0066E9B0
+//1.14d: 0x0066EC10
 void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2DrlgRoomStrc* pDrlgRoom, D2DrlgGridStrc* pTilePackedInfoGrid, D2DrlgGridStrc* pTileTypeGrid, BOOL bFillBlanks, BOOL bKillEdgeX, BOOL bKillEdgeY)
 {
 	void* pMemPool = pDrlgRoom->pLevel->pDrlg->pMempool;

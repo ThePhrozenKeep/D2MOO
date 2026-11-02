@@ -31,6 +31,9 @@ BOOL XFaultFatal(DWORD errorCode, ...);
 
 BOOL XFaultContinuableError(DWORD errorCode, ...);
 
+// Returns TRUE if the user pressed Cancel, in which case the caller is expected to break into the debugger
+BOOL XFaultBreakableError(DWORD errorCode, ...);
+
 
 
 // To use any of the XFault functions, you need to include this header with XFAULT_IMPL and XFAULT_MODULE_NAME defined in ONE (and only one) of the .cpp files of your .dll.
@@ -94,6 +97,19 @@ BOOL XFaultContinuableError(DWORD errorCode, ...)
 		return 1;
 	FaultExit();
 	return 0;
+}
+
+BOOL XFaultBreakableError(DWORD errorCode, ...)
+{
+	va_list va;
+	CHAR faultStringBuffer[512];
+	CHAR msgBuffer[512];
+
+	va_start(va, errorCode);
+	FaultGetString(errorCode, faultStringBuffer, sizeof(faultStringBuffer));
+	wvsprintfA(msgBuffer, faultStringBuffer, va);
+	va_end(va);
+	return MessageBoxA(0, msgBuffer, gpszModuleName, MB_OKCANCEL | MB_ICONHAND | MB_TASKMODAL) == IDCANCEL;
 }
 
 

@@ -1007,6 +1007,7 @@ int __stdcall D2Common_10231(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit_
 //1.00:  D2Common.0x1005F220
 //1.10f: D2Common.0x6FDACC40
 //1.13c: D2Common.0x6FD5DA40
+//1.14d: 0x0064FB90
 void PATH_RecacheRoomAtCoordIfNeeded(D2DynamicPathStrc* pPath, D2ActiveRoomStrc* pHintRoom, uint32_t nPrecisionX, uint32_t nPrecisionY)
 {
 	if ((pPath->dwFlags & PATH_MISSILE_MASK) == 0

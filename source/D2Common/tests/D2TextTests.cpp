@@ -15,6 +15,20 @@
 #include <D2Text.h>
 
 
+namespace
+{
+	// The padding of the allocated header and nodes is never written, so clear it before comparing
+	void clear_padding(D2TextHeaderStrc* pTextHeader)
+	{
+		pTextHeader->pad0x06 = 0;
+		for (D2TextNodeStrc* pNode = pTextHeader->pNode; pNode; pNode = pNode->pNext)
+		{
+			pNode->pad0x02 = 0;
+		}
+	}
+}
+
+
 TEST_SUITE("D2TextTests")
 {
 	const auto working_directory = std::filesystem::current_path();
@@ -34,6 +48,8 @@ TEST_SUITE("D2TextTests")
 			const auto original_result = original(nullptr);
 
 			// Compare return values
+			clear_padding(moo_result);
+			clear_padding(original_result);
 			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 
 			// Free allocated memory
@@ -84,6 +100,8 @@ TEST_SUITE("D2TextTests")
 				original(&original_pTextHeader, nStringId, nMenu);
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 		}
@@ -115,6 +133,8 @@ TEST_SUITE("D2TextTests")
 				original_add_to_list(&original_pTextHeader, nStringId, nMenu);
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 
@@ -125,6 +145,8 @@ TEST_SUITE("D2TextTests")
 			original(&original_pTextHeader, nStringId);
 
 			// Compare potentially modified input data
+			clear_padding(&moo_pTextHeader);
+			clear_padding(&original_pTextHeader);
 			MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 		}
 	}
@@ -151,6 +173,8 @@ TEST_SUITE("D2TextTests")
 				original_add_to_list(&original_pTextHeader, nStringId, nMenu);
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 
@@ -162,6 +186,8 @@ TEST_SUITE("D2TextTests")
 			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 
 			// Compare potentially modified input data
+			clear_padding(&moo_pTextHeader);
+			clear_padding(&original_pTextHeader);
 			MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 		}
 	}
@@ -188,6 +214,8 @@ TEST_SUITE("D2TextTests")
 				original_add_to_list(&original_pTextHeader, nStringId, nMenu);
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 
@@ -203,6 +231,8 @@ TEST_SUITE("D2TextTests")
 				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 		}
@@ -230,6 +260,8 @@ TEST_SUITE("D2TextTests")
 				original_add_to_list(&original_pTextHeader, nStringId, nMenu);
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 
@@ -245,6 +277,8 @@ TEST_SUITE("D2TextTests")
 				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 		}
@@ -272,6 +306,8 @@ TEST_SUITE("D2TextTests")
 				original_add_to_list(&original_pTextHeader, nStringId, nMenu);
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 
@@ -287,6 +323,8 @@ TEST_SUITE("D2TextTests")
 				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 		}
@@ -316,6 +354,8 @@ TEST_SUITE("D2TextTests")
 				original_add_to_list(&original_pTextHeader, nStringId, nMenu);
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 
@@ -324,6 +364,8 @@ TEST_SUITE("D2TextTests")
 			original(&original_pTextHeader, &original_pMsgList);
 
 			// Compare potentially modified input data
+			clear_padding(&moo_pTextHeader);
+			clear_padding(&original_pTextHeader);
 			MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			MOO_CHECK_EQ(moo_pMsgList, original_pMsgList, "Comparing pMsgList");
 		}
@@ -353,6 +395,8 @@ TEST_SUITE("D2TextTests")
 				original_add_to_list(&original_pTextHeader, nStringId, nMenu);
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 
@@ -361,6 +405,8 @@ TEST_SUITE("D2TextTests")
 			original(&original_pTextHeader, &original_pMsgList);
 
 			// Compare potentially modified input data
+			clear_padding(&moo_pTextHeader);
+			clear_padding(&original_pTextHeader);
 			MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			MOO_CHECK_EQ(moo_pMsgList, original_pMsgList, "Comparing pMsgList");
 		}
@@ -388,6 +434,8 @@ TEST_SUITE("D2TextTests")
 				original_add_to_list(&original_pTextHeader, nStringId, nMenu);
 
 				// Compare potentially modified input data
+				clear_padding(&moo_pTextHeader);
+				clear_padding(&original_pTextHeader);
 				MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 			}
 
@@ -396,6 +444,8 @@ TEST_SUITE("D2TextTests")
 			original(&original_pTextHeader);
 
 			// Compare potentially modified input data
+			clear_padding(&moo_pTextHeader);
+			clear_padding(&original_pTextHeader);
 			MOO_CHECK_EQ(moo_pTextHeader, original_pTextHeader, "Comparing pTextHeader");
 		}
 	}

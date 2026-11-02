@@ -945,7 +945,7 @@ void __fastcall OBJECTS_InitFunction46_TrappedSoulPlaceHolder(D2ObjInitFnStrc* p
             {
                 int32_t nMax = nBase >> 1;
 
-                if (nMax > 0 && (nMax - 1) & nMax ? ITEMS_RollRandomNumber(&pObjectControl->pSeed) % nMax : (nMax - 1) & ITEMS_RollRandomNumber(&pObjectControl->pSeed))
+                if (ITEMS_RollLimitedRandomNumber(&pObjectControl->pSeed, nMax))
                 {
                     break;
                 }
@@ -957,16 +957,15 @@ void __fastcall OBJECTS_InitFunction46_TrappedSoulPlaceHolder(D2ObjInitFnStrc* p
 
                 bPositionFound = 0;
 
-                if (nRemainingSpawnCount < 4)
-                {
-                    nRemainingSpawnCount = 4;
-                }
-
+                const int32_t nMaxAttempts = 3 * std::max(nRemainingSpawnCount, 4);
                 int32_t nCounter = 0;
-                while (nCounter < 3 * nRemainingSpawnCount)
+                while (nCounter < nMaxAttempts)
                 {
-                    nX += 2 * ((ITEMS_RollRandomNumber(&pObjectControl->pSeed) % 5 + 5) * nXOffsets[(ITEMS_RollRandomNumber(&pObjectControl->pSeed) & 7)]);
-                    nY += 2 * ((ITEMS_RollRandomNumber(&pObjectControl->pSeed) % 5 + 5) * nYOffsets[(ITEMS_RollRandomNumber(&pObjectControl->pSeed) & 7)]);
+                    const int32_t nDirection = ITEMS_RollRandomNumber(&pObjectControl->pSeed) & 7;
+                    const int32_t nXDistance = ITEMS_RollRandomNumber(&pObjectControl->pSeed) % 5 + 5;
+                    const int32_t nYDistance = ITEMS_RollRandomNumber(&pObjectControl->pSeed) % 5 + 5;
+                    nX += 2 * nXDistance * nXOffsets[nDirection];
+                    nY += 2 * nYDistance * nYOffsets[nDirection];
 
                     ++nCounter;
                     if (pRoomCoord.nSubtileWidth >= 5 && pRoomCoord.nSubtileHeight >= 5 && nX > pRoomCoord.nSubtileX + 1 && nY > pRoomCoord.nSubtileY + 1

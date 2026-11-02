@@ -35,7 +35,7 @@ D2COMMON_DLL_DECL void __stdcall D2Common_10846(int nDataBits, int* a2, int* a3,
 //D2Common.0x6FD926C0 (#11293)
 D2COMMON_DLL_DECL BOOL __stdcall ITEMMODS_GetItemCharges(D2UnitStrc* pItem, int nSkillId, int nSkillLevel, int* pValue, D2StatListStrc** ppStatList);
 //D2Common.0x6FD927D0 (#10847)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMMODS_UpdateItemWithSkillCharges(D2UnitStrc* pItem, int nSkillId, int nSkillLevel, int a4);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMMODS_UpdateItemWithSkillCharges(D2UnitStrc* pItem, int nSkillId, int nSkillLevel, int nCharges);
 //D2Common.0x6FD928D0 (#10843)
 D2COMMON_DLL_DECL int __stdcall ITEMMODS_GetByTimeAdjustment(int nAmount, int nPeriodOfDay, int nBaseTime, int* pItemModPeriodOfDay, int* pItemModMin, int* pItemModMax);
 //D2Common.0x6FD929A0 (#10849)
