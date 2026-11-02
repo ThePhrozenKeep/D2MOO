@@ -14,6 +14,8 @@
 
 #include <DataTbls/ItemsTbls.h>
 
+#include <Fixtures/DataTbls/Fixtures.h>
+
 
 TEST_SUITE("ItemsTblsTests")
 {
@@ -60,11 +62,11 @@ TEST_SUITE("ItemsTblsTests")
 		
 		SUBCASE("")
 		{
-			 int{};
+			int nUnused{};
 
 			// Call both implementations
-			const auto moo_result = sut(int);
-			const auto original_result = original(int);
+			const auto moo_result = sut(nUnused);
+			const auto original_result = original(nUnused);
 			
 			// Compare return values
 			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
@@ -207,21 +209,22 @@ TEST_SUITE("ItemsTblsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD57680 (#10600)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(ItemsTxtFixture<NoOpFixture>, "D2Common.0x6FD57680 (#10600)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(DATATBLS_GetItemsTxtRecord, dll_base + 0x00017680);
-		
-		SUBCASE("")
+
+		// The native bound is unsigned, so negative ids return NULL as well
+		for (const int nItemId : { INT_MIN, -1, 0, items_record_count - 1, items_record_count, INT_MAX })
 		{
-			int nItemId{};
+			CAPTURE(nItemId);
 
 			// Call both implementations
 			const auto moo_result = sut(nItemId);
 			const auto original_result = original(nItemId);
-			
+
 			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 		}
 	}
 	
