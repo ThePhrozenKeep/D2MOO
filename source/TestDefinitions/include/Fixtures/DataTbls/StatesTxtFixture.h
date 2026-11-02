@@ -17,11 +17,13 @@ struct StatesTxtFixture : Fixture
 	std::unique_ptr<D2StatesTxt[]> states_txt;
 	int states_record_count;
 	std::unique_ptr<uint32_t[]> state_masks;
+	uintptr_t states_d2common_base;
 
 	StatesTxtFixture()
 	{
 		const auto working_directory = std::filesystem::current_path();
 		const auto d2common_base = reinterpret_cast<uintptr_t>(LoadLibraryA((working_directory / "D2Common.dll").string().c_str()));
+		states_d2common_base = d2common_base;
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
@@ -58,4 +60,19 @@ struct StatesTxtFixture : Fixture
 		states_txt = std::move(states);
 		states_record_count = record_count;
 	};
+
+	// The tables are freed with the fixture, so don't leave dangling pointers behind for the following tests
+	~StatesTxtFixture()
+	{
+		sgptDataTables->nStatesTxtRecordCount = 0;
+		sgptDataTables->pStatesTxt = nullptr;
+		sgptDataTables->pStateMasks = nullptr;
+		for (auto& pStateMask : sgptDataTables->fStateMasks)
+		{
+			pStateMask = nullptr;
+		}
+
+		*reinterpret_cast<D2StatesTxt**>(states_d2common_base + 0x000A9608 + 0x000000BC) = nullptr;
+		*reinterpret_cast<int*>(states_d2common_base + 0x000A9608 + 0x000000C4) = 0;
+	}
 };
