@@ -2703,8 +2703,11 @@ BOOL __stdcall ITEMMODS_CanItemHaveMagicAffix(D2UnitStrc* pItem, const D2MagicAf
 	{
 		if (ITEMS_CheckIfSocketable(pItem) && ITEMS_GetMaxSockets(pItem) || pMagicAffixTxtRecord->pProperties[0].nProperty < 0 || pMagicAffixTxtRecord->pProperties[0].nProperty < sgptDataTables->nPropertiesTxtRecordCount)
 		{
-			pPropertiesTxtRecord = &sgptDataTables->pPropertiesTxt[pMagicAffixTxtRecord->pProperties[0].nProperty];
-			if (pPropertiesTxtRecord && pPropertiesTxtRecord->wStat[0] != STAT_ITEM_NUMSOCKETS)
+			// The game reads pPropertiesTxt[-1] for an affix with no property (memory before the table, never the
+			// sockets stat); an affix with no property is not a sockets affix, without that read.
+			const int nProperty = pMagicAffixTxtRecord->pProperties[0].nProperty;
+			pPropertiesTxtRecord = nProperty >= 0 ? &sgptDataTables->pPropertiesTxt[nProperty] : NULL;
+			if (!pPropertiesTxtRecord || pPropertiesTxtRecord->wStat[0] != STAT_ITEM_NUMSOCKETS)
 			{
 				for (int i = 0; i < ARRAY_SIZE(pMagicAffixTxtRecord->wEType); ++i)
 				{
