@@ -1,8 +1,13 @@
 #include "D2Gfx.h"
 
 #include <algorithm>
+#include <iterator>
 
 #include <Fog.h>
+
+#define XFAULT_IMPL
+#define XFAULT_MODULE_NAME "D2Gfx.DLL"
+#include <Fault.h>
 
 #include "CmnSubtile.h"
 #include "DisplayType.h"
@@ -11,31 +16,43 @@
 
 extern int32_t gbIsWindowed;
 extern D2GameResolutionMode gnResolutionMode;
-extern int32_t gbNoWindowCreated_6FA8D848;
+extern int32_t gbNoWindowCreated;
 extern HINSTANCE ghInstance;
 
 
-constexpr const char* gszDriverDllNames[NUMBER_OF_DISPLAYTYPES] = { "", "D2Gdi.dll", "", "D2DDraw.dll", "D2Glide.dll", "D2OpenGL.dll", "D2Direct3D.dll", "D2Rave.dll" };
+// OpenGL and Rave are not supported by this version of the game
+//D2Gfx.0x6FA7E1CC
+constexpr const char* gszDriverDllNames[NUMBER_OF_DISPLAYTYPES] = { nullptr, "D2Gdi.dll", nullptr, "D2DDraw.dll", "D2Glide.dll", nullptr, "D2Direct3D.dll", nullptr };
 
+//D2Gfx.0x6FA8D260
 WNDPROC gpfWndProc;
-PALETTEENTRY gpPalette_6FA8D278[256];
+//D2Gfx.0x6FA8D278
+PALETTEENTRY gpPalette[256];
 
+//D2Gfx.0x6FA8D274
 HMODULE ghRenderModule;
+//D2Gfx.0x6FA8D258
 D2GraphicsInterfaceStrc* gpGraphicsInterface;
+//D2Gfx.0x6FA8D264
 DisplayType gnDisplayType;
-int32_t gnViewMatrixAdjust_6FA8D254;
+//D2Gfx.0x6FA8D254
+int32_t gnViewMatrixAdjust;
+//D2Gfx.0x6FA8D854
+int32_t gbInDebugBreak;
 
+//D2Gfx.0x6FA7E198
 D2GfxSettingsStrc gGfxSettings = { 0, 1, 0, 155, 1, 1 };
 
+//D2Gfx.0x6FA7E1B0
 constexpr D2GfxHelperStrc gpGfxHelpers =
 {
-    D2GFX_FillYBufferTable_6FA71010,
-    D2GFX_DrawVisTile_6FA72730,
-    sub_6FA72900,
-    D2GFX_FloorTileDraw_6FA73410,
-    TILE_TileDrawLit_6FA729D0,
-    D2GFX_DrawBlendedVisTile_6FA72B80,
-    D2GFX_DrawRoofTile_6FA72DC0
+    CMNSUBTILE_FillYBufferTable,
+    CMNSUBTILE_DrawVisTile,
+    CMNSUBTILE_DrawFlatLitVisTile,
+    CMNSUBTILE_FloorTileDraw,
+    CMNSUBTILE_TileDrawLit,
+    CMNSUBTILE_DrawBlendedVisTile,
+    CMNSUBTILE_DrawRoofTile
 };
 
 
@@ -55,29 +72,31 @@ int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, Displ
     wndClass.cbWndExtra = 0;
     wndClass.hInstance = hInstance;
     wndClass.hIcon = (HICON)LoadImageA(ghInstance, (LPCSTR)(FOG_IsExpansion() ? 103 : 102), IMAGE_ICON, 0, 0, LR_DEFAULTCOLOR);
-    wndClass.hCursor = LoadCursorA(nullptr, (LPCSTR)0x7F00);
+    wndClass.hCursor = LoadCursorA(nullptr, IDC_ARROW);
     wndClass.lpszMenuName = nullptr;
     wndClass.lpszClassName = "Diablo II";
-    wndClass.hbrBackground = (HBRUSH)GetStockObject(COLOR_WINDOW);
+    wndClass.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
 
     if (!RegisterClassA(&wndClass))
     {
-    	//if (sub_6FA750A7(GetLastError()))
-    	//{
-    	//	__debugbreak();
-    	//	dword_6FA8D854 = 0;
-    	//}
+        if (XFaultBreakableError(GetLastError()))
+        {
+            gbInDebugBreak = 1;
+            __debugbreak();
+            gbInDebugBreak = 0;
+        }
         return 0;
     }
 
-    D2GFX_InitGouraudCache_6FA71000();
+    CMNSUBTILE_InitGouraudCache();
 
     atexit(j_D2GFX_10040_ShowAllWindows);
 
     gnDisplayType = nDisplayType;
     gbIsWindowed = bWindowed;
 
-    if (nDisplayType < 0 || nDisplayType >= std::size(gszDriverDllNames))
+    // The original dll does not check the bounds of nDisplayType
+    if (nDisplayType < 0 || nDisplayType >= std::size(gszDriverDllNames) || !gszDriverDllNames[nDisplayType])
     {
         FOG_Trace("Unsupported video mode - %d", nDisplayType);
         return 0;
@@ -109,7 +128,7 @@ int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, Displ
 
     if (!gpGraphicsInterface->pfDetect(hInstance))
     {
-        //Fog_10028(9, 0, 0, "%s", "Error 1: Diablo II is unable to proceed.  Please run D2VidTst and try again.");
+        FOG_10028(9, 0, 0, "%s", "Error 1: Diablo II is unable to proceed.  Please run D2VidTst and try again.");
         return 0;
     }
 
@@ -130,7 +149,7 @@ void __cdecl j_D2GFX_10040_ShowAllWindows()
 }
 
 //D2Gfx.0x6FA73990 (#10002)
-int32_t __stdcall D2GFX_ReturnFalse()
+int32_t __stdcall D2GFX_ReturnFalse(int32_t nUnused1, int32_t nUnused2, int32_t nUnused3)
 {
     return 0;
 }
@@ -141,7 +160,7 @@ int32_t __stdcall D2GFX_Release()
     gpGraphicsInterface->pfClose();
     UnregisterClassA("Diablo II", ghInstance);
 
-    if (gbNoWindowCreated_6FA8D848)
+    if (gbNoWindowCreated)
     {
         const char* szMsg = nullptr;
         switch (gnDisplayType)
@@ -170,6 +189,7 @@ int32_t __stdcall D2GFX_Release()
             break;
         }
 
+        // The original dll also displays the message box for other display types, with an uninitialized message
         if (szMsg)
         {
             MessageBoxA(nullptr, szMsg, "Diablo II Critical Error", MB_ICONEXCLAMATION);
@@ -317,7 +337,7 @@ uint32_t* __stdcall D2GFX_GetCacheResults()
 //D2Gfx.0x6FA73C50 (#10022)
 void __fastcall D2GFX_SetViewMatrixAdjust(int32_t nAdjust)
 {
-    gnViewMatrixAdjust_6FA8D254 = nAdjust;
+    gnViewMatrixAdjust = nAdjust;
 }
 
 //D2Gfx.0x6FA73C60 (#10042)
@@ -389,7 +409,7 @@ void __stdcall D2GFX_DrawBoxAlpha(int32_t nXStart, int32_t nYStart, int32_t nXEn
 }
 
 //D2Gfx.0x6FA73DE0 (#10057)
-void __stdcall D2GFX_DrawLine(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint8_t nColor, uint8_t nAlpha)
+void __stdcall D2GFX_DrawLine(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t nColor, uint8_t nAlpha)
 {
     return gpGraphicsInterface->pfDrawLine(nXStart, nYStart, nXEnd, nYEnd, nColor, nAlpha);
 }
@@ -411,12 +431,12 @@ void __stdcall D2GFX_SetPalette(PALETTEENTRY* pPalette)
 {
     if (pPalette)
     {
-        memcpy(gpPalette_6FA8D278, pPalette, sizeof(gpPalette_6FA8D278));
+        memcpy(gpPalette, pPalette, sizeof(gpPalette));
         gpGraphicsInterface->pfSetPalette(pPalette);
     }
     else
     {
-        gpGraphicsInterface->pfSetPalette(gpPalette_6FA8D278);
+        gpGraphicsInterface->pfSetPalette(gpPalette);
     }
 }
 
@@ -424,7 +444,7 @@ void __stdcall D2GFX_SetPalette(PALETTEENTRY* pPalette)
 void __stdcall D2GFX_SetPaletteTables(D2PaletteTableStrc* pPaletteTables)
 {
     gpGraphicsInterface->pfSetPaletteTables(pPaletteTables);
-    sub_6FA71070(pPaletteTables);
+    CMNSUBTILE_SetPaletteTables(pPaletteTables);
 }
 
 //D2Gfx.0x6FA73ED0 (#10050)

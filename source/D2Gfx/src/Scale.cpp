@@ -8,11 +8,24 @@
 #include "D2Gfx.h"
 
 
-int32_t gnChangedScaleFactor;
-int32_t gnScaleFactor;
+extern DisplayType gnDisplayType;
+
+
+//D2Gfx.0x6FA7E4A8
+int32_t gnChangedScaleFactor = 256;
+//D2Gfx.0x6FA7E4AC
+int32_t gnScaleFactor = 256;
+//D2Gfx.0x6FA8D678
 int32_t gnPerspectiveScaleX;
+//D2Gfx.0x6FA8D67C
 int32_t gnPerspectiveScaleY;
 
+
+// Inlined in the original dll. Contrary to D2GFX_HardwareAcceleratedRenderMode (#10047), invalid display types are rejected.
+static bool SCALE_IsPerspectiveDisplayType(DisplayType nDisplayType)
+{
+    return nDisplayType == DISPLAYTYPE_GLIDE || nDisplayType == DISPLAYTYPE_OPENGL || nDisplayType == DISPLAYTYPE_RAVE || nDisplayType == DISPLAYTYPE_DIRECT3D;
+}
 
 //D2Gfx.0x6FA73F30 (#10059)
 void __stdcall SCALE_UpdateFactor()
@@ -55,7 +68,7 @@ void __stdcall SCALE_DecreaseFactor()
 //D2Gfx.0x6FA73FE0 (#10064)
 void __stdcall SCALE_SetPerspectiveScale(int32_t nXScale, int32_t nYScale)
 {
-    D2_ASSERT(D2GFX_HardwareAcceleratedRenderMode());
+    D2_ASSERT(SCALE_IsPerspectiveDisplayType(gnDisplayType));
     D2_ASSERT(gGfxSettings.bPerspectiveEnabled);
 
     gnPerspectiveScaleX = nXScale;
@@ -66,7 +79,7 @@ void __stdcall SCALE_SetPerspectiveScale(int32_t nXScale, int32_t nYScale)
 //D2Gfx.0x6FA74060 (#10065)
 int32_t __stdcall SCALE_CheckPerspectivePosition(int32_t nXPos, int32_t nYPos)
 {
-    D2_ASSERT(D2GFX_HardwareAcceleratedRenderMode());
+    D2_ASSERT(SCALE_IsPerspectiveDisplayType(gnDisplayType));
     D2_ASSERT(gGfxSettings.bPerspectiveEnabled);
 
     const int32_t nX = std::abs(nXPos - gnPerspectiveScaleX);
@@ -96,7 +109,7 @@ void __stdcall SCALE_AdjustPerspectivePosition(int32_t nXPos, int32_t nYPos, int
 //D2Gfx.0x6FA74170 (#10067)
 void __stdcall SCALE_ScalePerspectivePosition(int32_t nXPos, int32_t nYPos, int32_t nAngle, int32_t* pXAdjust, int32_t* pYAdjust, int32_t bOrder)
 {
-    D2_ASSERT(D2GFX_HardwareAcceleratedRenderMode());
+    D2_ASSERT(SCALE_IsPerspectiveDisplayType(gnDisplayType));
     D2_ASSERT(gGfxSettings.bPerspectiveEnabled);
 
     return gpGraphicsInterface->pfPerspectiveTransformScale(nXPos, nYPos, 0, pXAdjust, pYAdjust, bOrder);
@@ -105,7 +118,7 @@ void __stdcall SCALE_ScalePerspectivePosition(int32_t nXPos, int32_t nYPos, int3
 //D2Gfx.0x6FA74200 (#10068)
 void __stdcall SCALE_SetDefaultFactorPerspectiveFactor()
 {
-    D2_ASSERT(D2GFX_HardwareAcceleratedRenderMode());
+    D2_ASSERT(SCALE_IsPerspectiveDisplayType(gnDisplayType));
     D2_ASSERT(gGfxSettings.bPerspectiveEnabled);
 
     return gpGraphicsInterface->pfPerspectiveClearScale();
