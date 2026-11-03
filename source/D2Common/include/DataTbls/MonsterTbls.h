@@ -425,7 +425,7 @@ struct D2MonStatsTxt
 	uint8_t nSendSkills[4];					//0x16C
 	int16_t nSkill[8];						//0x170
 	uint8_t nSkillMode[8];					//0x180
-	uint16_t nSequence[8];					//0x188
+	int16_t nSequence[8];					//0x188
 	uint8_t nSkLvl[8];						//0x198
 	uint32_t dwDamageRegen;					//0x1A0
 	uint8_t nSplEndDeath;					//0x1A4
