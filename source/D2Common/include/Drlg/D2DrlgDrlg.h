@@ -80,7 +80,7 @@ enum D2C_DrlgTileSubstitionMethod
 };
 
 // Note: Lower value has priority over others
-enum D2DrlgRoomStatus : uint8_t
+D2_TYPED_ENUM(D2DrlgRoomStatus, uint8_t)
 {
 	ROOMSTATUS_CLIENT_IN_ROOM = 0,
 	ROOMSTATUS_CLIENT_IN_SIGHT = 1,

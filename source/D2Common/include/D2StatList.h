@@ -391,7 +391,7 @@ enum D2C_PropertySets
 	PROPSET_SHIELD,
 };
 
-enum D2C_StatlistFlags : uint32_t
+D2_TYPED_ENUM(D2C_StatlistFlags, uint32_t)
 {
 	STATLIST_BASE = 0x0,
 	STATLIST_BASIC = 0x1,

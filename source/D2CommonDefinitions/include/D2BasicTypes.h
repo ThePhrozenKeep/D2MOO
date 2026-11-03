@@ -12,6 +12,12 @@ typedef int32_t BOOL;
 #pragma warning(error:4456) // declaration of 'identifier' hides previous local declaration
 #pragma warning(disable:28612) // "The enum type 'xxxx' is unscoped. Prefer 'enum class' over 'enum'"
 
+#if defined(_MSC_VER) && _MSC_VER < 1600
+#define D2_TYPED_ENUM(NAME, TYPE) typedef TYPE NAME; enum
+#else
+#define D2_TYPED_ENUM(NAME, TYPE) enum NAME : TYPE
+#endif
+
 // Windows.h defines its own, replace it
 #undef LOBYTE
 #undef HIBYTE

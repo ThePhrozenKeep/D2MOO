@@ -4,7 +4,7 @@
 
 #pragma pack(1)
 
-enum D2C_EventFlags : uint16_t
+D2_TYPED_ENUM(D2C_EventFlags, uint16_t)
 {
 	EVENTFLAG_EXECUTING = 0x1,
 	EVENTFLAG_FREE = 0x2,
@@ -12,7 +12,7 @@ enum D2C_EventFlags : uint16_t
 	EVENTFLAG_DELETE_PENDING = 0x8,
 };
 
-enum D2C_EventTypes : uint8_t
+D2_TYPED_ENUM(D2C_EventTypes, uint8_t)
 {
 	EVENTTYPE_MODECHANGE = 0,
 	EVENTTYPE_ENDANIM = 1,

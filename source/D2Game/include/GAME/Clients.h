@@ -37,7 +37,7 @@ enum D2SystemError
 	SYSERROR_NOTLADDERGAME = 26,
 };
 
-enum D2ClientState : uint32_t
+D2_TYPED_ENUM(D2ClientState, uint32_t)
 {
 	CLIENTSTATE_JUST_CREATED = 0,
 	CLIENTSTATE_GAME_INIT_SENT = 1,

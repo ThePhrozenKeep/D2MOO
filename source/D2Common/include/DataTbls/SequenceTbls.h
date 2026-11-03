@@ -5,7 +5,7 @@
 
 #pragma pack()
 
-enum D2AnimSeqEvent : uint8_t
+D2_TYPED_ENUM(D2AnimSeqEvent, uint8_t)
 {
 	ANIMSEQ_EVENT_NONE,
 	ANIMSEQ_EVENT_MELEE_ATTACK,

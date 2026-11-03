@@ -6,7 +6,7 @@
 
 using D2UnitEventCallbackFunction = int32_t(__fastcall*)(D2GameStrc*, int32_t, D2UnitStrc*, D2UnitStrc*, D2DamageStrc*, int32_t, int32_t);
 
-enum D2C_UnitEventTypes: uint8_t // Events.txt
+D2_TYPED_ENUM(D2C_UnitEventTypes, uint8_t) // Events.txt
 {
 	UNITEVENT_HITBYMISSILE,
 	UNITEVENT_DAMAGEDINMELEE,
@@ -24,7 +24,7 @@ enum D2C_UnitEventTypes: uint8_t // Events.txt
 	UNITEVENT_DEATH, // Monster dies
 };
 
-enum D2C_UnitEventFlags : uint16_t {
+D2_TYPED_ENUM(D2C_UnitEventFlags, uint16_t) {
 	UNITEVENTFLAG_IN_CALLBACK = 1 << 0, // Prevents destruction during callback
 	UNITEVENTFLAG_SHOULD_BE_FREED = 1 << 1,
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-enum D2C_StringIndices: int16_t
+D2_TYPED_ENUM(D2C_StringIndices, int16_t)
 {
 	STR_IDX_0_WarrivAct1IntroGossip1=0,
 	STR_IDX_1_WarrivAct1IntroPalGossip1=1,

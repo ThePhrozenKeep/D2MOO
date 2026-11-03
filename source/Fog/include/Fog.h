@@ -49,7 +49,7 @@ struct D2BinFileStrc
 	int32_t nCellCount;				//0x0C
 };
 
-enum D2C_TxtFieldTypes : uint32_t
+D2_TYPED_ENUM(D2C_TxtFieldTypes, uint32_t)
 {
 	TXTFIELD_NONE,
 	TXTFIELD_ASCII,
@@ -103,7 +103,7 @@ enum D2C_AsyncDataPriority
 	ASYNC_DATA_PRIORITY_HIGH = 1,
 };
 
-enum D2C_AsyncDataFlags : uint32_t
+D2_TYPED_ENUM(D2C_AsyncDataFlags, uint32_t)
 {
 	ASYNC_DATA_FLAGS_LOADED                    = 0x1,
 	ASYNC_DATA_FLAGS_OWNS_BUFFER               = 0x2,

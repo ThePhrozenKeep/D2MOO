@@ -11,7 +11,7 @@ constexpr int D2CMPImageBase = 0x6FDF0000;
 
 #pragma pack(1)
 
-enum D2TileMaterialFlags : uint16_t 
+D2_TYPED_ENUM(D2TileMaterialFlags, uint16_t) 
 {
 	TILE_FLAGS_OTHER = 0x1,
 	TILE_FLAGS_WATER = 0x2,
