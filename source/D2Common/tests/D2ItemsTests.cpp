@@ -3007,6 +3007,7 @@ TEST_SUITE("D2ItemsTests")
 			D2ItemDataStrc tItemData{};
 			D2StatListExStrc tStatListEx{};
 			D2StatStrc tStat{};
+			D2StatStrc tDurabilityStats[2] = {};
 			D2InventoryStrc tInventory{};
 			D2UnitStrc tSocket{};
 			D2ItemDataStrc tSocketData{};
@@ -3016,7 +3017,7 @@ TEST_SUITE("D2ItemsTests")
 
 		struct Setup
 		{
-			int nItemId = nWeaponId;
+			int nItemId = 0;
 			uint32_t nQuality = ITEMQUAL_NORMAL;
 			uint32_t dwItemFlags = 0;
 			int32_t nFileIndex = 0;
@@ -3027,6 +3028,8 @@ TEST_SUITE("D2ItemsTests")
 			BOOL bBaseStat = FALSE;
 			int nSocketId = -1;
 			int nQuestFlag = 0;
+			int nDurability = 0;
+			int nMaxDurability = 0;
 		};
 
 		const auto setup_data = [](TestItem& item, const Setup& setup)
@@ -3055,6 +3058,20 @@ TEST_SUITE("D2ItemsTests")
 					item.tStatListEx.Stats.nStatCount = 1;
 					item.tStatListEx.Stats.nCapacity = 1;
 				}
+				item.tItem.pStatListEx = &item.tStatListEx;
+			}
+
+			if (setup.nMaxDurability)
+			{
+				item.tDurabilityStats[0].nStat = STAT_DURABILITY;
+				item.tDurabilityStats[0].nValue = setup.nDurability;
+				item.tDurabilityStats[1].nStat = STAT_MAXDURABILITY;
+				item.tDurabilityStats[1].nValue = setup.nMaxDurability;
+				item.tStatListEx.dwFlags = STATLIST_EXTENDED;
+				item.tStatListEx.Stats.pStat = item.tDurabilityStats;
+				item.tStatListEx.Stats.nStatCount = 2;
+				item.tStatListEx.Stats.nCapacity = 2;
+				item.tStatListEx.FullStats = item.tStatListEx.Stats;
 				item.tItem.pStatListEx = &item.tStatListEx;
 			}
 
@@ -3089,6 +3106,22 @@ TEST_SUITE("D2ItemsTests")
 			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 		};
 
+		const auto repairable_setup = [&]()
+		{
+			D2ItemsTxt& weapon = items_txt[nWeaponId];
+			weapon.nNoDurability = 0;
+			weapon.nDurability = 10;
+			itemtypes_txt[weapon.wType[0]].nRepair = 1;
+			itemtypes_txt[weapon.wType[0]].nThrowable = 0;
+			itemtypes_txt[weapon.wType[0]].wQuiver = 0;
+
+			Setup setup;
+			setup.dwItemFlags = IFLAG_IDENTIFIED;
+			setup.nDurability = 5;
+			setup.nMaxDurability = 10;
+			return setup;
+		};
+
 		// Each case gives one multiplier or cost a value whose product with the cost has the sign bit set:
 		// the game divides those products as signed integers.
 		SUBCASE("Vendor sell multiplier")
@@ -3119,6 +3152,21 @@ TEST_SUITE("D2ItemsTests")
 			Setup setup;
 			setup.nQuestFlag = 1;
 			compare(setup, TRANSACTIONTYPE_SELL);
+		}
+
+		SUBCASE("Vendor repair multiplier")
+		{
+			npc.dwRepMult = -1024;
+			compare(repairable_setup(), TRANSACTIONTYPE_REPAIR);
+		}
+
+		SUBCASE("Vendor quest repair multiplier")
+		{
+			npc.dwQuestFlag[0] = 1;
+			npc.dwQuestRepMult[0] = -1024;
+			Setup setup = repairable_setup();
+			setup.nQuestFlag = 1;
+			compare(setup, TRANSACTIONTYPE_REPAIR);
 		}
 
 		SUBCASE("Magic affix multiplier")
