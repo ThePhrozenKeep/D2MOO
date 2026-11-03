@@ -8,6 +8,7 @@
 
 #include <cstdarg>
 #include <filesystem>
+#include <utility>
 
 #include <TestDefinitions.h>
 #include <TestUtilities.h>
@@ -1167,7 +1168,80 @@ TEST_SUITE("MissileTests")
 			}
 		}
 	}
-	
+
+	TEST_CASE_FIXTURE(ItemStatCostTxtFixture<ItemTypesTxtFixture<ItemsTxtFixture<NoOpFixture>>>, "D2Common.0x6FDBADF0 (weapon mastery)")
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(MISSILE_HasBonusStats, dll_base + 0x0007ADF0);
+
+		// With a weapon and a melee mastery critical strike bonus for its type, the mastery roll is made too
+		const auto nItemId = GENERATE(0, 1, 50);
+		const auto nMastery = GENERATE(1, 50, 99);
+		const auto nDeadlyStrike = GENERATE(0, 50);
+
+		SUBCASE("")
+		{
+			const int nItemType = items_txt[nItemId].wType[0];
+
+			for (uint32_t nLowSeed = 0; nLowSeed < 200; ++nLowSeed)
+			{
+				// Input data
+				D2UnitStrc moo_pUnit{};
+				D2UnitStrc moo_pItem{};
+				D2StatListExStrc moo_pStatListEx{};
+				D2StatStrc moo_pStats[2]{};
+				D2UnitStrc original_pUnit{};
+				D2UnitStrc original_pItem{};
+				D2StatListExStrc original_pStatListEx{};
+				D2StatStrc original_pStats[2]{};
+
+				const auto setup_data = [nLowSeed, nItemId, nItemType, nMastery, nDeadlyStrike](
+					D2UnitStrc& pUnit,
+					D2UnitStrc& pItem,
+					D2StatListExStrc& pStatListEx,
+					D2StatStrc* pStats
+				) {
+					pUnit.dwUnitType = UNIT_PLAYER;
+					pUnit.pSeed.nLowSeed = nLowSeed;
+					pUnit.pSeed.nHighSeed = 666;
+
+					pItem.dwUnitType = UNIT_ITEM;
+					pItem.dwClassId = nItemId;
+
+					pStats[0].nStat = STAT_ITEM_DEADLYSTRIKE;
+					pStats[0].nValue = nDeadlyStrike;
+					pStats[1].nLayer = static_cast<uint16_t>(nItemType);
+					pStats[1].nStat = STAT_PASSIVE_MASTERY_MELEE_CRIT;
+					pStats[1].nValue = nMastery;
+					if (pStats[1].nPackedValue < pStats[0].nPackedValue)
+					{
+						std::swap(pStats[0], pStats[1]);
+					}
+
+					pStatListEx.dwFlags = STATLIST_EXTENDED;
+					pStatListEx.pOwner = &pUnit;
+					pStatListEx.FullStats.pStat = pStats;
+					pStatListEx.FullStats.nStatCount = 2;
+					pStatListEx.FullStats.nCapacity = 2;
+					pUnit.pStatListEx = &pStatListEx;
+				};
+
+				setup_data(moo_pUnit, moo_pItem, moo_pStatListEx, moo_pStats);
+				setup_data(original_pUnit, original_pItem, original_pStatListEx, original_pStats);
+
+				// Call both implementations
+				const auto moo_result = sut(&moo_pUnit, &moo_pItem);
+				const auto original_result = original(&original_pUnit, &original_pItem);
+
+				// Compare return values
+				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+				// Compare the seeds, as the number of rolls depends on the results
+				MOO_CHECK_EQ(moo_pUnit.pSeed, original_pUnit.pSeed, "Comparing pSeed");
+			}
+		}
+	}
+
 	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDBAED0" * doctest::skip(""))
 	{
 		// Set up function pointers
