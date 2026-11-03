@@ -6,6 +6,7 @@
 
 #include <Windows.h>
 
+#include <algorithm>
 #include <cstdarg>
 #include <deque>
 #include <filesystem>
@@ -1907,6 +1908,34 @@ TEST_SUITE("D2ItemModsTests")
 			set_field(tMagicAffixTxtRecord.wIType[0], -1);
 			set_field(tMagicAffixTxtRecord.wIType[1], nItemType);
 			compare(tMagicAffixTxtRecord);
+		}
+
+		SUBCASE("First property on an item without sockets")
+		{
+			items_txt[nClassId].nHasInv = 0;
+
+			// The properties table with a sockets record just before it and a strength record just after it,
+			// so that a read outside of the table changes the result
+			const int nSockets = find_property_of_stat(STAT_ITEM_NUMSOCKETS);
+			const int nStrength = find_property_of_stat(STAT_STRENGTH);
+			REQUIRE(nSockets >= 0);
+			REQUIRE(nStrength >= 0);
+			std::vector<D2PropertiesTxt> padded_properties(properties_record_count + 2);
+			std::copy_n(properties_txt.get(), properties_record_count, padded_properties.begin() + 1);
+			padded_properties.front() = properties_txt[nSockets];
+			padded_properties.back() = properties_txt[nStrength];
+			sgptDataTables->pPropertiesTxt = padded_properties.data() + 1;
+
+			for (const int nProperty : { -1, properties_record_count, nSockets, nStrength })
+			{
+				CAPTURE(nProperty);
+				D2MagicAffixTxt tMagicAffixTxtRecord{};
+				tMagicAffixTxtRecord.pProperties[0] = { nProperty, 0, 1, 1 };
+				set_field(tMagicAffixTxtRecord.wIType[0], nItemType);
+				compare(tMagicAffixTxtRecord);
+			}
+
+			sgptDataTables->pPropertiesTxt = properties_txt.get();
 		}
 	}
 
