@@ -39,12 +39,12 @@
 //#define DRLG_TILESUB_TESTS
 
 //#define ASTAR_TESTS
-//#define IDASTAR_TESTS
-//#define PATHMISC_TESTS
-//#define PATH_TESTS
+#define IDASTAR_TESTS
+#define PATHMISC_TESTS
+#define PATH_TESTS
 //#define PATHUTIL_TESTS
 //#define PATHWF_TESTS
-//#define STEP_TESTS
+#define STEP_TESTS
 
 //#define MISSILESTREAM_TESTS
 //#define MISSILE_TESTS
