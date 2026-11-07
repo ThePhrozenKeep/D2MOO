@@ -556,7 +556,8 @@ static const char* DATATABLS_ParseSubExpression(const char* szExpression, FOGExp
 	// Function call ?
 	if (*szExpression == '(')
 	{
-		if (const int nFunctionId = pfnFunctionNameToId(tSubExpressionBuffer))
+		// The keyword mappers return -1 for an unknown name; 0 is a function too (min).
+		if (const int nFunctionId = pfnFunctionNameToId(tSubExpressionBuffer); nFunctionId >= 0)
 		{
 			*pOutTokenType = TOKEN_CUSTOM_FUNCTION_TABLE;
 			*pTokenAssociatedValue = nFunctionId;
