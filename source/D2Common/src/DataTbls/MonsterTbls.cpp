@@ -744,7 +744,10 @@ void __stdcall DATATBLS_SetVelocityInMonStatsTxtRecord(int nMonsterId, short nVe
 	D2_ASSERT(sgptDataTables->pMonStatsTxt);
 
 	pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nMonsterId);
-	pMonStatsTxtRecord->nVelocity = nVelocity;
+	if (pMonStatsTxtRecord)
+	{
+		pMonStatsTxtRecord->nVelocity = nVelocity;
+	}
 }
 
 //D2Common.0x6FD68A00

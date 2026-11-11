@@ -14,6 +14,8 @@
 
 #include <DataTbls/InvTbls.h>
 
+#include <Fixtures/DataTbls/Fixtures.h>
+
 
 TEST_SUITE("InvTblsTests")
 {
@@ -49,98 +51,95 @@ TEST_SUITE("InvTblsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD54F20 (#10635)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(InventoryTxtFixture<NoOpFixture>, "D2Common.0x6FD54F20 (#10635)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(DATATBLS_GetInventoryRect, dll_base + 0x00014F20);
-		
-		SUBCASE("")
+
+		// The native bound is inclusive (unsigned nIndex <= nInventoryTxtRecordCount): advertise one record fewer
+		// than loaded so that the last loaded record sits exactly on the bound.
+		const auto original_record_count = reinterpret_cast<int*>(dll_base + 0x000A9608 + 0x00000CCC);
+		sgptDataTables->nInventoryTxtRecordCount = inventory_record_count - 1;
+		*original_record_count = inventory_record_count - 1;
+
+		for (int nInventoryTxtId = 0; nInventoryTxtId < inventory_record_count; ++nInventoryTxtId)
 		{
-			// Input data
+			CAPTURE(nInventoryTxtId);
 			D2InvRectStrc moo_pInvRect{};
 			D2InvRectStrc original_pInvRect{};
-			int nInventoryTxtId{};
-			int bHigherRes{};
-
-			const auto setup_data = [](
-				D2InvRectStrc& pInvRect
-			) {
-				// TODO: Setup as needed
-			};
-
-			setup_data(moo_pInvRect);
-			setup_data(original_pInvRect);
 
 			// Call both implementations
-			sut(nInventoryTxtId, bHigherRes, &moo_pInvRect);
-			original(nInventoryTxtId, bHigherRes, &original_pInvRect);
+			sut(nInventoryTxtId, FALSE, &moo_pInvRect);
+			original(nInventoryTxtId, FALSE, &original_pInvRect);
 
 			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pInvRect, original_pInvRect, "Comparing pInvRect");
+			MOO_CHECK_EQ(moo_pInvRect, original_pInvRect, "Comparing pInvRect");
 		}
+
+		sgptDataTables->nInventoryTxtRecordCount = inventory_record_count;
+		*original_record_count = inventory_record_count;
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD54FB0 (#10636)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(InventoryTxtFixture<NoOpFixture>, "D2Common.0x6FD54FB0 (#10636)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(DATATBLS_GetInventoryGridInfo, dll_base + 0x00014FB0);
-		
-		SUBCASE("")
+
+		// The native bound is inclusive (unsigned nIndex <= nInventoryTxtRecordCount): advertise one record fewer
+		// than loaded so that the last loaded record sits exactly on the bound.
+		const auto original_record_count = reinterpret_cast<int*>(dll_base + 0x000A9608 + 0x00000CCC);
+		sgptDataTables->nInventoryTxtRecordCount = inventory_record_count - 1;
+		*original_record_count = inventory_record_count - 1;
+
+		for (int nInventoryTxtId = 0; nInventoryTxtId < inventory_record_count; ++nInventoryTxtId)
 		{
-			// Input data
+			CAPTURE(nInventoryTxtId);
 			D2InventoryGridInfoStrc moo_pInventoryGridInfo{};
 			D2InventoryGridInfoStrc original_pInventoryGridInfo{};
-			int nInventoryTxtId{};
-			int bHigherRes{};
-
-			const auto setup_data = [](
-				D2InventoryGridInfoStrc& pInventoryGridInfo
-			) {
-				// TODO: Setup as needed
-			};
-
-			setup_data(moo_pInventoryGridInfo);
-			setup_data(original_pInventoryGridInfo);
 
 			// Call both implementations
-			sut(nInventoryTxtId, bHigherRes, &moo_pInventoryGridInfo);
-			original(nInventoryTxtId, bHigherRes, &original_pInventoryGridInfo);
+			sut(nInventoryTxtId, FALSE, &moo_pInventoryGridInfo);
+			original(nInventoryTxtId, FALSE, &original_pInventoryGridInfo);
 
 			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pInventoryGridInfo, original_pInventoryGridInfo, "Comparing pInventoryGridInfo");
+			MOO_CHECK_EQ(moo_pInventoryGridInfo, original_pInventoryGridInfo, "Comparing pInventoryGridInfo");
 		}
+
+		sgptDataTables->nInventoryTxtRecordCount = inventory_record_count;
+		*original_record_count = inventory_record_count;
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD55030 (#10637)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(InventoryTxtFixture<NoOpFixture>, "D2Common.0x6FD55030 (#10637)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(DATATBLS_GetInventoryComponentGrid, dll_base + 0x00015030);
-		
-		SUBCASE("")
+
+		// The native bound is inclusive (unsigned nIndex <= nInventoryTxtRecordCount): advertise one record fewer
+		// than loaded so that the last loaded record sits exactly on the bound.
+		const auto original_record_count = reinterpret_cast<int*>(dll_base + 0x000A9608 + 0x00000CCC);
+		sgptDataTables->nInventoryTxtRecordCount = inventory_record_count - 1;
+		*original_record_count = inventory_record_count - 1;
+
+		for (int nInventoryTxtId = 0; nInventoryTxtId < inventory_record_count; ++nInventoryTxtId)
 		{
-			// Input data
-			D2InvCompGridStrc moo_pInvCompGrid{};
-			D2InvCompGridStrc original_pInvCompGrid{};
-			int nInventoryTxtId{};
-			int bHigherRes{};
-			int nComponent{};
+			CAPTURE(nInventoryTxtId);
+			for (int nComponent = 0; nComponent < NUM_INV_COMPS; ++nComponent)
+			{
+				CAPTURE(nComponent);
+				D2InvCompGridStrc moo_pInvCompGrid{};
+				D2InvCompGridStrc original_pInvCompGrid{};
 
-			const auto setup_data = [](
-				D2InvCompGridStrc& pInvCompGrid
-			) {
-				// TODO: Setup as needed
-			};
+				// Call both implementations
+				sut(nInventoryTxtId, FALSE, &moo_pInvCompGrid, nComponent);
+				original(nInventoryTxtId, FALSE, &original_pInvCompGrid, nComponent);
 
-			setup_data(moo_pInvCompGrid);
-			setup_data(original_pInvCompGrid);
-
-			// Call both implementations
-			sut(nInventoryTxtId, bHigherRes, &moo_pInvCompGrid, nComponent);
-			original(nInventoryTxtId, bHigherRes, &original_pInvCompGrid, nComponent);
-
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pInvCompGrid, original_pInvCompGrid, "Comparing pInvCompGrid");
+				// Compare potentially modified input data
+				MOO_CHECK_EQ(moo_pInvCompGrid, original_pInvCompGrid, "Comparing pInvCompGrid");
+			}
 		}
+
+		sgptDataTables->nInventoryTxtRecordCount = inventory_record_count;
+		*original_record_count = inventory_record_count;
 	}
 }
 #endif
