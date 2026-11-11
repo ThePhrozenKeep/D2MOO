@@ -1178,7 +1178,8 @@ BOOL __stdcall INVENTORY_CanItemBePlaced(D2InventoryStrc* pInventory, D2UnitStrc
 		{
 			if (nX >= pInventoryGrid->nGridWidth)
 			{
-				return FALSE;
+				bFree = FALSE;
+				break;
 			}
 
 			D2UnitStrc* pCurrentItem = pInventoryGrid->ppItems[nX + nY * pInventoryGrid->nGridWidth];
@@ -2874,10 +2875,10 @@ void __fastcall INVENTORY_InitializeComponentArray()
 			}
 
 			BOOL bNeedsToBeAdded = FALSE;
-			if (ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_WEAPON)
+			if ((ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_WEAPON)
 				|| ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_ARMOR)
 				|| ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_ANY_SHIELD)
-				|| ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_HELM) && !ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_CIRCLET))
+				|| ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_HELM)) && !ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_CIRCLET))
 			{
 				bNeedsToBeAdded = TRUE;
 			}
