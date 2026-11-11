@@ -398,7 +398,7 @@ struct D2MonStatsTxt
 	uint8_t nCrit;							//0xA6
 	uint8_t unk0xA7;						//0xA7
 	int16_t wSkillDamage;					//0xA8
-	uint16_t nLevel[3];						//0xAA
+	int16_t nLevel[3];						//0xAA
 	uint16_t nMinHP[3];						//0xB0
 	uint16_t nMaxHP[3];						//0xB6
 	uint16_t nAC[3];						//0xBC
@@ -540,13 +540,13 @@ struct D2MonUModTxt
 struct D2NpcTxt
 {
 	uint32_t dwNpc;							//0x00
-	uint32_t dwSellMult;					//0x04
-	uint32_t dwBuyMult;						//0x08
-	uint32_t dwRepMult;						//0x0C
+	int32_t dwSellMult;						//0x04
+	int32_t dwBuyMult;						//0x08
+	int32_t dwRepMult;						//0x0C
 	uint32_t dwQuestFlag[3];				//0x10
-	uint32_t dwQuestSellMult[3];			//0x1C
-	uint32_t dwQuestBuyMult[3];				//0x28
-	uint32_t dwQuestRepMult[3];				//0x34
+	int32_t dwQuestSellMult[3];				//0x1C
+	int32_t dwQuestBuyMult[3];				//0x28
+	int32_t dwQuestRepMult[3];				//0x34
 	int32_t nMaxBuy[3];						//0x40
 };
 

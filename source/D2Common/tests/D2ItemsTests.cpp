@@ -12,11 +12,14 @@
 #include <TestDefinitions.h>
 #include <TestUtilities.h>
 
+#include <D2Inventory.h>
 #include <D2Items.h>
+#include <D2QuestRecord.h>
 #include <D2StatList.h>
 #include <GAME/Game.h>
 #include <Units/Units.h>
 
+#include <Fixtures/DataTbls/Fixtures.h>
 
 TEST_SUITE("D2ItemsTests")
 {
@@ -2950,47 +2953,311 @@ TEST_SUITE("D2ItemsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD9CDE0 (#10775)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(ItemStatCostTxtFixture<NpcTxtFixture<MonStatsTxtFixture<SetItemsTxtFixture<UniqueItemsTxtFixture<ItemTypesTxtFixture<ItemsTxtFixture<NoOpFixture>>>>>>>, "D2Common.0x6FD9CDE0 (#10775)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(ITEMS_GetTransactionCost, dll_base + 0x0005CDE0);
-		
-		SUBCASE("")
+
+		// A one-row MagicAffix table shared by both implementations
+		D2MagicAffixTxt magicaffix_txt[1] = {};
+		const auto original_magicaffix = reinterpret_cast<D2MagicAffixDataTbl*>(dll_base + 0x000A9608 + offsetof(D2DataTablesStrc, pMagicAffixDataTables));
+		const D2MagicAffixDataTbl moo_saved_magicaffix = sgptDataTables->pMagicAffixDataTables;
+		const D2MagicAffixDataTbl original_saved_magicaffix = *original_magicaffix;
+		sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt = magicaffix_txt;
+		sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount = 1;
+		*original_magicaffix = sgptDataTables->pMagicAffixDataTables;
+
+		// Neutral vendor: x1 multipliers, no quest multiplier unless a subcase sets one, no buy cap
+		D2NpcTxt& npc = npc_txt[0];
+		const int nVendorId = npc.dwNpc;
+		npc.dwSellMult = 1024;
+		npc.dwBuyMult = 1024;
+		npc.dwRepMult = 1024;
+		for (int i = 0; i < 3; ++i)
 		{
-			// Input data
-			D2UnitStrc moo_pPlayer{};
-			D2UnitStrc moo_pItem{};
-			D2BitBufferStrc moo_pQuestFlags{};
-			D2UnitStrc original_pPlayer{};
-			D2UnitStrc original_pItem{};
-			D2BitBufferStrc original_pQuestFlags{};
-			D2C_Difficulties nDifficulty{};
-			int nVendorId{};
-			D2C_TransactionTypes nTransactionType{};
-
-			const auto setup_data = [](
-				D2UnitStrc& pPlayer,
-				D2UnitStrc& pItem,
-				D2BitBufferStrc& pQuestFlags
-			) {
-				// TODO: Setup as needed
-			};
-
-			setup_data(moo_pPlayer, moo_pItem, moo_pQuestFlags);
-			setup_data(original_pPlayer, original_pItem, original_pQuestFlags);
-
-			// Call both implementations
-			const auto moo_result = sut(&moo_pPlayer, &moo_pItem, nDifficulty, &moo_pQuestFlags, nVendorId, nTransactionType);
-			const auto original_result = original(&original_pPlayer, &original_pItem, nDifficulty, &original_pQuestFlags, nVendorId, nTransactionType);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
-
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pPlayer, original_pPlayer, "Comparing pPlayer");
-			SKIP_MOO_CHECK_EQ(moo_pItem, original_pItem, "Comparing pItem");
-			SKIP_MOO_CHECK_EQ(moo_pQuestFlags, original_pQuestFlags, "Comparing pQuestFlags");
+			npc.dwQuestFlag[i] = 0;
+			npc.dwQuestSellMult[i] = 1024;
+			npc.dwQuestBuyMult[i] = 1024;
+			npc.dwQuestRepMult[i] = 1024;
+			npc.nMaxBuy[i] = INT_MAX;
 		}
+
+		const int nWeaponId = 0;
+		const int nArmorId = sgptDataTables->pItemDataTables.nWeaponsTxtRecordCount;
+		items_txt[nWeaponId].dwCost = 3000;
+		items_txt[nArmorId].dwCost = 3000;
+
+		const auto find_item = [&](auto predicate)
+		{
+			for (int nItemId = 0; nItemId < items_record_count; ++nItemId)
+			{
+				if (predicate(nItemId))
+				{
+					return nItemId;
+				}
+			}
+			FAIL("no matching item");
+			return -1;
+		};
+
+		struct TestItem
+		{
+			D2UnitStrc tPlayer{};
+			D2UnitStrc tItem{};
+			D2ItemDataStrc tItemData{};
+			D2StatListExStrc tStatListEx{};
+			D2StatStrc tStat{};
+			D2StatStrc tDurabilityStats[2] = {};
+			D2InventoryStrc tInventory{};
+			D2UnitStrc tSocket{};
+			D2ItemDataStrc tSocketData{};
+			uint8_t pQuestBuffer[96] = {};
+			D2BitBufferStrc tQuestFlags{};
+		};
+
+		struct Setup
+		{
+			int nItemId = 0;
+			uint32_t nQuality = ITEMQUAL_NORMAL;
+			uint32_t dwItemFlags = 0;
+			int32_t nFileIndex = 0;
+			int wMagicPrefix = 0;
+			BOOL bStat = FALSE;
+			int nStatId = 0;
+			int nStatValue = 0;
+			BOOL bBaseStat = FALSE;
+			int nSocketId = -1;
+			int nQuestFlag = 0;
+			int nDurability = 0;
+			int nMaxDurability = 0;
+		};
+
+		const auto setup_data = [](TestItem& item, const Setup& setup)
+		{
+			item.tPlayer.dwUnitType = UNIT_PLAYER;
+
+			item.tItem.dwUnitType = UNIT_ITEM;
+			item.tItem.dwClassId = setup.nItemId;
+			item.tItem.pItemData = &item.tItemData;
+			item.tItemData.dwQualityNo = setup.nQuality;
+			item.tItemData.dwItemFlags = setup.dwItemFlags;
+			item.tItemData.dwFileIndex = setup.nFileIndex;
+			item.tItemData.wMagicPrefix[0] = static_cast<uint16_t>(setup.wMagicPrefix);
+
+			if (setup.bStat)
+			{
+				item.tStat.nStat = setup.nStatId;
+				item.tStat.nValue = setup.nStatValue;
+				item.tStatListEx.dwFlags = STATLIST_EXTENDED;
+				item.tStatListEx.FullStats.pStat = &item.tStat;
+				item.tStatListEx.FullStats.nStatCount = 1;
+				item.tStatListEx.FullStats.nCapacity = 1;
+				if (setup.bBaseStat)
+				{
+					item.tStatListEx.Stats.pStat = &item.tStat;
+					item.tStatListEx.Stats.nStatCount = 1;
+					item.tStatListEx.Stats.nCapacity = 1;
+				}
+				item.tItem.pStatListEx = &item.tStatListEx;
+			}
+
+			if (setup.nMaxDurability)
+			{
+				item.tDurabilityStats[0].nStat = STAT_DURABILITY;
+				item.tDurabilityStats[0].nValue = setup.nDurability;
+				item.tDurabilityStats[1].nStat = STAT_MAXDURABILITY;
+				item.tDurabilityStats[1].nValue = setup.nMaxDurability;
+				item.tStatListEx.dwFlags = STATLIST_EXTENDED;
+				item.tStatListEx.Stats.pStat = item.tDurabilityStats;
+				item.tStatListEx.Stats.nStatCount = 2;
+				item.tStatListEx.Stats.nCapacity = 2;
+				item.tStatListEx.FullStats = item.tStatListEx.Stats;
+				item.tItem.pStatListEx = &item.tStatListEx;
+			}
+
+			if (setup.nSocketId >= 0)
+			{
+				item.tSocket.dwUnitType = UNIT_ITEM;
+				item.tSocket.dwClassId = setup.nSocketId;
+				item.tSocket.pItemData = &item.tSocketData;
+				item.tInventory.dwSignature = D2C_InventoryHeader;
+				item.tInventory.pFirstItem = &item.tSocket;
+				item.tInventory.pLastItem = &item.tSocket;
+				item.tItem.pInventory = &item.tInventory;
+			}
+
+			item.tQuestFlags.pBuffer = item.pQuestBuffer;
+			item.tQuestFlags.nBits = 8 * sizeof(item.pQuestBuffer);
+			if (setup.nQuestFlag)
+			{
+				QUESTRECORD_SetQuestState(&item.tQuestFlags, setup.nQuestFlag, QFLAG_REWARDGRANTED);
+			}
+		};
+
+		const auto compare = [&](const Setup& setup, D2C_TransactionTypes nTransactionType)
+		{
+			TestItem moo_item;
+			TestItem original_item;
+			setup_data(moo_item, setup);
+			setup_data(original_item, setup);
+
+			const auto moo_result = sut(&moo_item.tPlayer, &moo_item.tItem, DIFFMODE_NORMAL, &moo_item.tQuestFlags, nVendorId, nTransactionType);
+			const auto original_result = original(&original_item.tPlayer, &original_item.tItem, DIFFMODE_NORMAL, &original_item.tQuestFlags, nVendorId, nTransactionType);
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		};
+
+		const auto repairable_setup = [&]()
+		{
+			D2ItemsTxt& weapon = items_txt[nWeaponId];
+			weapon.nNoDurability = 0;
+			weapon.nDurability = 10;
+			itemtypes_txt[weapon.wType[0]].nRepair = 1;
+			itemtypes_txt[weapon.wType[0]].nThrowable = 0;
+			itemtypes_txt[weapon.wType[0]].wQuiver = 0;
+
+			Setup setup;
+			setup.dwItemFlags = IFLAG_IDENTIFIED;
+			setup.nDurability = 5;
+			setup.nMaxDurability = 10;
+			return setup;
+		};
+
+		// Each case gives one multiplier or cost a value whose product with the cost has the sign bit set:
+		// the game divides those products as signed integers.
+		SUBCASE("Vendor sell multiplier")
+		{
+			npc.dwSellMult = -1024;
+			compare(Setup{}, TRANSACTIONTYPE_BUY);
+		}
+
+		SUBCASE("Vendor buy multiplier")
+		{
+			npc.dwBuyMult = -1024;
+			compare(Setup{}, TRANSACTIONTYPE_SELL);
+		}
+
+		SUBCASE("Vendor quest sell multiplier")
+		{
+			npc.dwQuestFlag[0] = 1;
+			npc.dwQuestSellMult[0] = -1024;
+			Setup setup;
+			setup.nQuestFlag = 1;
+			compare(setup, TRANSACTIONTYPE_BUY);
+		}
+
+		SUBCASE("Vendor quest buy multiplier")
+		{
+			npc.dwQuestFlag[0] = 1;
+			npc.dwQuestBuyMult[0] = -1024;
+			Setup setup;
+			setup.nQuestFlag = 1;
+			compare(setup, TRANSACTIONTYPE_SELL);
+		}
+
+		SUBCASE("Vendor repair multiplier")
+		{
+			npc.dwRepMult = -1024;
+			compare(repairable_setup(), TRANSACTIONTYPE_REPAIR);
+		}
+
+		SUBCASE("Vendor quest repair multiplier")
+		{
+			npc.dwQuestFlag[0] = 1;
+			npc.dwQuestRepMult[0] = -1024;
+			Setup setup = repairable_setup();
+			setup.nQuestFlag = 1;
+			compare(setup, TRANSACTIONTYPE_REPAIR);
+		}
+
+		SUBCASE("Magic affix multiplier")
+		{
+			magicaffix_txt[0].dwMultiply = -1024;
+			Setup setup;
+			setup.nQuality = ITEMQUAL_MAGIC;
+			setup.dwItemFlags = IFLAG_IDENTIFIED;
+			setup.wMagicPrefix = 1;
+			compare(setup, TRANSACTIONTYPE_BUY);
+		}
+
+		SUBCASE("Unique cost multiplier")
+		{
+			uniqueitems_txt[0].dwCostMult = -1024;
+			Setup setup;
+			setup.nQuality = ITEMQUAL_UNIQUE;
+			setup.dwItemFlags = IFLAG_IDENTIFIED;
+			compare(setup, TRANSACTIONTYPE_BUY);
+		}
+
+		SUBCASE("Set cost multiplier")
+		{
+			setitems_txt[0].dwCostMult = -1024;
+			Setup setup;
+			setup.nQuality = ITEMQUAL_SET;
+			setup.dwItemFlags = IFLAG_IDENTIFIED;
+			compare(setup, TRANSACTIONTYPE_BUY);
+		}
+
+		SUBCASE("Bonus stat multiplier with a negative bonus")
+		{
+			D2ItemStatCostTxt& strength = itemstatcost_txt[STAT_STRENGTH];
+			strength.nEncode = 0;
+			strength.nValShift = 0;
+			strength.dwAdd = 0;
+			strength.dwMultiply = 1024;
+			Setup setup;
+			setup.nQuality = ITEMQUAL_SUPERIOR;
+			setup.dwItemFlags = IFLAG_IDENTIFIED;
+			setup.bStat = TRUE;
+			setup.nStatId = STAT_STRENGTH;
+			setup.nStatValue = -5;
+			compare(setup, TRANSACTIONTYPE_BUY);
+		}
+
+		SUBCASE("Armor class ratio")
+		{
+			items_txt[nArmorId].dwCost = -1024;
+			Setup setup;
+			setup.nItemId = nArmorId;
+			setup.bStat = TRUE;
+			setup.nStatId = STAT_ARMORCLASS;
+			setup.nStatValue = 10;
+			setup.bBaseStat = TRUE;
+			compare(setup, TRANSACTIONTYPE_BUY);
+		}
+
+		SUBCASE("Quiver cost per unit")
+		{
+			const int nQuiverId = find_item([&](int nItemId) {
+				const int nItemType = items_txt[nItemId].wType[0];
+				return nItemType > 0 && nItemType < itemtypes_record_count && itemtypes_txt[nItemType].wQuiver != 0;
+			});
+			items_txt[nQuiverId].dwCost = -1024;
+			Setup setup;
+			setup.nItemId = nQuiverId;
+			compare(setup, TRANSACTIONTYPE_BUY);
+		}
+
+		SUBCASE("Socketed item cost")
+		{
+			items_txt[nWeaponId].dwCost = 0;
+			items_txt[1].dwCost = -1024;
+			Setup setup;
+			setup.nSocketId = 1;
+			compare(setup, TRANSACTIONTYPE_BUY);
+		}
+
+		SUBCASE("Body part monster level")
+		{
+			const int nBodyPartId = find_item([&](int nItemId) { return ITEMS_CheckItemTypeIdByItemId(nItemId, ITEMTYPE_BODY_PART) != FALSE; });
+			items_txt[nBodyPartId].dwCost = 100;
+			monstats_txt[0].nLevel[DIFFMODE_NORMAL] = -1;
+			Setup setup;
+			setup.nItemId = nBodyPartId;
+			compare(setup, TRANSACTIONTYPE_BUY);
+		}
+
+		sgptDataTables->pMagicAffixDataTables = moo_saved_magicaffix;
+		*original_magicaffix = original_saved_magicaffix;
 	}
 	
 	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD9CE10 (#10794)" * doctest::skip(""))

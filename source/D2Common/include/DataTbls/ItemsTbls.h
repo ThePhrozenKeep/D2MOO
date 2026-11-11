@@ -72,7 +72,7 @@ struct D2SetItemsTxt
 	uint16_t wLvl;							//0x30
 	uint16_t wLvlReq;						//0x32
 	uint32_t dwRarity;						//0x34
-	uint32_t dwCostMult;					//0x38
+	int32_t dwCostMult;						//0x38
 	uint32_t dwCostAdd;						//0x3C
 	int8_t nChrTransform;					//0x40
 	int8_t nInvTransform;					//0x41
@@ -136,7 +136,7 @@ struct D2UniqueItemsTxt
 	char szFlippyFile[32];					//0x3A
 	char szInvFile[32];						//0x5A
 	uint16_t pad0x7A;						//0x7A
-	uint32_t dwCostMult;					//0x7C
+	int32_t dwCostMult;						//0x7C
 	uint32_t dwCostAdd;						//0x80
 	uint16_t wDropSound;					//0x84
 	uint16_t wUseSound;						//0x86
@@ -242,7 +242,7 @@ struct D2ItemStatCostTxt
 	uint8_t nCsvBits;						//0x0A
 	uint8_t nCsvParam;						//0x0B
 	uint32_t dwDivide;						//0x0C
-	uint32_t dwMultiply;					//0x10
+	int32_t dwMultiply;						//0x10
 	uint32_t dwAdd;							//0x14
 	uint8_t nValShift;						//0x18
 	uint8_t nSaveBits;						//0x19
@@ -318,7 +318,7 @@ struct D2ItemsTxt
 	uint32_t dwGambleCost;					//0xD4
 	int32_t dwSpeed;						//0xD8
 	uint32_t dwBitField1;					//0xDC
-	uint32_t dwCost;						//0xE0
+	int32_t dwCost;							//0xE0
 	uint32_t dwMinStack;					//0xE4
 	uint32_t dwMaxStack;					//0xE8
 	uint32_t dwSpawnStack;					//0xEC
@@ -566,7 +566,7 @@ struct D2MagicAffixTxt
 	uint8_t wFrequency;								//0x82
 	uint8_t padding0x83;							//0x83
 	uint32_t dwDivide;								//0x84
-	uint32_t dwMultiply;							//0x88
+	int32_t dwMultiply;								//0x88
 	uint32_t dwAdd;									//0x8C
 };
 
