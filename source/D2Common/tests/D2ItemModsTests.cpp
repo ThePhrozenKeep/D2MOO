@@ -6,15 +6,167 @@
 
 #include <Windows.h>
 
+#include <algorithm>
 #include <cstdarg>
+#include <deque>
 #include <filesystem>
+#include <vector>
 
 #include <TestDefinitions.h>
 #include <TestUtilities.h>
 
+#include <D2Inventory.h>
 #include <D2ItemMods.h>
+#include <D2Items.h>
 #include <D2StatList.h>
+#include <D2States.h>
 #include <Units/Units.h>
+
+#include <Fixtures/DataTbls/Fixtures.h>
+#include <Fixtures/DataTbls/ItemStatCostTxtOpStatsFixture.h>
+
+
+namespace
+{
+	template<typename T>
+	void set_field(T& field, int nValue)
+	{
+		field = static_cast<T>(nValue);
+	}
+
+	// The item tables, the property tables and what is needed to give units extended stat lists.
+	// The stat lists are allocated through the original D2Common.dll, so that both implementations can add to and free them.
+	struct ItemModsFixture : SetsTxtFixture<SetItemsTxtFixture<PropertiesTxtFixture<ItemTypesTxtFixture<ItemsTxtFixture<StatesTxtFixture<ItemStatCostTxtOpStatsFixture<NoOpFixture>>>>>>>
+	{
+		decltype(&STATLIST_AllocStatListEx) native_AllocStatListEx;
+		decltype(&STATLIST_FreeStatList) native_FreeStatList;
+		decltype(&STATLIST_FreeStatListEx) native_FreeStatListEx;
+
+		ItemModsFixture()
+		{
+			const auto working_directory = std::filesystem::current_path();
+			const auto d2common_base = reinterpret_cast<uintptr_t>(LoadLibraryA((working_directory / "D2Common.dll").string().c_str()));
+
+			native_AllocStatListEx = reinterpret_cast<decltype(native_AllocStatListEx)>(d2common_base + 0x00077190);
+			native_FreeStatList = reinterpret_cast<decltype(native_FreeStatList)>(d2common_base + 0x00077030);
+			native_FreeStatListEx = reinterpret_cast<decltype(native_FreeStatListEx)>(d2common_base + 0x00077110);
+		}
+
+		int find_item_of_type(int nItemType) const
+		{
+			for (int nClassId = 0; nClassId < items_record_count; ++nClassId)
+			{
+				if (items_txt[nClassId].wType[0] == nItemType)
+				{
+					return nClassId;
+				}
+			}
+			return -1;
+		}
+
+		int find_property_of_stat(int nStatId) const
+		{
+			for (int nProperty = 0; nProperty < properties_record_count; ++nProperty)
+			{
+				if (properties_txt[nProperty].wStat[0] == nStatId)
+				{
+					return nProperty;
+				}
+			}
+			return -1;
+		}
+
+		void alloc_stats(D2UnitStrc& unit) const
+		{
+			native_AllocStatListEx(&unit, 0, nullptr, nullptr);
+		}
+
+		void free_stats(D2UnitStrc& unit) const
+		{
+			if (!unit.pStatListEx)
+			{
+				return;
+			}
+
+			while (D2StatListStrc* pStatList = unit.pStatListEx->pMyStats)
+			{
+				if (STATLIST_IsExtended(pStatList))
+				{
+					break;
+				}
+				native_FreeStatList(pStatList);
+			}
+			native_FreeStatListEx(&unit);
+		}
+	};
+
+	struct ItemModsTestItem
+	{
+		D2UnitStrc tUnit{};
+		D2ItemDataStrc tItemData{};
+
+		ItemModsTestItem(int nClassId, D2UnitGUID nGUID = 100)
+		{
+			tUnit.dwUnitType = UNIT_ITEM;
+			tUnit.dwClassId = nClassId;
+			tUnit.dwUnitId = nGUID;
+			tUnit.pItemData = &tItemData;
+			tItemData.dwItemLevel = 1;
+			tItemData.wItemFormat = 1;
+			tItemData.dwFileIndex = -1;
+		}
+
+		ItemModsTestItem(const ItemModsTestItem&) = delete;
+		ItemModsTestItem& operator=(const ItemModsTestItem&) = delete;
+	};
+
+	// The state, flags and stats of every stat list of the unit, so that the stat lists of both implementations can be compared
+	std::vector<int> collect_stats(const D2UnitStrc& unit)
+	{
+		std::vector<int> result;
+		if (!unit.pStatListEx)
+		{
+			return result;
+		}
+
+		const auto add_list = [&result](const D2StatListStrc* pStatList)
+		{
+			result.push_back(static_cast<int>(pStatList->dwStateNo));
+			result.push_back(static_cast<int>(pStatList->dwFlags));
+			result.push_back(pStatList->Stats.nStatCount);
+			for (int i = 0; i < pStatList->Stats.nStatCount; ++i)
+			{
+				result.push_back(pStatList->Stats.pStat[i].nLayer);
+				result.push_back(pStatList->Stats.pStat[i].nStat);
+				result.push_back(pStatList->Stats.pStat[i].nValue);
+			}
+		};
+
+		add_list(unit.pStatListEx);
+		for (D2StatListStrc* pStatList = unit.pStatListEx->pMyLastList; pStatList; pStatList = pStatList->pPrevLink)
+		{
+			if (!STATLIST_IsExtended(pStatList))
+			{
+				add_list(pStatList);
+			}
+		}
+		return result;
+	}
+
+	void check_stats_eq(const D2UnitStrc& moo_unit, const D2UnitStrc& original_unit)
+	{
+		auto moo_stats = collect_stats(moo_unit);
+		auto original_stats = collect_stats(original_unit);
+		auto moo_count = moo_stats.size();
+		auto original_count = original_stats.size();
+		MOO_CHECK_EQ(moo_count, original_count, "Comparing stat list contents size");
+		for (size_t i = 0; i < moo_stats.size() && i < original_stats.size(); ++i)
+		{
+			CAPTURE(i);
+			MOO_CHECK_EQ(moo_stats[i], original_stats[i], "Comparing stat list contents");
+		}
+	}
+}
 
 
 TEST_SUITE("D2ItemModsTests")
@@ -1466,42 +1618,36 @@ TEST_SUITE("D2ItemModsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD95430 (#10855)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(ItemModsFixture, "D2Common.0x6FD95430 (#10855)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(ITEMMODS_AssignProperty, dll_base + 0x00055430);
-		
-		SUBCASE("")
+
+		SUBCASE("QualityItems.txt properties")
 		{
-			// Input data
-			D2UnitStrc moo_a2{};
-			D2UnitStrc moo_pItem{};
-			D2UnitStrc original_a2{};
-			D2UnitStrc original_pItem{};
-			int nType{};
-			void* moo_pMods = nullptr;
-			void* original_pMods = nullptr;
-			int nPropSet{};
-			int nApplyType{};
+			const int nClassId = find_item_of_type(ITEMTYPE_WAND);
+			const int nSkillTab = find_property_of_stat(STAT_ITEM_ADDSKILL_TAB);
+			REQUIRE(nClassId >= 0);
+			REQUIRE(nSkillTab >= 0);
 
-			const auto setup_data = [](
-				D2UnitStrc& a2,
-				D2UnitStrc& pItem
-			) {
-				// TODO: Setup as needed
-			};
+			D2QualityItemsTxt tQualityItemsTxtRecord{};
+			tQualityItemsTxtRecord.nWand = 1;
+			tQualityItemsTxtRecord.pProperties[0] = { nSkillTab, 0, 2, 2 };
+			tQualityItemsTxtRecord.pProperties[1] = { -1, 0, 0, 0 };
 
-			setup_data(moo_a2, moo_pItem);
-			setup_data(original_a2, original_pItem);
+			ItemModsTestItem moo_item(nClassId);
+			ItemModsTestItem original_item(nClassId);
+			alloc_stats(moo_item.tUnit);
+			alloc_stats(original_item.tUnit);
 
 			// Call both implementations
-			sut(nType, &moo_a2, &moo_pItem, moo_pMods, nPropSet, nApplyType);
-			original(nType, &original_a2, &original_pItem, original_pMods, nPropSet, nApplyType);
+			sut(PROPMODE_GRADE, nullptr, &moo_item.tUnit, &tQualityItemsTxtRecord, 0, 0);
+			original(PROPMODE_GRADE, nullptr, &original_item.tUnit, &tQualityItemsTxtRecord, 0, 0);
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_a2, original_a2, "Comparing a2");
-			SKIP_MOO_CHECK_EQ(moo_pItem, original_pItem, "Comparing pItem");
-			SKIP_MOO_CHECK_EQ(moo_pMods, original_pMods, "Comparing pMods");
+			check_stats_eq(moo_item.tUnit, original_item.tUnit);
+
+			free_stats(moo_item.tUnit);
+			free_stats(original_item.tUnit);
 		}
 	}
 	
@@ -1618,142 +1764,258 @@ TEST_SUITE("D2ItemModsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD95A70" * doctest::skip(""))
+	TEST_CASE_FIXTURE(ItemModsFixture, "D2Common.0x6FD95A70")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(ITEMMODS_UpdateFullSetBoni, dll_base + 0x00055A70);
-		
-		SUBCASE("")
+
+		constexpr int nSetId = 0;
+		constexpr int nSetItemCount = 3;
+		const int nStrength = find_property_of_stat(STAT_STRENGTH);
+		const int nDexterity = find_property_of_stat(STAT_DEXTERITY);
+		const int nVitality = find_property_of_stat(STAT_VITALITY);
+		const int nEnergy = find_property_of_stat(STAT_ENERGY);
+		const int nClassId = find_item_of_type(ITEMTYPE_BOOTS);
+		REQUIRE(nStrength >= 0);
+		REQUIRE(nDexterity >= 0);
+		REQUIRE(nVitality >= 0);
+		REQUIRE(nEnergy >= 0);
+		REQUIRE(nClassId >= 0);
+		REQUIRE(setitems_record_count >= nSetItemCount);
+		REQUIRE(sets_record_count > nSetId);
+
+		// The set links are computed while loading the tables, so set them up for a three piece set
+		for (int i = 0; i < nSetItemCount; ++i)
 		{
-			// Input data
-			D2UnitStrc moo_pUnit{};
-			D2UnitStrc moo_pItem{};
-			D2UnitStrc original_pUnit{};
-			D2UnitStrc original_pItem{};
-			int nState{};
+			setitems_txt[i].nSetId = nSetId;
+			setitems_txt[i].nSetItems = static_cast<int16_t>(i);
+		}
 
-			const auto setup_data = [](
-				D2UnitStrc& pUnit,
-				D2UnitStrc& pItem
-			) {
-				// TODO: Setup as needed
-			};
+		D2SetsTxt& tSetsTxtRecord = sets_txt[nSetId];
+		tSetsTxtRecord.nSetItems = nSetItemCount;
+		for (auto& tProperty : tSetsTxtRecord.pBoni2) { tProperty = { -1, 0, 0, 0 }; }
+		for (auto& tProperty : tSetsTxtRecord.pBoni3) { tProperty = { -1, 0, 0, 0 }; }
+		for (auto& tProperty : tSetsTxtRecord.pBoni4) { tProperty = { -1, 0, 0, 0 }; }
+		for (auto& tProperty : tSetsTxtRecord.pBoni5) { tProperty = { -1, 0, 0, 0 }; }
+		for (auto& tProperty : tSetsTxtRecord.pFBoni) { tProperty = { -1, 0, 0, 0 }; }
+		tSetsTxtRecord.pBoni2[0] = { nStrength, 0, 1, 1 };
+		tSetsTxtRecord.pBoni2[1] = { nDexterity, 0, 2, 2 };
+		tSetsTxtRecord.pFBoni[0] = { nVitality, 0, 15, 15 };
+		tSetsTxtRecord.pFBoni[1] = { nEnergy, 0, 25, 25 };
 
-			setup_data(moo_pUnit, moo_pItem);
-			setup_data(original_pUnit, original_pItem);
+		// A player wearing every item of the set
+		struct SetScene
+		{
+			D2UnitStrc tPlayer{};
+			D2InventoryStrc tInventory{};
+			std::deque<ItemModsTestItem> items;
+
+			SetScene(int nClassId, int nItemCount)
+			{
+				tPlayer.dwUnitType = UNIT_PLAYER;
+				tPlayer.dwUnitId = 1;
+				tPlayer.pInventory = &tInventory;
+				tInventory.dwSignature = D2C_InventoryHeader;
+				tInventory.dwOwnerGuid = tPlayer.dwUnitId;
+
+				for (int i = 0; i < nItemCount; ++i)
+				{
+					ItemModsTestItem& item = items.emplace_back(nClassId, 100 + i);
+					item.tItemData.dwQualityNo = ITEMQUAL_SET;
+					item.tItemData.dwFileIndex = i;
+					item.tItemData.dwOwnerGUID = tPlayer.dwUnitId;
+					item.tItemData.pExtraData.pParentInv = &tInventory;
+					item.tItemData.pExtraData.nNodePosOther = NODEPAGE_EQUIP;
+				}
+
+				for (int i = 0; i + 1 < nItemCount; ++i)
+				{
+					items[i].tItemData.pExtraData.pNextItem = &items[i + 1].tUnit;
+				}
+				tInventory.pFirstItem = &items.front().tUnit;
+				tInventory.pLastItem = &items.back().tUnit;
+			}
+		};
+
+		SUBCASE("Complete set")
+		{
+			SetScene moo_scene(nClassId, nSetItemCount);
+			SetScene original_scene(nClassId, nSetItemCount);
+			alloc_stats(moo_scene.tPlayer);
+			alloc_stats(original_scene.tPlayer);
 
 			// Call both implementations
-			sut(&moo_pUnit, &moo_pItem, nState);
-			original(&original_pUnit, &original_pItem, nState);
+			sut(&moo_scene.tPlayer, &moo_scene.items.front().tUnit, STATE_ITEMSET1);
+			original(&original_scene.tPlayer, &original_scene.items.front().tUnit, STATE_ITEMSET1);
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
-			SKIP_MOO_CHECK_EQ(moo_pItem, original_pItem, "Comparing pItem");
+			check_stats_eq(moo_scene.tPlayer, original_scene.tPlayer);
+
+			free_stats(moo_scene.tPlayer);
+			free_stats(original_scene.tPlayer);
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD95BE0 (#10859)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(ItemModsFixture, "D2Common.0x6FD95BE0 (#10859)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(ITEMMODS_CanItemHaveMagicAffix, dll_base + 0x00055BE0);
-		
-		SUBCASE("")
+
+		const int nClassId = find_item_of_type(ITEMTYPE_BOOTS);
+		REQUIRE(nClassId >= 0);
+		const int nItemType = items_txt[nClassId].wType[0];
+
+		const auto compare = [&](const D2MagicAffixTxt& tMagicAffixTxtRecord)
 		{
-			// Input data
-			D2UnitStrc moo_pItem{};
-			D2UnitStrc original_pItem{};
-			D2MagicAffixTxt pMagicAffixTxtRecord{};
-
-			const auto setup_data = [](
-				D2UnitStrc& pItem
-			) {
-				// TODO: Setup as needed
-			};
-
-			setup_data(moo_pItem);
-			setup_data(original_pItem);
+			ItemModsTestItem moo_item(nClassId);
+			ItemModsTestItem original_item(nClassId);
 
 			// Call both implementations
-			const auto moo_result = sut(&moo_pItem, &pMagicAffixTxtRecord);
-			const auto original_result = original(&original_pItem, &pMagicAffixTxtRecord);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			const auto moo_result = sut(&moo_item.tUnit, &tMagicAffixTxtRecord);
+			const auto original_result = original(&original_item.tUnit, &tMagicAffixTxtRecord);
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pItem, original_pItem, "Comparing pItem");
+			// Compare return values
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		};
+
+		SUBCASE("Sockets affix on a socketable item")
+		{
+			const int nSockets = find_property_of_stat(STAT_ITEM_NUMSOCKETS);
+			REQUIRE(nSockets >= 0);
+			items_txt[nClassId].nHasInv = 1;
+			items_txt[nClassId].nGemSockets = 2;
+			itemtypes_txt[nItemType].nMaxSock1 = 2;
+
+			D2MagicAffixTxt tMagicAffixTxtRecord{};
+			tMagicAffixTxtRecord.pProperties[0] = { nSockets, 0, 1, 2 };
+			set_field(tMagicAffixTxtRecord.wIType[0], nItemType);
+			compare(tMagicAffixTxtRecord);
+		}
+
+		SUBCASE("A negative excluded type ends the list")
+		{
+			D2MagicAffixTxt tMagicAffixTxtRecord{};
+			tMagicAffixTxtRecord.pProperties[0] = { -1, 0, 0, 0 };
+			set_field(tMagicAffixTxtRecord.wEType[0], -1);
+			set_field(tMagicAffixTxtRecord.wEType[1], nItemType);
+			set_field(tMagicAffixTxtRecord.wIType[0], nItemType);
+			compare(tMagicAffixTxtRecord);
+		}
+
+		SUBCASE("A negative included type ends the list")
+		{
+			D2MagicAffixTxt tMagicAffixTxtRecord{};
+			tMagicAffixTxtRecord.pProperties[0] = { -1, 0, 0, 0 };
+			set_field(tMagicAffixTxtRecord.wIType[0], -1);
+			set_field(tMagicAffixTxtRecord.wIType[1], nItemType);
+			compare(tMagicAffixTxtRecord);
+		}
+
+		SUBCASE("First property on an item without sockets")
+		{
+			items_txt[nClassId].nHasInv = 0;
+
+			// The properties table with a sockets record just before it and a strength record just after it,
+			// so that a read outside of the table changes the result
+			const int nSockets = find_property_of_stat(STAT_ITEM_NUMSOCKETS);
+			const int nStrength = find_property_of_stat(STAT_STRENGTH);
+			REQUIRE(nSockets >= 0);
+			REQUIRE(nStrength >= 0);
+			std::vector<D2PropertiesTxt> padded_properties(properties_record_count + 2);
+			std::copy_n(properties_txt.get(), properties_record_count, padded_properties.begin() + 1);
+			padded_properties.front() = properties_txt[nSockets];
+			padded_properties.back() = properties_txt[nStrength];
+			sgptDataTables->pPropertiesTxt = padded_properties.data() + 1;
+
+			for (const int nProperty : { -1, properties_record_count, nSockets, nStrength })
+			{
+				CAPTURE(nProperty);
+				D2MagicAffixTxt tMagicAffixTxtRecord{};
+				tMagicAffixTxtRecord.pProperties[0] = { nProperty, 0, 1, 1 };
+				set_field(tMagicAffixTxtRecord.wIType[0], nItemType);
+				compare(tMagicAffixTxtRecord);
+			}
+
+			sgptDataTables->pPropertiesTxt = properties_txt.get();
 		}
 	}
-	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD95CC0 (#10860)" * doctest::skip(""))
+
+	TEST_CASE_FIXTURE(ItemModsFixture, "D2Common.0x6FD95CC0 (#10860)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(ITEMMODS_CanItemHaveRareAffix, dll_base + 0x00055CC0);
-		
-		SUBCASE("")
+
+		const int nClassId = find_item_of_type(ITEMTYPE_BOOTS);
+		REQUIRE(nClassId >= 0);
+		const int nItemType = items_txt[nClassId].wType[0];
+
+		const auto compare = [&](D2RareAffixTxt& tRareAffixTxtRecord)
 		{
-			// Input data
-			D2UnitStrc moo_pItem{};
-			D2RareAffixTxt moo_pRareAffixTxtRecord{};
-			D2UnitStrc original_pItem{};
-			D2RareAffixTxt original_pRareAffixTxtRecord{};
-
-			const auto setup_data = [](
-				D2UnitStrc& pItem,
-				D2RareAffixTxt& pRareAffixTxtRecord
-			) {
-				// TODO: Setup as needed
-			};
-
-			setup_data(moo_pItem, moo_pRareAffixTxtRecord);
-			setup_data(original_pItem, original_pRareAffixTxtRecord);
+			ItemModsTestItem moo_item(nClassId);
+			ItemModsTestItem original_item(nClassId);
 
 			// Call both implementations
-			const auto moo_result = sut(&moo_pItem, &moo_pRareAffixTxtRecord);
-			const auto original_result = original(&original_pItem, &original_pRareAffixTxtRecord);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			const auto moo_result = sut(&moo_item.tUnit, &tRareAffixTxtRecord);
+			const auto original_result = original(&original_item.tUnit, &tRareAffixTxtRecord);
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pItem, original_pItem, "Comparing pItem");
-			SKIP_MOO_CHECK_EQ(moo_pRareAffixTxtRecord, original_pRareAffixTxtRecord, "Comparing pRareAffixTxtRecord");
+			// Compare return values
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		};
+
+		SUBCASE("A negative excluded type ends the list")
+		{
+			D2RareAffixTxt tRareAffixTxtRecord{};
+			set_field(tRareAffixTxtRecord.wEType[0], -1);
+			set_field(tRareAffixTxtRecord.wEType[1], nItemType);
+			set_field(tRareAffixTxtRecord.wIType[0], nItemType);
+			compare(tRareAffixTxtRecord);
+		}
+
+		SUBCASE("A negative included type ends the list")
+		{
+			D2RareAffixTxt tRareAffixTxtRecord{};
+			set_field(tRareAffixTxtRecord.wIType[0], -1);
+			set_field(tRareAffixTxtRecord.wIType[1], nItemType);
+			compare(tRareAffixTxtRecord);
 		}
 	}
-	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD95D60 (#10861)" * doctest::skip(""))
+
+	TEST_CASE_FIXTURE(ItemModsFixture, "D2Common.0x6FD95D60 (#10861)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(ITEMMODS_CanItemBeHighQuality, dll_base + 0x00055D60);
-		
-		SUBCASE("")
+
+		// The QualityItems.txt columns which allow a quality on items of one type
+		const std::pair<uint8_t D2QualityItemsTxt::*, int> type_columns[] =
 		{
-			// Input data
-			D2UnitStrc moo_pItem{};
-			D2QualityItemsTxt moo_pQualityItemsTxtRecord{};
-			D2UnitStrc original_pItem{};
-			D2QualityItemsTxt original_pQualityItemsTxtRecord{};
+			{ &D2QualityItemsTxt::nShield, ITEMTYPE_SHIELD },
+			{ &D2QualityItemsTxt::nScepter, ITEMTYPE_SCEPTER },
+			{ &D2QualityItemsTxt::nWand, ITEMTYPE_WAND },
+			{ &D2QualityItemsTxt::nStaff, ITEMTYPE_STAFF },
+			{ &D2QualityItemsTxt::nBow, ITEMTYPE_BOW },
+			{ &D2QualityItemsTxt::nBow, ITEMTYPE_CROSSBOW },
+			{ &D2QualityItemsTxt::nBoots, ITEMTYPE_BOOTS },
+			{ &D2QualityItemsTxt::nGloves, ITEMTYPE_GLOVES },
+			{ &D2QualityItemsTxt::nBelt, ITEMTYPE_BELT },
+		};
 
-			const auto setup_data = [](
-				D2UnitStrc& pItem,
-				D2QualityItemsTxt& pQualityItemsTxtRecord
-			) {
-				// TODO: Setup as needed
-			};
+		for (const auto& [pColumn, nItemType] : type_columns)
+		{
+			CAPTURE(nItemType);
+			const int nClassId = find_item_of_type(nItemType);
+			REQUIRE(nClassId >= 0);
 
-			setup_data(moo_pItem, moo_pQualityItemsTxtRecord);
-			setup_data(original_pItem, original_pQualityItemsTxtRecord);
+			D2QualityItemsTxt tQualityItemsTxtRecord{};
+			tQualityItemsTxtRecord.*pColumn = 1;
+
+			ItemModsTestItem moo_item(nClassId);
+			ItemModsTestItem original_item(nClassId);
 
 			// Call both implementations
-			const auto moo_result = sut(&moo_pItem, &moo_pQualityItemsTxtRecord);
-			const auto original_result = original(&original_pItem, &original_pQualityItemsTxtRecord);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			const auto moo_result = sut(&moo_item.tUnit, &tQualityItemsTxtRecord);
+			const auto original_result = original(&original_item.tUnit, &tQualityItemsTxtRecord);
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pItem, original_pItem, "Comparing pItem");
-			SKIP_MOO_CHECK_EQ(moo_pQualityItemsTxtRecord, original_pQualityItemsTxtRecord, "Comparing pQualityItemsTxtRecord");
+			// Compare return values
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 		}
 	}
 	
@@ -2348,51 +2610,39 @@ TEST_SUITE("D2ItemModsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD97180" * doctest::skip(""))
+	TEST_CASE_FIXTURE(ItemModsFixture, "D2Common.0x6FD97180")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(ITEMMODS_PropertyFunc10, dll_base + 0x00057180);
-		
-		SUBCASE("")
+
+		const int nClassId = find_item_of_type(ITEMTYPE_BOOTS);
+		const int nSkillTab = find_property_of_stat(STAT_ITEM_ADDSKILL_TAB);
+		REQUIRE(nClassId >= 0);
+		REQUIRE(nSkillTab >= 0);
+
+		// The tab parameter of the skilltab property, 3 tabs for each of the 7 classes
+		const auto nValue = GENERATE(0, 2);
+		for (int nTab = 0; nTab < 21; ++nTab)
 		{
-			// Input data
-			D2UnitStrc moo_pUnit{};
-			D2UnitStrc moo_pItem{};
-			D2UnitStrc moo_a11{};
-			D2UnitStrc original_pUnit{};
-			D2UnitStrc original_pItem{};
-			D2UnitStrc original_a11{};
-			int nType{};
-			D2PropertyStrc pProperty{};
-			int nSet{};
-			short nStatId{};
-			int nLayer{};
-			int nValue{};
-			int nState{};
-			int fStatList{};
+			CAPTURE(nValue);
+			CAPTURE(nTab);
+			const D2PropertyStrc tProperty = { nSkillTab, nTab, 1, 1 };
 
-			const auto setup_data = [](
-				D2UnitStrc& pUnit,
-				D2UnitStrc& pItem,
-				D2UnitStrc& a11
-			) {
-				// TODO: Setup as needed
-			};
-
-			setup_data(moo_pUnit, moo_pItem, moo_a11);
-			setup_data(original_pUnit, original_pItem, original_a11);
+			ItemModsTestItem moo_item(nClassId);
+			ItemModsTestItem original_item(nClassId);
+			alloc_stats(moo_item.tUnit);
+			alloc_stats(original_item.tUnit);
 
 			// Call both implementations
-			const auto moo_result = sut(nType, &moo_pUnit, &moo_pItem, &pProperty, nSet, nStatId, nLayer, nValue, nState, fStatList, &moo_a11);
-			const auto original_result = original(nType, &original_pUnit, &original_pItem, &pProperty, nSet, nStatId, nLayer, nValue, nState, fStatList, &original_a11);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			const auto moo_result = sut(PROPMODE_AFFIX, nullptr, &moo_item.tUnit, &tProperty, 0, STAT_ITEM_ADDSKILL_TAB, 0, nValue, 0, STATLIST_MAGIC, nullptr);
+			const auto original_result = original(PROPMODE_AFFIX, nullptr, &original_item.tUnit, &tProperty, 0, STAT_ITEM_ADDSKILL_TAB, 0, nValue, 0, STATLIST_MAGIC, nullptr);
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
-			SKIP_MOO_CHECK_EQ(moo_pItem, original_pItem, "Comparing pItem");
-			SKIP_MOO_CHECK_EQ(moo_a11, original_a11, "Comparing a11");
+			// Compare return values
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			check_stats_eq(moo_item.tUnit, original_item.tUnit);
+
+			free_stats(moo_item.tUnit);
+			free_stats(original_item.tUnit);
 		}
 	}
 	
@@ -2444,51 +2694,51 @@ TEST_SUITE("D2ItemModsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD97430" * doctest::skip(""))
+	TEST_CASE_FIXTURE(ItemModsFixture, "D2Common.0x6FD97430")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(ITEMMODS_PropertyFunc14, dll_base + 0x00057430);
-		
-		SUBCASE("")
+
+		const int nSockets = find_property_of_stat(STAT_ITEM_NUMSOCKETS);
+		REQUIRE(nSockets >= 0);
+
+		// A 2x4 item whose item and item type limits allow more than 6 sockets
+		int nClassId = -1;
+		for (int i = 0; i < items_record_count && nClassId < 0; ++i)
 		{
-			// Input data
-			D2UnitStrc moo_pUnit{};
-			D2UnitStrc moo_pItem{};
-			D2UnitStrc moo_a11{};
-			D2UnitStrc original_pUnit{};
-			D2UnitStrc original_pItem{};
-			D2UnitStrc original_a11{};
-			int nType{};
-			D2PropertyStrc pProperty{};
-			int nSet{};
-			short nStatId{};
-			int nLayer{};
-			int nValue{};
-			int nState{};
-			int fStatList{};
+			if (items_txt[i].nInvWidth == 2 && items_txt[i].nInvHeight == 4 && items_txt[i].wType[0] >= 0)
+			{
+				nClassId = i;
+			}
+		}
+		REQUIRE(nClassId >= 0);
+		D2ItemTypesTxt& tItemTypesTxtRecord = itemtypes_txt[items_txt[nClassId].wType[0]];
+		items_txt[nClassId].nHasInv = 1;
+		items_txt[nClassId].nGemSockets = 7;
+		tItemTypesTxtRecord.nMaxSock1 = 7;
+		tItemTypesTxtRecord.nMaxSock25 = 7;
+		tItemTypesTxtRecord.nMaxSock40 = 7;
 
-			const auto setup_data = [](
-				D2UnitStrc& pUnit,
-				D2UnitStrc& pItem,
-				D2UnitStrc& a11
-			) {
-				// TODO: Setup as needed
-			};
+		for (int nRequestedSockets = 1; nRequestedSockets <= 8; ++nRequestedSockets)
+		{
+			CAPTURE(nRequestedSockets);
+			const D2PropertyStrc tProperty = { nSockets, 0, nRequestedSockets, nRequestedSockets };
 
-			setup_data(moo_pUnit, moo_pItem, moo_a11);
-			setup_data(original_pUnit, original_pItem, original_a11);
+			ItemModsTestItem moo_item(nClassId);
+			ItemModsTestItem original_item(nClassId);
+			alloc_stats(moo_item.tUnit);
+			alloc_stats(original_item.tUnit);
 
 			// Call both implementations
-			const auto moo_result = sut(nType, &moo_pUnit, &moo_pItem, &pProperty, nSet, nStatId, nLayer, nValue, nState, fStatList, &moo_a11);
-			const auto original_result = original(nType, &original_pUnit, &original_pItem, &pProperty, nSet, nStatId, nLayer, nValue, nState, fStatList, &original_a11);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			const auto moo_result = sut(PROPMODE_AFFIX, nullptr, &moo_item.tUnit, &tProperty, 0, STAT_ITEM_NUMSOCKETS, 0, nRequestedSockets, 0, STATLIST_MAGIC, nullptr);
+			const auto original_result = original(PROPMODE_AFFIX, nullptr, &original_item.tUnit, &tProperty, 0, STAT_ITEM_NUMSOCKETS, 0, nRequestedSockets, 0, STATLIST_MAGIC, nullptr);
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
-			SKIP_MOO_CHECK_EQ(moo_pItem, original_pItem, "Comparing pItem");
-			SKIP_MOO_CHECK_EQ(moo_a11, original_a11, "Comparing a11");
+			// Compare return values
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			check_stats_eq(moo_item.tUnit, original_item.tUnit);
+
+			free_stats(moo_item.tUnit);
+			free_stats(original_item.tUnit);
 		}
 	}
 	

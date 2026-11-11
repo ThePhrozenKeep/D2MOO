@@ -53,8 +53,8 @@ struct D2RareAffixTxt
 	uint32_t unk0x00[3];					//0x00
 	uint16_t wStringId;						//0x0C
 	uint16_t wVersion;						//0x0E
-	uint16_t wIType[7];						//0x10
-	uint16_t wEType[4];						//0x1E
+	int16_t wIType[7];						//0x10
+	int16_t wEType[4];						//0x1E
 	char szName[32];						//0x26
 	uint16_t pad0x46;						//0x46
 };
@@ -561,8 +561,8 @@ struct D2MagicAffixTxt
 	uint8_t nClass;									//0x67
 	uint8_t nClassLevelReq;							//0x68
 	uint8_t pad0x69;								//0x69
-	uint16_t wIType[7];								//0x6A
-	uint16_t wEType[5];								//0x78
+	int16_t wIType[7];								//0x6A
+	int16_t wEType[5];								//0x78
 	uint8_t wFrequency;								//0x82
 	uint8_t padding0x83;							//0x83
 	uint32_t dwDivide;								//0x84
