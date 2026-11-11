@@ -16,6 +16,8 @@
 #include <Path/Step.h>
 #include <Units/Units.h>
 
+#include <Fixtures/CollisionRoomsFixture.h>
+
 
 TEST_SUITE("StepTests")
 {
@@ -251,45 +253,70 @@ TEST_SUITE("StepTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDADF50 (#10232)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(CollisionRoomsFixture<NoOpFixture>, "D2Common.0x6FDADF50 (#10232)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(D2Common_10232, dll_base + 0x0006DF50);
-		
+
+		// Moves inside the center room, which spans subtiles (5010, 3015) to (5054, 3019)
+		const auto start_x = GENERATE(5020, 5030);
+		const auto offset_x = GENERATE(-1, 0, 1, 2);
+		const auto offset_y = GENERATE(-1, 0, 1);
+		const auto blocked = GENERATE(false, true);
+
 		SUBCASE("")
 		{
 			// Input data
 			D2DynamicPathStrc moo_pPath{};
 			D2UnitStrc moo_pUnit{};
-			D2ActiveRoomStrc moo_pDestRoom{};
 			D2DynamicPathStrc original_pPath{};
 			D2UnitStrc original_pUnit{};
-			D2ActiveRoomStrc original_pDestRoom{};
-			int nTargetX{};
-			int nTargetY{};
+			const int nStartY = 3017;
+			const int nTargetX = start_x + offset_x;
+			const int nTargetY = nStartY + offset_y;
 
-			const auto setup_data = [](
+			if (blocked)
+			{
+				block_all_but(start_x, nStartY);
+			}
+
+			const auto setup_data = [start_x, nStartY](
 				D2DynamicPathStrc& pPath,
 				D2UnitStrc& pUnit,
-				D2ActiveRoomStrc& pDestRoom
+				D2ActiveRoomStrc* pRoom
 			) {
-				// TODO: Setup as needed
+				pUnit.dwUnitType = UNIT_PLAYER;
+				pUnit.pDynamicPath = &pPath;
+
+				pPath.pUnit = &pUnit;
+				pPath.pRoom = pRoom;
+				pPath.tGameCoords.wPosX = static_cast<uint16_t>(start_x);
+				pPath.tGameCoords.wOffsetX = 0x8000;
+				pPath.tGameCoords.wPosY = static_cast<uint16_t>(nStartY);
+				pPath.tGameCoords.wOffsetY = 0x8000;
+				pPath.dwPathPoints = 3;
+				pPath.dwCurrentPointIdx = 1;
+				pPath.tVelocityVector = { 5, 7 };
+				pPath.dwCollisionPattern = COLLISION_PATTERN_SMALL_UNIT_PRESENCE;
+				pPath.nFootprintCollisionMask = COLLIDE_PLAYER;
+				pPath.nMoveTestCollisionMask = COLLIDE_MASK_PLAYER_PATH;
 			};
 
-			setup_data(moo_pPath, moo_pUnit, moo_pDestRoom);
-			setup_data(original_pPath, original_pUnit, original_pDestRoom);
+			setup_data(moo_pPath, moo_pUnit, moo_room(center_room));
+			setup_data(original_pPath, original_pUnit, original_room(center_room));
 
 			// Call both implementations
-			const auto moo_result = sut(&moo_pPath, &moo_pUnit, &moo_pDestRoom, nTargetX, nTargetY);
-			const auto original_result = original(&original_pPath, &original_pUnit, &original_pDestRoom, nTargetX, nTargetY);
-			
+			const auto moo_result = sut(&moo_pPath, &moo_pUnit, moo_room(center_room), nTargetX, nTargetY);
+			const auto original_result = original(&original_pPath, &original_pUnit, original_room(center_room), nTargetX, nTargetY);
+
 			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 
 			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pPath, original_pPath, "Comparing pPath");
-			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
-			SKIP_MOO_CHECK_EQ(moo_pDestRoom, original_pDestRoom, "Comparing pDestRoom");
+			MOO_CHECK_EQ(moo_pPath, original_pPath, "Comparing pPath");
+			MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+			MOO_CHECK_EQ(moo_map.rooms[center_room], original_map.rooms[center_room], "Comparing pDestRoom");
+			CHECK_MESSAGE(moo_map.collision_masks[center_room] == original_map.collision_masks[center_room], "Comparing collision masks");
 		}
 	}
 	

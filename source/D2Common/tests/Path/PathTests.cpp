@@ -2439,22 +2439,25 @@ TEST_SUITE("PathTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDAA310 (#10192)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDAA310 (#10192)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(PATH_SetIDAStarInitFScore, dll_base + 0x0006A310);
-		
+
+		// The original asserts unless the path is an IDAStar one
+		const auto nIDAStarInitFScore = GENERATE(0, 70, 255);
+
 		SUBCASE("")
 		{
 			// Input data
 			D2DynamicPathStrc moo_pDynamicPath{};
 			D2DynamicPathStrc original_pDynamicPath{};
-			int nIDAStarInitFScore{};
 
 			const auto setup_data = [](
 				D2DynamicPathStrc& pDynamicPath
 			) {
-				// TODO: Setup as needed
+				pDynamicPath.dwPathType = PATHTYPE_IDASTAR;
+				pDynamicPath.nIDAStarInitFScore = 12;
 			};
 
 			setup_data(moo_pDynamicPath);
@@ -2465,7 +2468,7 @@ TEST_SUITE("PathTests")
 			original(&original_pDynamicPath, nIDAStarInitFScore);
 
 			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pDynamicPath, original_pDynamicPath, "Comparing pDynamicPath");
+			MOO_CHECK_EQ(moo_pDynamicPath, original_pDynamicPath, "Comparing pDynamicPath");
 		}
 	}
 	
