@@ -7,10 +7,9 @@
 enum D2C_CubeOps
 {
 	CUBEOP_COWPORTAL = 1,
-#ifdef D2_VERSION_HAS_UBERS
+	// The 1.10f cubemain.txt already has these outputs and its .bin holds them, so they are parsed in every version
 	CUBEOP_UBERDUNGEON = 2,
 	CUBEOP_UBERTRISTRAM = 3,
-#endif
 	CUBEOP_SKILLPTS = 4,
 	CUBEOP_STATPTS = 5,
 	CUBEOP_REDPORTAL = 128,
