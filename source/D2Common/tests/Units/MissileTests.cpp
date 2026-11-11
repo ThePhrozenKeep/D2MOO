@@ -8,12 +8,16 @@
 
 #include <cstdarg>
 #include <filesystem>
+#include <utility>
 
 #include <TestDefinitions.h>
 #include <TestUtilities.h>
 
 #include <Units/Missile.h>
 #include <Units/Units.h>
+#include <D2StatList.h>
+
+#include <Fixtures/DataTbls/Fixtures.h>
 
 
 TEST_SUITE("MissileTests")
@@ -1104,42 +1108,140 @@ TEST_SUITE("MissileTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDBADF0" * doctest::skip(""))
+	TEST_CASE_FIXTURE(ItemStatCostTxtFixture<NoOpFixture>, "D2Common.0x6FDBADF0")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(MISSILE_HasBonusStats, dll_base + 0x0007ADF0);
-		
+
+		// Without an item, only the critical strike and deadly strike rolls are made
+		const auto nDeadlyStrike = GENERATE(0, 1, 50);
+		const auto nCriticalStrike = GENERATE(0, 1, 50);
+
 		SUBCASE("")
 		{
-			// Input data
-			D2UnitStrc moo_pUnit{};
-			D2UnitStrc moo_pItem{};
-			D2UnitStrc original_pUnit{};
-			D2UnitStrc original_pItem{};
+			// Half of the rolls have their high bit set
+			for (uint32_t nLowSeed = 0; nLowSeed < 200; ++nLowSeed)
+			{
+				// Input data
+				D2UnitStrc moo_pUnit{};
+				D2StatListExStrc moo_pStatListEx{};
+				D2StatStrc moo_pStats[2]{};
+				D2UnitStrc original_pUnit{};
+				D2StatListExStrc original_pStatListEx{};
+				D2StatStrc original_pStats[2]{};
 
-			const auto setup_data = [](
-				D2UnitStrc& pUnit,
-				D2UnitStrc& pItem
-			) {
-				// TODO: Setup as needed
-			};
+				const auto setup_data = [nLowSeed, nDeadlyStrike, nCriticalStrike](
+					D2UnitStrc& pUnit,
+					D2StatListExStrc& pStatListEx,
+					D2StatStrc* pStats
+				) {
+					pUnit.dwUnitType = UNIT_PLAYER;
+					pUnit.pSeed.nLowSeed = nLowSeed;
+					pUnit.pSeed.nHighSeed = 666;
 
-			setup_data(moo_pUnit, moo_pItem);
-			setup_data(original_pUnit, original_pItem);
+					// Sorted by stat id
+					pStats[0].nStat = STAT_ITEM_DEADLYSTRIKE;
+					pStats[0].nValue = nDeadlyStrike;
+					pStats[1].nStat = STAT_PASSIVE_CRITICAL_STRIKE;
+					pStats[1].nValue = nCriticalStrike;
 
-			// Call both implementations
-			const auto moo_result = sut(&moo_pUnit, &moo_pItem);
-			const auto original_result = original(&original_pUnit, &original_pItem);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+					pStatListEx.dwFlags = STATLIST_EXTENDED;
+					pStatListEx.pOwner = &pUnit;
+					pStatListEx.FullStats.pStat = pStats;
+					pStatListEx.FullStats.nStatCount = 2;
+					pStatListEx.FullStats.nCapacity = 2;
+					pUnit.pStatListEx = &pStatListEx;
+				};
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
-			SKIP_MOO_CHECK_EQ(moo_pItem, original_pItem, "Comparing pItem");
+				setup_data(moo_pUnit, moo_pStatListEx, moo_pStats);
+				setup_data(original_pUnit, original_pStatListEx, original_pStats);
+
+				// Call both implementations
+				const auto moo_result = sut(&moo_pUnit, nullptr);
+				const auto original_result = original(&original_pUnit, nullptr);
+
+				// Compare return values
+				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+				// Compare the seeds, as the number of rolls depends on the results
+				MOO_CHECK_EQ(moo_pUnit.pSeed, original_pUnit.pSeed, "Comparing pSeed");
+			}
 		}
 	}
-	
+
+	TEST_CASE_FIXTURE(ItemStatCostTxtFixture<ItemTypesTxtFixture<ItemsTxtFixture<NoOpFixture>>>, "D2Common.0x6FDBADF0 (weapon mastery)")
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(MISSILE_HasBonusStats, dll_base + 0x0007ADF0);
+
+		// With a weapon and a melee mastery critical strike bonus for its type, the mastery roll is made too
+		const auto nItemId = GENERATE(0, 1, 50);
+		const auto nMastery = GENERATE(1, 50, 99);
+		const auto nDeadlyStrike = GENERATE(0, 50);
+
+		SUBCASE("")
+		{
+			const int nItemType = items_txt[nItemId].wType[0];
+
+			for (uint32_t nLowSeed = 0; nLowSeed < 200; ++nLowSeed)
+			{
+				// Input data
+				D2UnitStrc moo_pUnit{};
+				D2UnitStrc moo_pItem{};
+				D2StatListExStrc moo_pStatListEx{};
+				D2StatStrc moo_pStats[2]{};
+				D2UnitStrc original_pUnit{};
+				D2UnitStrc original_pItem{};
+				D2StatListExStrc original_pStatListEx{};
+				D2StatStrc original_pStats[2]{};
+
+				const auto setup_data = [nLowSeed, nItemId, nItemType, nMastery, nDeadlyStrike](
+					D2UnitStrc& pUnit,
+					D2UnitStrc& pItem,
+					D2StatListExStrc& pStatListEx,
+					D2StatStrc* pStats
+				) {
+					pUnit.dwUnitType = UNIT_PLAYER;
+					pUnit.pSeed.nLowSeed = nLowSeed;
+					pUnit.pSeed.nHighSeed = 666;
+
+					pItem.dwUnitType = UNIT_ITEM;
+					pItem.dwClassId = nItemId;
+
+					pStats[0].nStat = STAT_ITEM_DEADLYSTRIKE;
+					pStats[0].nValue = nDeadlyStrike;
+					pStats[1].nLayer = static_cast<uint16_t>(nItemType);
+					pStats[1].nStat = STAT_PASSIVE_MASTERY_MELEE_CRIT;
+					pStats[1].nValue = nMastery;
+					if (pStats[1].nPackedValue < pStats[0].nPackedValue)
+					{
+						std::swap(pStats[0], pStats[1]);
+					}
+
+					pStatListEx.dwFlags = STATLIST_EXTENDED;
+					pStatListEx.pOwner = &pUnit;
+					pStatListEx.FullStats.pStat = pStats;
+					pStatListEx.FullStats.nStatCount = 2;
+					pStatListEx.FullStats.nCapacity = 2;
+					pUnit.pStatListEx = &pStatListEx;
+				};
+
+				setup_data(moo_pUnit, moo_pItem, moo_pStatListEx, moo_pStats);
+				setup_data(original_pUnit, original_pItem, original_pStatListEx, original_pStats);
+
+				// Call both implementations
+				const auto moo_result = sut(&moo_pUnit, &moo_pItem);
+				const auto original_result = original(&original_pUnit, &original_pItem);
+
+				// Compare return values
+				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+				// Compare the seeds, as the number of rolls depends on the results
+				MOO_CHECK_EQ(moo_pUnit.pSeed, original_pUnit.pSeed, "Comparing pSeed");
+			}
+		}
+	}
+
 	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDBAED0" * doctest::skip(""))
 	{
 		// Set up function pointers
