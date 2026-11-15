@@ -841,11 +841,11 @@ BOOL __fastcall MISSILE_HasBonusStats(D2UnitStrc* pUnit, D2UnitStrc* pItem)
 
 	nCriticalStrike = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_CRITICAL_STRIKE, 0);
 
-	if (((int)SEED_RollRandomNumber(&pUnit->pSeed) % 100) >= nCriticalStrike)
+	if (static_cast<int32_t>(static_cast<uint32_t>(SEED_RollRandomNumber(&pUnit->pSeed)) % 100) >= nCriticalStrike)
 	{
 		nDeadlyStrike = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_DEADLYSTRIKE, 0);
 
-		if (!nDeadlyStrike || ((int)SEED_RollRandomNumber(&pUnit->pSeed) % 100) >= nDeadlyStrike)
+		if (!nDeadlyStrike || static_cast<int32_t>(static_cast<uint32_t>(SEED_RollRandomNumber(&pUnit->pSeed)) % 100) >= nDeadlyStrike)
 		{
 			if (!pItem)
 			{
@@ -853,7 +853,7 @@ BOOL __fastcall MISSILE_HasBonusStats(D2UnitStrc* pUnit, D2UnitStrc* pItem)
 			}
 
 			nPassiveMastery = SKILLS_GetWeaponMasteryBonus(pUnit, pItem, NULL, 2);
-			if (!nPassiveMastery || ((int)SEED_RollRandomNumber(&pUnit->pSeed) % 100) >= nPassiveMastery)
+			if (!nPassiveMastery || static_cast<int32_t>(static_cast<uint32_t>(SEED_RollRandomNumber(&pUnit->pSeed)) % 100) >= nPassiveMastery)
 			{
 				return FALSE;
 			}
