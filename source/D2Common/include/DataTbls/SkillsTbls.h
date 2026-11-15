@@ -156,11 +156,11 @@ struct D2SkillsTxt
 	uint32_t dwFlags[2];					//0x04 D2C_SkillsTxtFlags
 	int8_t nCharClass;						//0x0C
 	uint8_t unk0x0D[3];						//0x0D
-	uint8_t nAnim;							//0x10
-	uint8_t nMonAnim;						//0x11
+	int8_t nAnim;							//0x10
+	int8_t nMonAnim;						//0x11
 	uint8_t nSeqTrans;						//0x12
 	uint8_t nSeqNum;						//0x13
-	uint8_t nRange;							//0x14
+	int8_t nRange;							//0x14
 	uint8_t nSelectProc;					//0x15
 	uint8_t nSeqInput;						//0x16
 	uint8_t pad0x17;						//0x17
@@ -234,7 +234,7 @@ struct D2SkillsTxt
 	uint16_t wItemCastOverlay;				//0x124
 	uint16_t pad0x126;						//0x126
 	uint32_t dwPerDelay;					//0x128
-	uint16_t wMaxLvl;						//0x12C
+	int16_t wMaxLvl;						//0x12C
 	uint16_t wResultFlags;					//0x12E
 	uint32_t dwHitFlags;					//0x130
 	uint32_t dwHitClass;					//0x134
@@ -246,11 +246,11 @@ struct D2SkillsTxt
 	uint16_t wItemCltEffect;				//0x16C
 	uint16_t pad0x16E;						//0x16E
 	uint32_t dwSkPoints;					//0x170
-	uint16_t wReqLevel;						//0x174
-	uint16_t wReqStr;						//0x176
-	uint16_t wReqDex;						//0x178
-	uint16_t wReqInt;						//0x17A
-	uint16_t wReqVit;						//0x17C
+	int16_t wReqLevel;						//0x174
+	int16_t wReqStr;						//0x176
+	int16_t wReqDex;						//0x178
+	int16_t wReqInt;						//0x17A
+	int16_t wReqVit;						//0x17C
 	int16_t nReqSkill[3];					//0x17E
 	int16_t wStartMana;						//0x184
 	uint16_t wMinMana;						//0x186

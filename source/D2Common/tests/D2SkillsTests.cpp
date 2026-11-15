@@ -17,6 +17,8 @@
 #include <Drlg/D2DrlgDrlg.h>
 #include <Units/Units.h>
 
+#include <Fixtures/DataTbls/Fixtures.h>
+
 
 TEST_SUITE("D2SkillsTests")
 {
@@ -391,35 +393,48 @@ TEST_SUITE("D2SkillsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDAFCB0 (#10944)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(SkillsTxtFixture<NoOpFixture>, "D2Common.0x6FDAFCB0 (#10944)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(SKILLS_GetRange, dll_base + 0x0006FCB0);
-		
+
 		SUBCASE("")
 		{
-			// Input data
-			D2SkillStrc moo_pSkill{};
-			D2SkillStrc original_pSkill{};
+			// Stock ranges, then every byte with the high bit set
+			const auto override_range = GENERATE(0, 1);
 
-			const auto setup_data = [](
-				D2SkillStrc& pSkill
-			) {
-				// TODO: Setup as needed
-			};
+			for (auto i = 0; i < skills_record_count; ++i)
+			{
+				CAPTURE(i);
 
-			setup_data(moo_pSkill);
-			setup_data(original_pSkill);
+				const auto nStockRange = skills_txt[i].nRange;
+				if (override_range)
+				{
+					skills_txt[i].nRange = static_cast<decltype(skills_txt[i].nRange)>(0x80 + (i & 0x7F));
+				}
 
-			// Call both implementations
-			const auto moo_result = sut(&moo_pSkill);
-			const auto original_result = original(&original_pSkill);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+				// Input data
+				D2SkillStrc moo_pSkill{};
+				D2SkillStrc original_pSkill{};
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pSkill, original_pSkill, "Comparing pSkill");
+				const auto setup_data = [this, i](
+					D2SkillStrc& pSkill
+				) {
+					pSkill.pSkillsTxt = &skills_txt[i];
+				};
+
+				setup_data(moo_pSkill);
+				setup_data(original_pSkill);
+
+				// Call both implementations
+				const auto moo_result = sut(&moo_pSkill);
+				const auto original_result = original(&original_pSkill);
+
+				// Compare return values
+				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+				skills_txt[i].nRange = nStockRange;
+			}
 		}
 	}
 	
@@ -895,36 +910,127 @@ TEST_SUITE("D2SkillsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB0320 (#10952)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(SkillsTxtFixture<NoOpFixture>, "D2Common.0x6FDB0320 (#10952)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(SKILLS_AddSkill, dll_base + 0x00070320);
-		
-		SUBCASE("")
+
+		SUBCASE("Existing skill at the default maximum level")
 		{
-			// Input data
-			D2UnitStrc moo_pUnit{};
-			D2UnitStrc original_pUnit{};
-			int nSkillId{};
+			const auto unit_type = GENERATE((int)UNIT_PLAYER, (int)UNIT_OBJECT);
 
-			const auto setup_data = [](
-				D2UnitStrc& pUnit
-			) {
-				// TODO: Setup as needed
-			};
+			for (auto nSkillId = 0; nSkillId < skills_record_count; ++nSkillId)
+			{
+				if (skills_txt[nSkillId].nPassiveState > 0)
+				{
+					continue;
+				}
 
-			setup_data(moo_pUnit);
-			setup_data(original_pUnit);
+				CAPTURE(nSkillId);
 
-			// Call both implementations
-			const auto moo_result = sut(&moo_pUnit, nSkillId);
-			const auto original_result = original(&original_pUnit, nSkillId);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+				// A maximum level of -1 falls back to the default of 20
+				const auto nStockMaxLvl = skills_txt[nSkillId].wMaxLvl;
+				skills_txt[nSkillId].wMaxLvl = static_cast<decltype(skills_txt[nSkillId].wMaxLvl)>(-1);
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+				// Input data
+				D2UnitStrc moo_pUnit{};
+				D2SkillListStrc moo_pSkillList{};
+				D2SkillStrc moo_pSkill{};
+				D2UnitStrc original_pUnit{};
+				D2SkillListStrc original_pSkillList{};
+				D2SkillStrc original_pSkill{};
+
+				const auto setup_data = [this, unit_type, nSkillId](
+					D2UnitStrc& pUnit,
+					D2SkillListStrc& pSkillList,
+					D2SkillStrc& pSkill
+				) {
+					pUnit.dwUnitType = unit_type;
+					pUnit.pSkills = &pSkillList;
+					pSkillList.pFirstSkill = &pSkill;
+					pSkill.pSkillsTxt = &skills_txt[nSkillId];
+					pSkill.nOwnerGUID = D2UnitInvalidGUID;
+					pSkill.nSkillLevel = 20;
+				};
+
+				setup_data(moo_pUnit, moo_pSkillList, moo_pSkill);
+				setup_data(original_pUnit, original_pSkillList, original_pSkill);
+
+				// Call both implementations
+				const auto moo_result = sut(&moo_pUnit, nSkillId);
+				const auto original_result = original(&original_pUnit, nSkillId);
+
+				// Compare return values
+				CHECK(moo_result == &moo_pSkill);
+				CHECK(original_result == &original_pSkill);
+
+				// Compare potentially modified input data
+				MOO_CHECK_EQ(moo_pSkill.nSkillLevel, original_pSkill.nSkillLevel, "Comparing pSkill->nSkillLevel");
+
+				skills_txt[nSkillId].wMaxLvl = nStockMaxLvl;
+			}
+		}
+
+		SUBCASE("New skill animation")
+		{
+			const auto unit_type = GENERATE((int)UNIT_PLAYER, (int)UNIT_MONSTER);
+			const auto override_anim = GENERATE(0, 1);
+
+			for (auto nSkillId = 0; nSkillId < skills_record_count; ++nSkillId)
+			{
+				if (skills_txt[nSkillId].nPassiveState > 0)
+				{
+					continue;
+				}
+
+				CAPTURE(nSkillId);
+
+				const auto nStockAnim = skills_txt[nSkillId].nAnim;
+				const auto nStockMonAnim = skills_txt[nSkillId].nMonAnim;
+				if (override_anim)
+				{
+					skills_txt[nSkillId].nAnim = static_cast<decltype(skills_txt[nSkillId].nAnim)>(-1);
+					skills_txt[nSkillId].nMonAnim = static_cast<decltype(skills_txt[nSkillId].nMonAnim)>(-1);
+				}
+
+				// Input data
+				D2UnitStrc moo_pUnit{};
+				D2SkillListStrc moo_pSkillList{};
+				D2UnitStrc original_pUnit{};
+				D2SkillListStrc original_pSkillList{};
+
+				const auto setup_data = [unit_type](
+					D2UnitStrc& pUnit,
+					D2SkillListStrc& pSkillList
+				) {
+					pUnit.dwUnitType = unit_type;
+					pUnit.pSkills = &pSkillList;
+				};
+
+				setup_data(moo_pUnit, moo_pSkillList);
+				setup_data(original_pUnit, original_pSkillList);
+
+				// Call both implementations
+				const auto moo_result = sut(&moo_pUnit, nSkillId);
+				const auto original_result = original(&original_pUnit, nSkillId);
+
+				// Compare return values
+				REQUIRE(moo_result != nullptr);
+				REQUIRE(original_result != nullptr);
+				MOO_CHECK_EQ(moo_result->dwSkillMode, original_result->dwSkillMode, "Comparing dwSkillMode");
+				MOO_CHECK_EQ(moo_result->nSkillLevel, original_result->nSkillLevel, "Comparing nSkillLevel");
+				MOO_CHECK_EQ(moo_result->nOwnerGUID, original_result->nOwnerGUID, "Comparing nOwnerGUID");
+
+				// Compare potentially modified input data
+				CHECK(moo_pSkillList.pFirstSkill == moo_result);
+				CHECK(original_pSkillList.pFirstSkill == original_result);
+
+				D2_FREE_POOL(nullptr, moo_result);
+				D2_FREE_POOL(nullptr, original_result);
+
+				skills_txt[nSkillId].nAnim = nStockAnim;
+				skills_txt[nSkillId].nMonAnim = nStockMonAnim;
+			}
 		}
 	}
 	
@@ -1205,39 +1311,63 @@ TEST_SUITE("D2SkillsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB0AF0 (#10965)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(SkillsTxtFixture<MonStatsTxtFixture<NoOpFixture>>, "D2Common.0x6FDB0AF0 (#10965)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(SKILLS_GetSeqNumFromSkill, dll_base + 0x00070AF0);
-		
+
 		SUBCASE("")
 		{
-			// Input data
-			D2UnitStrc moo_pUnit{};
-			D2SkillStrc moo_pSkill{};
-			D2UnitStrc original_pUnit{};
-			D2SkillStrc original_pSkill{};
+			// Stock sequences, then the -1 of a skill without a sequence
+			const auto override_sequence = GENERATE(0, 1);
 
-			const auto setup_data = [](
-				D2UnitStrc& pUnit,
-				D2SkillStrc& pSkill
-			) {
-				// TODO: Setup as needed
-			};
+			for (auto nClassId = 0; nClassId < monstats_record_count; ++nClassId)
+			{
+				for (int k = 0; k < (int)ARRAY_SIZE(monstats_txt[nClassId].nSkill); ++k)
+				{
+					const int nSkillId = monstats_txt[nClassId].nSkill[k];
+					if (nSkillId < 0 || nSkillId >= skills_record_count)
+					{
+						continue;
+					}
 
-			setup_data(moo_pUnit, moo_pSkill);
-			setup_data(original_pUnit, original_pSkill);
+					CAPTURE(nClassId);
+					CAPTURE(k);
 
-			// Call both implementations
-			const auto moo_result = sut(&moo_pUnit, &moo_pSkill);
-			const auto original_result = original(&original_pUnit, &original_pSkill);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+					const auto nStockSequence = monstats_txt[nClassId].nSequence[k];
+					if (override_sequence)
+					{
+						monstats_txt[nClassId].nSequence[k] = static_cast<std::remove_reference_t<decltype(monstats_txt[nClassId].nSequence[k])>>(-1);
+					}
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
-			SKIP_MOO_CHECK_EQ(moo_pSkill, original_pSkill, "Comparing pSkill");
+					// Input data
+					D2UnitStrc moo_pUnit{};
+					D2SkillStrc moo_pSkill{};
+					D2UnitStrc original_pUnit{};
+					D2SkillStrc original_pSkill{};
+
+					const auto setup_data = [this, nClassId, nSkillId](
+						D2UnitStrc& pUnit,
+						D2SkillStrc& pSkill
+					) {
+						pUnit.dwUnitType = UNIT_MONSTER;
+						pUnit.dwClassId = nClassId;
+						pSkill.pSkillsTxt = &skills_txt[nSkillId];
+					};
+
+					setup_data(moo_pUnit, moo_pSkill);
+					setup_data(original_pUnit, original_pSkill);
+
+					// Call both implementations
+					const auto moo_result = sut(&moo_pUnit, &moo_pSkill);
+					const auto original_result = original(&original_pUnit, &original_pSkill);
+
+					// Compare return values
+					MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+					monstats_txt[nClassId].nSequence[k] = nStockSequence;
+				}
+			}
 		}
 	}
 	
@@ -2288,87 +2418,174 @@ TEST_SUITE("D2SkillsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB1BC0 (#10986)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(SkillsTxtFixture<NoOpFixture>, "D2Common.0x6FDB1BC0 (#10986)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(SKILLS_GetRequiredLevel, dll_base + 0x00071BC0);
-		
+
 		SUBCASE("")
 		{
-			int nSkillId{};
+			// Stock requirements, then a required level of -1
+			const auto override_level = GENERATE(0, 1);
 
-			// Call both implementations
-			const auto moo_result = sut(nSkillId);
-			const auto original_result = original(nSkillId);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			for (auto nSkillId = -1; nSkillId <= skills_record_count; ++nSkillId)
+			{
+				CAPTURE(nSkillId);
+
+				const auto bValidSkill = nSkillId >= 0 && nSkillId < skills_record_count;
+				const auto nStockReqLevel = bValidSkill ? skills_txt[nSkillId].wReqLevel : 0;
+				if (bValidSkill && override_level)
+				{
+					skills_txt[nSkillId].wReqLevel = static_cast<decltype(skills_txt[nSkillId].wReqLevel)>(-1);
+				}
+
+				// Call both implementations
+				const auto moo_result = sut(nSkillId);
+				const auto original_result = original(nSkillId);
+
+				// Compare return values
+				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+				if (bValidSkill)
+				{
+					skills_txt[nSkillId].wReqLevel = nStockReqLevel;
+				}
+			}
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB1C00 (#10987)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(SkillsTxtFixture<NoOpFixture>, "D2Common.0x6FDB1C00 (#10987)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(SKILLS_GetRequiredLevelBasedOnCurrent, dll_base + 0x00071C00);
-		
+
 		SUBCASE("")
 		{
-			// Input data
-			D2UnitStrc moo_pUnit{};
-			D2UnitStrc original_pUnit{};
-			int nSkillId{};
+			// Stock requirements, then a required level of -1
+			const auto override_level = GENERATE(0, 1);
+			const auto has_skill = GENERATE(0, 1);
 
-			const auto setup_data = [](
-				D2UnitStrc& pUnit
-			) {
-				// TODO: Setup as needed
-			};
+			for (auto nSkillId = 0; nSkillId < skills_record_count; ++nSkillId)
+			{
+				CAPTURE(nSkillId);
 
-			setup_data(moo_pUnit);
-			setup_data(original_pUnit);
+				const auto nStockReqLevel = skills_txt[nSkillId].wReqLevel;
+				if (override_level)
+				{
+					skills_txt[nSkillId].wReqLevel = static_cast<decltype(skills_txt[nSkillId].wReqLevel)>(-1);
+				}
 
-			// Call both implementations
-			const auto moo_result = sut(&moo_pUnit, nSkillId);
-			const auto original_result = original(&original_pUnit, nSkillId);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+				// Input data
+				D2UnitStrc moo_pUnit{};
+				D2SkillListStrc moo_pSkillList{};
+				D2SkillStrc moo_pSkill{};
+				D2UnitStrc original_pUnit{};
+				D2SkillListStrc original_pSkillList{};
+				D2SkillStrc original_pSkill{};
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+				const auto setup_data = [this, has_skill, nSkillId](
+					D2UnitStrc& pUnit,
+					D2SkillListStrc& pSkillList,
+					D2SkillStrc& pSkill
+				) {
+					pUnit.pSkills = &pSkillList;
+					if (has_skill)
+					{
+						pSkillList.pFirstSkill = &pSkill;
+						pSkill.pSkillsTxt = &skills_txt[nSkillId];
+						pSkill.nOwnerGUID = D2UnitInvalidGUID;
+						pSkill.nSkillLevel = 3;
+					}
+				};
+
+				setup_data(moo_pUnit, moo_pSkillList, moo_pSkill);
+				setup_data(original_pUnit, original_pSkillList, original_pSkill);
+
+				// Call both implementations
+				const auto moo_result = sut(&moo_pUnit, nSkillId);
+				const auto original_result = original(&original_pUnit, nSkillId);
+
+				// Compare return values
+				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+				skills_txt[nSkillId].wReqLevel = nStockReqLevel;
+			}
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB1C80 (#10988)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(SkillsTxtFixture<ItemStatCostTxtFixture<NoOpFixture>>, "D2Common.0x6FDB1C80 (#10988)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(SKILLS_CheckRequiredSkills, dll_base + 0x00071C80);
-		
+
 		SUBCASE("")
 		{
-			// Input data
-			D2UnitStrc moo_pUnit{};
-			D2UnitStrc original_pUnit{};
-			int nSkillId{};
+			// Stock requirements, then a required level of -1
+			const auto override_level = GENERATE(0, 1);
 
-			const auto setup_data = [](
-				D2UnitStrc& pUnit
-			) {
-				// TODO: Setup as needed
-			};
+			for (auto nSkillId = 0; nSkillId < skills_record_count; ++nSkillId)
+			{
+				CAPTURE(nSkillId);
 
-			setup_data(moo_pUnit);
-			setup_data(original_pUnit);
+				const auto nStockReqLevel = skills_txt[nSkillId].wReqLevel;
+				if (override_level)
+				{
+					skills_txt[nSkillId].wReqLevel = static_cast<decltype(skills_txt[nSkillId].wReqLevel)>(-1);
+				}
 
-			// Call both implementations
-			const auto moo_result = sut(&moo_pUnit, nSkillId);
-			const auto original_result = original(&original_pUnit, nSkillId);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+				// Input data: a level 1 unit with 20 in every attribute (stats sorted by id) that knows only Attack
+				D2UnitStrc moo_pUnit{};
+				D2StatListExStrc moo_pStatListEx{};
+				D2StatStrc moo_pStats[5]{};
+				D2SkillListStrc moo_pSkillList{};
+				D2SkillStrc moo_pSkill{};
+				D2UnitStrc original_pUnit{};
+				D2StatListExStrc original_pStatListEx{};
+				D2StatStrc original_pStats[5]{};
+				D2SkillListStrc original_pSkillList{};
+				D2SkillStrc original_pSkill{};
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+				const auto setup_data = [this](
+					D2UnitStrc& pUnit,
+					D2StatListExStrc& pStatListEx,
+					D2StatStrc* pStats,
+					D2SkillListStrc& pSkillList,
+					D2SkillStrc& pSkill
+				) {
+					pUnit.dwUnitType = UNIT_PLAYER;
+					pUnit.pSkills = &pSkillList;
+					pSkillList.pFirstSkill = &pSkill;
+					pSkill.pSkillsTxt = &skills_txt[0];
+					pSkill.nOwnerGUID = D2UnitInvalidGUID;
+					pSkill.nSkillLevel = 1;
+					pUnit.pStatListEx = &pStatListEx;
+					pStatListEx.dwFlags |= STATLIST_EXTENDED;
+					pStatListEx.FullStats.pStat = pStats;
+					pStatListEx.FullStats.nStatCount = 5;
+					pStats[0].nStat = STAT_STRENGTH;
+					pStats[0].nValue = 20;
+					pStats[1].nStat = STAT_ENERGY;
+					pStats[1].nValue = 20;
+					pStats[2].nStat = STAT_DEXTERITY;
+					pStats[2].nValue = 20;
+					pStats[3].nStat = STAT_VITALITY;
+					pStats[3].nValue = 20;
+					pStats[4].nStat = STAT_LEVEL;
+					pStats[4].nValue = 1;
+				};
+
+				setup_data(moo_pUnit, moo_pStatListEx, moo_pStats, moo_pSkillList, moo_pSkill);
+				setup_data(original_pUnit, original_pStatListEx, original_pStats, original_pSkillList, original_pSkill);
+
+				// Call both implementations
+				const auto moo_result = sut(&moo_pUnit, nSkillId);
+				const auto original_result = original(&original_pUnit, nSkillId);
+
+				// Compare return values
+				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+				skills_txt[nSkillId].wReqLevel = nStockReqLevel;
+			}
 		}
 	}
 	
@@ -2406,36 +2623,88 @@ TEST_SUITE("D2SkillsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB1FC0 (#10989)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(SkillsTxtFixture<ItemStatCostTxtFixture<NoOpFixture>>, "D2Common.0x6FDB1FC0 (#10989)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(SKILLS_CheckRequiredAttributes, dll_base + 0x00071FC0);
-		
+
 		SUBCASE("")
 		{
-			// Input data
-			D2UnitStrc moo_pUnit{};
-			D2UnitStrc original_pUnit{};
-			int nSkillId{};
+			// 0: stock requirements, 1: level -1, 2-5: level -1 and one attribute -1
+			const auto override_field = GENERATE(0, 1, 2, 3, 4, 5);
 
-			const auto setup_data = [](
-				D2UnitStrc& pUnit
-			) {
-				// TODO: Setup as needed
-			};
+			for (auto nSkillId = 0; nSkillId < skills_record_count; ++nSkillId)
+			{
+				CAPTURE(nSkillId);
 
-			setup_data(moo_pUnit);
-			setup_data(original_pUnit);
+				auto& record = skills_txt[nSkillId];
+				const auto stock_record = record;
+				if (override_field >= 1)
+				{
+					record.wReqLevel = static_cast<decltype(record.wReqLevel)>(-1);
+				}
+				switch (override_field)
+				{
+				case 2: record.wReqStr = static_cast<decltype(record.wReqStr)>(-1); break;
+				case 3: record.wReqDex = static_cast<decltype(record.wReqDex)>(-1); break;
+				case 4: record.wReqInt = static_cast<decltype(record.wReqInt)>(-1); break;
+				case 5: record.wReqVit = static_cast<decltype(record.wReqVit)>(-1); break;
+				default: break;
+				}
 
-			// Call both implementations
-			const auto moo_result = sut(&moo_pUnit, nSkillId);
-			const auto original_result = original(&original_pUnit, nSkillId);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+				// Input data: a level 1 unit with 20 in every attribute (stats sorted by id) that knows only Attack
+				D2UnitStrc moo_pUnit{};
+				D2StatListExStrc moo_pStatListEx{};
+				D2StatStrc moo_pStats[5]{};
+				D2SkillListStrc moo_pSkillList{};
+				D2SkillStrc moo_pSkill{};
+				D2UnitStrc original_pUnit{};
+				D2StatListExStrc original_pStatListEx{};
+				D2StatStrc original_pStats[5]{};
+				D2SkillListStrc original_pSkillList{};
+				D2SkillStrc original_pSkill{};
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+				const auto setup_data = [this](
+					D2UnitStrc& pUnit,
+					D2StatListExStrc& pStatListEx,
+					D2StatStrc* pStats,
+					D2SkillListStrc& pSkillList,
+					D2SkillStrc& pSkill
+				) {
+					pUnit.dwUnitType = UNIT_PLAYER;
+					pUnit.pSkills = &pSkillList;
+					pSkillList.pFirstSkill = &pSkill;
+					pSkill.pSkillsTxt = &skills_txt[0];
+					pSkill.nOwnerGUID = D2UnitInvalidGUID;
+					pSkill.nSkillLevel = 1;
+					pUnit.pStatListEx = &pStatListEx;
+					pStatListEx.dwFlags |= STATLIST_EXTENDED;
+					pStatListEx.FullStats.pStat = pStats;
+					pStatListEx.FullStats.nStatCount = 5;
+					pStats[0].nStat = STAT_STRENGTH;
+					pStats[0].nValue = 20;
+					pStats[1].nStat = STAT_ENERGY;
+					pStats[1].nValue = 20;
+					pStats[2].nStat = STAT_DEXTERITY;
+					pStats[2].nValue = 20;
+					pStats[3].nStat = STAT_VITALITY;
+					pStats[3].nValue = 20;
+					pStats[4].nStat = STAT_LEVEL;
+					pStats[4].nValue = 1;
+				};
+
+				setup_data(moo_pUnit, moo_pStatListEx, moo_pStats, moo_pSkillList, moo_pSkill);
+				setup_data(original_pUnit, original_pStatListEx, original_pStats, original_pSkillList, original_pSkill);
+
+				// Call both implementations
+				const auto moo_result = sut(&moo_pUnit, nSkillId);
+				const auto original_result = original(&original_pUnit, nSkillId);
+
+				// Compare return values
+				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+				record = stock_record;
+			}
 		}
 	}
 	
