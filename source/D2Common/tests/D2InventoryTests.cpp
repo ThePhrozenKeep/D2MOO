@@ -8,6 +8,7 @@
 
 #include <cstdarg>
 #include <filesystem>
+#include <vector>
 
 #include <TestDefinitions.h>
 #include <TestUtilities.h>
@@ -15,7 +16,18 @@
 #include <D2Inventory.h>
 #include <DataTbls/InvTbls.h>
 #include <Units/Units.h>
+#include <D2Items.h>
 
+#include <Fixtures/DataTbls/Fixtures.h>
+
+// Defined in D2Inventory.cpp
+struct D2InventoryComponentItemTypeStrc
+{
+	int dwCode;
+	int nItemType;
+};
+extern D2InventoryComponentItemTypeStrc gTxtComponentItemTypeMap[255];
+extern BOOL gbComponentArrayInitialized;
 
 TEST_SUITE("D2InventoryTests")
 {
@@ -687,51 +699,88 @@ TEST_SUITE("D2InventoryTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD8F600 (#10247)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(ItemsTxtFixture<InventoryTxtFixture<NoOpFixture>>, "D2Common.0x6FD8F600 (#10247)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(INVENTORY_CanItemBePlaced, dll_base + 0x0004F600);
-		
-		SUBCASE("")
+
+		constexpr int nInventoryRecordId = 0;
+		constexpr uint8_t nPage = 0;
+
+		D2InventoryGridInfoStrc tGridInfo = {};
+		DATATBLS_GetInventoryGridInfo(nInventoryRecordId, FALSE, &tGridInfo);
+		REQUIRE(tGridInfo.nGridX >= 2);
+		REQUIRE(tGridInfo.nGridY >= 2);
+
+		int nItemClassId = -1;
+		for (int i = 0; i < items_record_count; ++i)
 		{
-			// Input data
-			D2InventoryStrc moo_pInventory{};
-			D2UnitStrc moo_pItem{};
-			D2UnitStrc* moo_ppExchangeItem{};
-			unsigned int moo_pHoveredItems{};
-			D2InventoryStrc original_pInventory{};
-			D2UnitStrc original_pItem{};
-			D2UnitStrc* original_ppExchangeItem{};
-			unsigned int original_pHoveredItems{};
-			int nXPos{};
-			int nYPos{};
-			int nInventoryRecordId{};
-			uint8_t nPage{};
+			if (items_txt[i].nInvWidth == 2 && items_txt[i].nInvHeight == 2)
+			{
+				nItemClassId = i;
+				break;
+			}
+		}
+		REQUIRE(nItemClassId >= 0);
 
-			const auto setup_data = [](
-				D2InventoryStrc& pInventory,
-				D2UnitStrc& pItem,
-				D2UnitStrc*& ppExchangeItem,
-				unsigned int& pHoveredItems
-			) {
-				// TODO: Setup as needed
-			};
+		// Two separate one-cell items stacked in the rightmost column
+		D2UnitStrc tItemA{};
+		tItemA.dwUnitType = UNIT_ITEM;
+		D2UnitStrc tItemB{};
+		tItemB.dwUnitType = UNIT_ITEM;
 
-			setup_data(moo_pInventory, moo_pItem, moo_ppExchangeItem, moo_pHoveredItems);
-			setup_data(original_pInventory, original_pItem, original_ppExchangeItem, original_pHoveredItems);
+		std::vector<D2UnitStrc*> tGridItems(tGridInfo.nGridX * tGridInfo.nGridY, nullptr);
+		tGridItems[(tGridInfo.nGridX - 1) + 0 * tGridInfo.nGridX] = &tItemA;
+		tGridItems[(tGridInfo.nGridX - 1) + 1 * tGridInfo.nGridX] = &tItemB;
 
-			// Call both implementations
-			const auto moo_result = sut(&moo_pInventory, &moo_pItem, nXPos, nYPos, nInventoryRecordId, &moo_ppExchangeItem, &moo_pHoveredItems, nPage);
-			const auto original_result = original(&original_pInventory, &original_pItem, nXPos, nYPos, nInventoryRecordId, &original_ppExchangeItem, &original_pHoveredItems, nPage);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		D2InventoryGridStrc tGrids[nPage + 3] = {};
+		tGrids[nPage + 2].nGridWidth = tGridInfo.nGridX;
+		tGrids[nPage + 2].nGridHeight = tGridInfo.nGridY;
+		tGrids[nPage + 2].ppItems = tGridItems.data();
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pInventory, original_pInventory, "Comparing pInventory");
-			SKIP_MOO_CHECK_EQ(moo_pItem, original_pItem, "Comparing pItem");
-			SKIP_MOO_CHECK_EQ(moo_ppExchangeItem, original_ppExchangeItem, "Comparing ppExchangeItem");
-			SKIP_MOO_CHECK_EQ(moo_pHoveredItems, original_pHoveredItems, "Comparing pHoveredItems");
+		D2InventoryStrc tInventory{};
+		tInventory.dwSignature = D2C_InventoryHeader;
+		tInventory.pGrids = tGrids;
+		tInventory.nGridCount = ARRAY_SIZE(tGrids);
+
+		D2UnitStrc tItem{};
+		tItem.dwUnitType = UNIT_ITEM;
+		tItem.dwClassId = nItemClassId;
+
+		const auto compare = [&](int nXPos, int nYPos)
+		{
+			CAPTURE(nXPos);
+			CAPTURE(nYPos);
+
+			D2UnitStrc* moo_pExchangeItem = nullptr;
+			unsigned int moo_nHoveredItems = 0;
+			D2UnitStrc* original_pExchangeItem = nullptr;
+			unsigned int original_nHoveredItems = 0;
+
+			const auto moo_result = sut(&tInventory, &tItem, nXPos, nYPos, nInventoryRecordId, &moo_pExchangeItem, &moo_nHoveredItems, nPage);
+			const auto original_result = original(&tInventory, &tItem, nXPos, nYPos, nInventoryRecordId, &original_pExchangeItem, &original_nHoveredItems, nPage);
+
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			MOO_CHECK_EQ(moo_nHoveredItems, original_nHoveredItems, "Comparing pHoveredItems");
+			CHECK(moo_pExchangeItem == original_pExchangeItem);
+		};
+
+		SUBCASE("Inside the grid")
+		{
+			compare(0, 0);
+			compare(tGridInfo.nGridX - 2, 0);
+			compare(tGridInfo.nGridX - 2, 1);
+		}
+
+		SUBCASE("Crossing the right edge")
+		{
+			// Each row stops at the edge, the next rows are still scanned for hovered items
+			compare(tGridInfo.nGridX - 1, 0);
+		}
+
+		SUBCASE("Crossing the bottom edge")
+		{
+			compare(tGridInfo.nGridX - 2, tGridInfo.nGridY - 1);
 		}
 	}
 	
@@ -1801,7 +1850,7 @@ TEST_SUITE("D2InventoryTests")
 	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD90940 (#10280)" * doctest::skip(""))
 	{
 		// Set up function pointers
-		const auto [sut, original] = make_function_pair(INVENTORY_GetTradeInventory, dll_base + 0x00050940);
+		const auto [sut, original] = make_function_pair(INVENTORY_GetCommandQueue, dll_base + 0x00050940);
 		
 		SUBCASE("")
 		{
@@ -1833,7 +1882,7 @@ TEST_SUITE("D2InventoryTests")
 	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD90960 (#10281)" * doctest::skip(""))
 	{
 		// Set up function pointers
-		const auto [sut, original] = make_function_pair(INVENTORY_FreeTradeInventory, dll_base + 0x00050960);
+		const auto [sut, original] = make_function_pair(INVENTORY_FreeCommandQueue, dll_base + 0x00050960);
 		
 		SUBCASE("")
 		{
@@ -1862,7 +1911,7 @@ TEST_SUITE("D2InventoryTests")
 	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD909B0 (#10282)" * doctest::skip(""))
 	{
 		// Set up function pointers
-		const auto [sut, original] = make_function_pair(INVENTORY_CheckForItemInTradeInventory, dll_base + 0x000509B0);
+		const auto [sut, original] = make_function_pair(INVENTORY_IsItemInCommandQueue, dll_base + 0x000509B0);
 		
 		SUBCASE("")
 		{
@@ -1895,7 +1944,7 @@ TEST_SUITE("D2InventoryTests")
 	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD909F0 (#10283)" * doctest::skip(""))
 	{
 		// Set up function pointers
-		const auto [sut, original] = make_function_pair(INVENTORY_AddItemToTradeInventory, dll_base + 0x000509F0);
+		const auto [sut, original] = make_function_pair(INVENTORY_AddItemToCommandQueue, dll_base + 0x000509F0);
 		
 		SUBCASE("")
 		{
@@ -2597,16 +2646,62 @@ TEST_SUITE("D2InventoryTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD915C0" * doctest::skip(""))
+	TEST_CASE_FIXTURE(ItemsTxtFixture<ItemTypesTxtFixture<NoOpFixture>>, "D2Common.0x6FD915C0")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(INVENTORY_InitializeComponentArray, dll_base + 0x000515C0);
-		
-		SUBCASE("")
+
+		auto* original_map = reinterpret_cast<D2InventoryComponentItemTypeStrc*>(dll_base + 0x000AA708);
+		auto* original_initialized = reinterpret_cast<BOOL*>(dll_base + 0x000AAF04);
+
+		const auto compare = [&]()
 		{
-			// Call both implementations
+			gbComponentArrayInitialized = FALSE;
+			*original_initialized = FALSE;
+
 			sut();
 			original();
+
+			for (int i = 0; i < ARRAY_SIZE(gTxtComponentItemTypeMap); ++i)
+			{
+				CAPTURE(i);
+				CHECK(gTxtComponentItemTypeMap[i].dwCode == original_map[i].dwCode);
+				CHECK(gTxtComponentItemTypeMap[i].nItemType == original_map[i].nItemType);
+			}
+
+			// Leave both tables to be rebuilt from whatever data the next test loads
+			gbComponentArrayInitialized = FALSE;
+			*original_initialized = FALSE;
+		};
+
+		SUBCASE("Stock data")
+		{
+			compare();
+		}
+
+		SUBCASE("Circlet that is also torso armor")
+		{
+			// A circlet inheriting torso armor through its second equivalence must still be left out
+			itemtypes_txt[ITEMTYPE_CIRCLET].nEquiv2 = ITEMTYPE_ARMOR;
+			REQUIRE(DATATBLS_CheckItemTypesEquivalenceNested(ITEMTYPE_CIRCLET, ITEMTYPE_ARMOR));
+
+			auto* pCircletLUT = &itemtypes_equivalent_luts[sgptDataTables->nItemTypesIndex * ITEMTYPE_CIRCLET];
+			pCircletLUT[ITEMTYPE_ARMOR >> 5] |= gdwBitMasks[ITEMTYPE_ARMOR & 31];
+
+			// Stock circlets draw as "lit ", which is already in the table; give the first one its own graphics
+			int nCircletClassId = -1;
+			for (int i = 0; i < items_record_count; ++i)
+			{
+				if (items_txt[i].wType[0] == ITEMTYPE_CIRCLET)
+				{
+					nCircletClassId = i;
+					break;
+				}
+			}
+			REQUIRE(nCircletClassId >= 0);
+			items_txt[nCircletClassId].dwAlternateGfx = 0;
+
+			compare();
 		}
 	}
 	
