@@ -101,7 +101,7 @@ void __stdcall DATATBLS_GetInventoryRect(int nInventoryTxtId, int bHigherRes, D2
 	D2_ASSERT(sgptDataTables->pInventoryTxt);
 
 	const int nIndex = nInventoryTxtId + 16 * bHigherRes;
-	D2_ASSERT(nIndex < sgptDataTables->nInventoryTxtRecordCount);
+	D2_ASSERT(uint32_t(nIndex) <= uint32_t(sgptDataTables->nInventoryTxtRecordCount));
 	const D2InventoryTxt* pInventoryTxtRecord = &sgptDataTables->pInventoryTxt[nIndex];
 	D2_ASSERT(pInventoryTxtRecord);
 
@@ -119,7 +119,7 @@ void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes
 	int nIndex = nInventoryTxtId + 16 * bHigherRes;
 
 	D2_ASSERT(sgptDataTables->pInventoryTxt);
-	D2_ASSERT(nIndex < sgptDataTables->nInventoryTxtRecordCount);
+	D2_ASSERT(uint32_t(nIndex) <= uint32_t(sgptDataTables->nInventoryTxtRecordCount));
 	pInventoryTxtRecord = &sgptDataTables->pInventoryTxt[nIndex];
 	D2_ASSERT(pInventoryTxtRecord);
 
@@ -133,7 +133,7 @@ void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigh
 	int nIndex = nInventoryTxtId + 16 * bHigherRes;
 
 	D2_ASSERT(sgptDataTables->pInventoryTxt);
-	D2_ASSERT(nIndex < sgptDataTables->nInventoryTxtRecordCount);
+	D2_ASSERT(uint32_t(nIndex) <= uint32_t(sgptDataTables->nInventoryTxtRecordCount));
 
 	const D2InventoryTxt* pInventoryTxtRecord = &sgptDataTables->pInventoryTxt[nIndex];
 	D2_ASSERT(pInventoryTxtRecord);

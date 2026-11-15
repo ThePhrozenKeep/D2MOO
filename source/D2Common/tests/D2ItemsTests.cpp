@@ -17,6 +17,8 @@
 #include <GAME/Game.h>
 #include <Units/Units.h>
 
+#include <Fixtures/DataTbls/Fixtures.h>
+
 
 TEST_SUITE("D2ItemsTests")
 {
@@ -3641,6 +3643,28 @@ TEST_SUITE("D2ItemsTests")
 		}
 	}
 	
+	TEST_CASE_FIXTURE(ItemsTxtFixture<ItemTypesTxtFixture<NoOpFixture>>, "D2Common.0x6FD9DBA0 (#10729)")
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(ITEMS_CheckItemTypeIdByItemId, dll_base + 0x0005DBA0);
+
+		for (const int nItemId : { INT_MIN, -1, 0, items_record_count - 1, items_record_count, INT_MAX })
+		{
+			for (int nItemType = 0; nItemType < itemtypes_record_count; ++nItemType)
+			{
+				CAPTURE(nItemId);
+				CAPTURE(nItemType);
+
+				// Call both implementations
+				const auto moo_result = sut(nItemId, nItemType);
+				const auto original_result = original(nItemId, nItemType);
+
+				// Compare return values
+				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			}
+		}
+	}
+	
 	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD9DDD0 (#10803)" * doctest::skip(""))
 	{
 		// Set up function pointers
@@ -4600,39 +4624,56 @@ TEST_SUITE("D2ItemsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD9FE70 (#10840)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(ItemsTxtFixture<ItemTypesTxtFixture<NoOpFixture>>, "D2Common.0x6FD9FE70 (#10840)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(ITEMS_IsCharmUsable, dll_base + 0x0005FE70);
-		
-		SUBCASE("")
+
+		D2UnitStrc pPlayer{};
+		pPlayer.dwUnitType = UNIT_PLAYER;
+
+		SUBCASE("No item")
 		{
-			// Input data
-			D2UnitStrc moo_pItem{};
-			D2UnitStrc moo_pPlayer{};
-			D2UnitStrc original_pItem{};
-			D2UnitStrc original_pPlayer{};
+			// Call both implementations
+			const auto moo_result = sut(nullptr, &pPlayer);
+			const auto original_result = original(nullptr, &pPlayer);
 
-			const auto setup_data = [](
-				D2UnitStrc& pItem,
-				D2UnitStrc& pPlayer
-			) {
-				// TODO: Setup as needed
-			};
+			// Compare return values
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		}
 
-			setup_data(moo_pItem, moo_pPlayer);
-			setup_data(original_pItem, original_pPlayer);
+		SUBCASE("Item without item data")
+		{
+			// Native still checks the item type (charms included) before it reads the missing item data
+			for (int nClassId = 0; nClassId < items_record_count; ++nClassId)
+			{
+				CAPTURE(nClassId);
+				D2UnitStrc pItem{};
+				pItem.dwUnitType = UNIT_ITEM;
+				pItem.dwClassId = nClassId;
+
+				// Call both implementations
+				const auto moo_result = sut(&pItem, &pPlayer);
+				const auto original_result = original(&pItem, &pPlayer);
+
+				// Compare return values
+				MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			}
+		}
+
+		SUBCASE("Not an item")
+		{
+			D2ItemDataStrc pItemData{};
+			D2UnitStrc pMonster{};
+			pMonster.dwUnitType = UNIT_MONSTER;
+			pMonster.pItemData = &pItemData;
 
 			// Call both implementations
-			const auto moo_result = sut(&moo_pItem, &moo_pPlayer);
-			const auto original_result = original(&original_pItem, &original_pPlayer);
-			
-			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			const auto moo_result = sut(&pMonster, &pPlayer);
+			const auto original_result = original(&pMonster, &pPlayer);
 
-			// Compare potentially modified input data
-			SKIP_MOO_CHECK_EQ(moo_pItem, original_pItem, "Comparing pItem");
-			SKIP_MOO_CHECK_EQ(moo_pPlayer, original_pPlayer, "Comparing pPlayer");
+			// Compare return values
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 		}
 	}
 	

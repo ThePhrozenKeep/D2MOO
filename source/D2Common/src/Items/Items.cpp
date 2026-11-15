@@ -3480,7 +3480,11 @@ BOOL __stdcall ITEMS_CheckItemTypeIdByItemId(int nItemId, int nItemType)
 	if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 	{
 		const D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
-		D2_ASSERT(pItemsTxtRecord);
+		if (!pItemsTxtRecord)
+		{
+			return FALSE;
+		}
+
 		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
 			if (ITEMS_CheckTypeEquivalenceFromLUT(ITEMS_TypeEquivalenceLUT(pItemsTxtRecord->wType[0]), nItemType))
@@ -4674,7 +4678,7 @@ BOOL __stdcall ITEMS_CanBeEquipped(D2UnitStrc* pItem)
 BOOL __stdcall ITEMS_IsCharmUsable(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 {
 	D2ItemDataStrc* pItemData = ITEMS_GetItemData(pItem);
-	if (pItemData->dwItemFlags & IFLAG_BROKEN || pItemData->dwItemFlags & IFLAG_NOEQUIP)
+	if (!pItemData || pItemData->dwItemFlags & IFLAG_BROKEN || pItemData->dwItemFlags & IFLAG_NOEQUIP)
 	{
 		return FALSE;
 	}

@@ -18,6 +18,8 @@
 #include <GAME/Event.h>
 #include <Units/Units.h>
 
+#include <Fixtures/DataTbls/Fixtures.h>
+
 
 TEST_SUITE("UnitsTests")
 {
@@ -3476,21 +3478,21 @@ TEST_SUITE("UnitsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDC1FE0" * doctest::skip(""))
+	TEST_CASE_FIXTURE(MonStatsTxtFixture<MonStats2TxtFixture<NoOpFixture>>, "D2Common.0x6FDC1FE0")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(UNITS_GetMonStats2TxtRecordFromMonsterId, dll_base + 0x00081FE0);
-		
-		SUBCASE("")
+
+		for (const int nMonsterId : { INT_MIN, -1, 0, monstats_record_count - 1, monstats_record_count, INT_MAX })
 		{
-			int nMonsterId{};
+			CAPTURE(nMonsterId);
 
 			// Call both implementations
 			const auto moo_result = sut(nMonsterId);
 			const auto original_result = original(nMonsterId);
-			
+
 			// Compare return values
-			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 		}
 	}
 	

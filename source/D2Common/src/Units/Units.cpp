@@ -3357,7 +3357,13 @@ uint8_t __stdcall UNITS_GetItemComponentId(D2UnitStrc* pUnit, D2UnitStrc* pItem)
 //1.14d: 0x00451FE0
 D2MonStats2Txt* __fastcall UNITS_GetMonStats2TxtRecordFromMonsterId(int nMonsterId)
 {
-	int nMonStatsEx = DATATBLS_GetMonStatsTxtRecord(nMonsterId)->wMonStatsEx;
+	const D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nMonsterId);
+	if (!pMonStatsTxtRecord)
+	{
+		return NULL;
+	}
+
+	int nMonStatsEx = pMonStatsTxtRecord->wMonStatsEx;
 
 	if (nMonStatsEx >= 0 && nMonStatsEx < sgptDataTables->nMonStats2TxtRecordCount)
 	{

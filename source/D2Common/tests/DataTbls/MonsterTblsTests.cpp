@@ -15,6 +15,8 @@
 #include <DataTbls/MonsterTbls.h>
 #include <Units/Units.h>
 
+#include <Fixtures/DataTbls/Fixtures.h>
+
 
 TEST_SUITE("MonsterTblsTests")
 {
@@ -147,19 +149,28 @@ TEST_SUITE("MonsterTblsTests")
 		}
 	}
 	
-	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FD689B0 (#10642)" * doctest::skip(""))
+	TEST_CASE_FIXTURE(MonStatsTxtFixture<NoOpFixture>, "D2Common.0x6FD689B0 (#10642)")
 	{
 		// Set up function pointers
 		const auto [sut, original] = make_function_pair(DATATBLS_SetVelocityInMonStatsTxtRecord, dll_base + 0x000289B0);
-		
-		SUBCASE("")
-		{
-			int nMonsterId{};
-			short nVelocity{};
 
-			// Call both implementations
+		const std::vector<D2MonStatsTxt> loaded(monstats_txt.get(), monstats_txt.get() + monstats_record_count);
+		for (const int nMonsterId : { INT_MIN, -1, 0, monstats_record_count - 1, monstats_record_count, INT_MAX })
+		{
+			CAPTURE(nMonsterId);
+			const short nVelocity = 1234;
+
+			// Call both implementations, each on the loaded table
 			sut(nMonsterId, nVelocity);
+			const std::vector<D2MonStatsTxt> moo_monstats(monstats_txt.get(), monstats_txt.get() + monstats_record_count);
+			std::copy(loaded.begin(), loaded.end(), monstats_txt.get());
+
 			original(nMonsterId, nVelocity);
+			const std::vector<D2MonStatsTxt> original_monstats(monstats_txt.get(), monstats_txt.get() + monstats_record_count);
+			std::copy(loaded.begin(), loaded.end(), monstats_txt.get());
+
+			// Compare the written table
+			CHECK_EQ(std::memcmp(moo_monstats.data(), original_monstats.data(), sizeof(D2MonStatsTxt) * monstats_record_count), 0);
 		}
 	}
 	
