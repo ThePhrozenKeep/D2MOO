@@ -1008,6 +1008,7 @@ int __fastcall PATH_SimplifyToLines_6FDAC170(D2PathPointStrc* pOutPathPoints, D2
 		}
 		if (nCurrentPointIdx < nbTempPoints)
 			pOutPathPoints[nbOutPoints++] = pInputPoints[nCurrentPointIdx];
+		return nbOutPoints;
 	}
 	else if (nbTempPoints == 1)
 	{

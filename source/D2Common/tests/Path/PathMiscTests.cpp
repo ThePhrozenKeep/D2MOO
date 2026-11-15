@@ -16,6 +16,12 @@
 #include <Path/PathMisc.h>
 #include <Units/Units.h>
 
+#include <vector>
+
+
+// Defined in PathMisc.cpp, next to the PATH_SimplifyToLines of PathWF.cpp
+int __fastcall PATH_SimplifyToLines_6FDAC170(D2PathPointStrc* pOutPathPoints, D2PathPointStrc* pInputPoints, D2PathPointStrc tStartCoord, signed int nbTempPoints);
+
 
 TEST_SUITE("PathMiscTests")
 {
@@ -571,7 +577,46 @@ TEST_SUITE("PathMiscTests")
 			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
 		}
 	}
-	
+
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDAC170 (PathMisc)")
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(PATH_SimplifyToLines_6FDAC170, dll_base + 0x0006C170);
+
+		const auto points = GENERATE(
+			std::vector<D2PathPointStrc>{},
+			std::vector<D2PathPointStrc>{ { 101, 100 } },
+			std::vector<D2PathPointStrc>{ { 101, 100 }, { 102, 100 } },
+			std::vector<D2PathPointStrc>{ { 101, 100 }, { 102, 100 }, { 103, 100 } },
+			std::vector<D2PathPointStrc>{ { 101, 100 }, { 102, 100 }, { 103, 101 }, { 104, 102 } },
+			std::vector<D2PathPointStrc>{ { 101, 101 }, { 102, 101 }, { 102, 102 }, { 103, 103 }, { 103, 104 }, { 103, 105 } }
+		);
+
+		SUBCASE("")
+		{
+			// Input data
+			D2PathPointStrc moo_pOutPathPoints[8]{};
+			D2PathPointStrc original_pOutPathPoints[8]{};
+			std::vector<D2PathPointStrc> pInputPoints = points;
+			pInputPoints.resize(8);
+			const D2PathPointStrc tStartCoord{ 100, 100 };
+			const int nbTempPoints = static_cast<int>(points.size());
+
+			// Call both implementations
+			const auto moo_result = sut(moo_pOutPathPoints, pInputPoints.data(), tStartCoord, nbTempPoints);
+			const auto original_result = original(original_pOutPathPoints, pInputPoints.data(), tStartCoord, nbTempPoints);
+
+			// Compare return values
+			MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			for (int i = 0; i < 8; ++i)
+			{
+				MOO_CHECK_EQ(moo_pOutPathPoints[i], original_pOutPathPoints[i], "Comparing pOutPathPoints");
+			}
+		}
+	}
+
 	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDAC700 (#10215)" * doctest::skip(""))
 	{
 		// Set up function pointers

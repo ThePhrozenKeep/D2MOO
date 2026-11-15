@@ -1563,7 +1563,7 @@ uint16_t __stdcall D2Common_10202(D2DynamicPathStrc* pDynamicPath)
 //1.14d: 0x00648F00
 void __stdcall PATH_SetIDAStarInitFScore(D2DynamicPathStrc* pDynamicPath, int nIDAStarInitFScore)
 {
-	D2_ASSERT(pDynamicPath->dwPathType != PATHTYPE_IDASTAR);
+	D2_ASSERT(pDynamicPath->dwPathType == PATHTYPE_IDASTAR);
 
 	pDynamicPath->nIDAStarInitFScore = nIDAStarInitFScore;
 }
