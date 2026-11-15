@@ -305,7 +305,6 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 	{
 		pCubeOutputParam->nType = CUBEOP_COWPORTAL;
 	}
-#ifdef D2_VERSION_HAS_UBERS
 	else if (!_strcmpi(szOutput, "Pandemonium Portal"))
 	{
 		pCubeOutputParam->nType = CUBEOP_UBERDUNGEON;
@@ -314,7 +313,6 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 	{
 		pCubeOutputParam->nType = CUBEOP_UBERTRISTRAM;
 	}
-#endif
 	else if (DATATBLS_AreStringsEqual(szOutput, "usetype"))
 	{
 		pCubeOutputParam->nType = CUBEOP_USETYPE;
